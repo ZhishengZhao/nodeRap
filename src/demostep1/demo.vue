@@ -126,7 +126,14 @@
                                 prop="type"
                                 type="select">
                                     <template scope="scope">
-                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 2" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
+                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 2" class="cell-edit-input">
+                                            <select v-model="editValue" @change="setEditValue('res')">
+                                                <option v-for="item in typeList" :value="item">
+                                                    {{item}}
+                                                </option>
+                                            </select>
+                                            <!-- <el-input v-model="editValue" @change="setEditValue('res')"></el-input> -->
+                                        </span>
                                         <span v-else class="show_value" >{{ scope.row.type }}</span>
                                     </template>
                                 </el-table-column>
@@ -211,8 +218,8 @@ export default {
             curRowIndex: -1,
             curColIndex: -1,
             editValue: '',
-            propOrder: ['key', 'comments', 'type', 'value']
-
+            propOrder: ['key', 'comments', 'type', 'value'],
+            typeList: ['number', 'string', 'object', 'boolean']
         }
     },
     computed: {
@@ -300,6 +307,7 @@ export default {
         },
         setEditValue(type) {
             if (type == 'res') {
+                console.log('====================', this.editValue)
                 this.responseParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
             } else {
                 this.requestParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
