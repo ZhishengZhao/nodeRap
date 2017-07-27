@@ -57,8 +57,6 @@
                             @cell-dblclick = "goEditRequest"
                             :data="requestParams"
                             style="width: 100%">
-                                <el-table-column type="index">
-                                </el-table-column>
                                 <el-table-column
                                 label="变量名"
                                 prop="key"
@@ -109,8 +107,9 @@
                                 prop="key"
                                 width="180">
                                     <template scope="scope">
-                                        <span class="show_value" >{{ scope.row.key }}</span>
-                                        <span  class="cell-edit-input show_input"><el-input v-model="resKey"></el-input></span>
+                                    <!-- {{scope.row.index}}/{{curRowIndex}}/{{curColIndex}}/{{scope.row.index == curRowIndex}}/{{curColIndex == 0}} -->
+                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 0" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
+                                        <span v-else class="show_value" >{{ scope.row.key }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -118,8 +117,8 @@
                                 prop="comments"
                                 width="180">
                                     <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.comments }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="resComment"></el-input></span>
+                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 1" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
+                                        <span v-else class="show_value" >{{ scope.row.comments }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -127,18 +126,16 @@
                                 prop="type"
                                 type="select">
                                     <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.type }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input">
-                                            <el-input v-model="resType"></el-input>
-                                        </span>
+                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 2" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
+                                        <span v-else class="show_value" >{{ scope.row.type }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
                                 label="备注"
                                 prop="value">
                                     <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.value }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="resValue"></el-input></span>
+                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 3" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
+                                        <span v-else class="show_value" >{{ scope.row.value }}</span>
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -185,28 +182,6 @@ export default {
     filters: {},
     data() {
         return {
-            // requestParams: [{
-            //         key: 'req1',
-            //         comments: 'req1',
-            //         type: 'req1',
-            //         value: 'req1'
-            //     }, {
-            //         key: 'req1',
-            //         comments: 'req1',
-            //         type: 'req1',
-            //         value: 'req1'
-            //     }, {
-            //         key: 'req1',
-            //         comments: 'req1',
-            //         type: 'req1',
-            //         value: 'req1'
-            //     }],
-            // responseParams: [{
-            //         key: 'res1',
-            //         comments: 'res1',
-            //         type: 'res1',
-            //         value: 'res1'
-            //     }],
             requestParams: [],
             responseParams: [],
             interList: [],
@@ -232,7 +207,12 @@ export default {
             resValue: '',
             resType: '',
             resComment: '',
-            parasType: 'res'
+            parasType: 'res',
+            curRowIndex: -1,
+            curColIndex: -1,
+            editValue: '',
+            propOrder: ['key', 'comments', 'type', 'value']
+
         }
     },
     computed: {
@@ -246,6 +226,16 @@ export default {
         this.getInterfaceList()
     },
     methods: {
+        getIndexs(row, column, cell) {
+            var len = cell.className.length
+            var colIndex = parseInt(cell.className.substr(len - 1) - 1) % 4
+            var rowIndex = cell.closest('tr').rowIndex
+            console.log('当前点击的是第'+colIndex+'列, 第'+rowIndex+'行')
+            return {
+                rowIndex: rowIndex,
+                colIndex: colIndex
+            }
+        },
         saveResponse() {
             let params = {
                 parasType: this.parasType,
@@ -288,9 +278,6 @@ export default {
                 })
             }
         },
-        goEditTest(a,b) {
-            console.log(a, b)
-        },
         goEditAll() {
             this.editFlag = true
         },
@@ -301,11 +288,22 @@ export default {
             console.log(row, column, cell, event)
         },
         goEditResponse(row, column, cell, event) {
-            console.log(row, column, cell, event)
-            let tar = cell.getElementsByClassName('show_input')[0]
-            cell.getElementsByClassName('show_value')[0].style.display = 'none'
-            console.log(tar)
-            tar.style.display = 'block'
+            if (this.editFlag) {
+                let indexs = this.getIndexs(row, column, cell)
+                this.curColIndex = indexs.colIndex
+                this.curRowIndex = indexs.rowIndex
+
+                var tempObj = this.responseParams[this.curRowIndex]
+
+                this.editValue = tempObj[this.propOrder[this.curColIndex]]
+            }
+        },
+        setEditValue(type) {
+            if (type == 'res') {
+                this.responseParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
+            } else {
+                this.requestParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
+            }
         },
         openInterDialog() {
             this.dialogFormVisible = true
@@ -367,6 +365,7 @@ export default {
                     for (; i < data.result.length; i++) {
                         if (data.result[i].parasType === 'req') {
                             tempArrReq.push({
+                                id: i,
                                 key: data.result[i].key,
                                 comments: data.result[i].comments,
                                 type: data.result[i].valueType,
@@ -374,6 +373,7 @@ export default {
                             })
                         } else {
                             tempArrRes.push({
+                                index: i,
                                 key: data.result[i].key,
                                 comments: data.result[i].comments,
                                 type: data.result[i].valueType,
