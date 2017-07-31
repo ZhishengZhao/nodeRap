@@ -237,21 +237,25 @@ export default {
             var len = cell.className.length
             var colIndex = parseInt(cell.className.substr(len - 1) - 1) % 4
             var rowIndex = cell.closest('tr').rowIndex
-            console.log('当前点击的是第'+colIndex+'列, 第'+rowIndex+'行')
+            // console.log('当前点击的是第'+colIndex+'列, 第'+rowIndex+'行')
             return {
                 rowIndex: rowIndex,
                 colIndex: colIndex
             }
         },
         saveResponse() {
-            let params = {
-                parasType: this.parasType,
+            // let params = {
+            //     parasType: this.parasType,
+            //     recordId: this.curIterfaceId,
+            //     key: this.resKey,
+            //     value: this.resValue,
+            //     valueType: this.resType,
+            //     parentId: '',
+            //     comments: this.resComment
+            // }
+            var params = {
                 recordId: this.curIterfaceId,
-                key: this.resKey,
-                value: this.resValue,
-                valueType: this.resType,
-                parentId: '',
-                comments: this.resComment
+                responseParams: JSON.stringify(this.responseParams)
             }
             _post('http://localhost:3000/rap/paramsSave', params, (data) => {
                 // this.backdata = data.result
@@ -261,8 +265,13 @@ export default {
                     this.getInterfaceList()
                 }
             })
+
+            this.editFlag = false;
+            thi.curColIndex = -1;
+            this.curRowIndex = -1;
         },
         saveAll() {
+            // this.responseParams
             this.editFlag = false
         },
         addResponseList() {
@@ -270,14 +279,18 @@ export default {
         },
         addParams(tar) {
             if (tar === 'req') {
+                var count = this.requestParams.length
                 this.requestParams.push({
+                    index: count,
                     key: '',
                     comments: '',
                     type: '',
                     value: ''
                 })
             } else {
+                var count = this.responseParams.length
                 this.responseParams.push({
+                    index: count,
                     key: '',
                     comments: '',
                     type: '',
@@ -289,10 +302,10 @@ export default {
             this.editFlag = true
         },
         goSaveEditAll() {
-            console.log('requestParams', this.requestParams)
+            // console.log('requestParams', this.requestParams)
         },
         goEditRequest(row, column, cell, event) {
-            console.log(row, column, cell, event)
+            // console.log(row, column, cell, event)
         },
         goEditResponse(row, column, cell, event) {
             if (this.editFlag) {
@@ -307,7 +320,7 @@ export default {
         },
         setEditValue(type) {
             if (type == 'res') {
-                console.log('====================', this.editValue)
+                // console.log('====================', this.editValue)
                 this.responseParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
             } else {
                 this.requestParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
@@ -353,11 +366,11 @@ export default {
             })
         },
         iterfaceNodeClick(data) {
-            console.log(data);
+            // console.log(data);
             let iterId = data.id
             this.curIterfaceId = data.id
             let iterName = data.name
-            this.getIterParams(iterId)
+            // this.getIterParams(iterId)
             this.interfaceInfo.name = data.name
             this.interfaceInfo.type = data.type
             this.interfaceInfo.url = data.url
@@ -365,7 +378,7 @@ export default {
         },
         getInterfaceParams(iterId) {
             _post('http://localhost:3000/rap/getIterParamsByIterId', {iterId}, (data) => {
-                console.log(data)
+                // console.log(data)
                 let tempArrRes = []
                 let tempArrReq = []
                 if (data && data.result && data.success) {
@@ -373,7 +386,7 @@ export default {
                     for (; i < data.result.length; i++) {
                         if (data.result[i].parasType === 'req') {
                             tempArrReq.push({
-                                id: i,
+                                index: i,
                                 key: data.result[i].key,
                                 comments: data.result[i].comments,
                                 type: data.result[i].valueType,
@@ -398,7 +411,7 @@ export default {
 
         },
         handleEdit:function(row){
-            console.log('>>>>>>>>>>>>>>>>>>>>', row)
+            // console.log('>>>>>>>>>>>>>>>>>>>>', row)
         //遍历数组改变editeFlag
         },
         handleSave:function(row){

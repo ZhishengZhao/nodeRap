@@ -11,5 +11,10 @@ module.exports = {
         return RapRecords.find({
             recordId: iterId
         }).exec();
+    },
+    deleteRecordsByIterId: function deleteRecordsByIterId(recordId) {
+        return RapRecords.remove({
+            recordId: recordId
+        }).exec();
     }
 };
