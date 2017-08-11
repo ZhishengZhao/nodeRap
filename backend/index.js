@@ -3,9 +3,18 @@ var express = require('express');
 var MongoStore = require('connect-mongo');
 // var config = require('config-lite');
 var routes = require('./routes');
+var bodyParser = require('body-parser'); 
 
 var app = express();
 
+// app.set('views', './build/views')
+app.set('view engine', 'ejs');
+
+// app.use(require('body-parser')());
+
+// var router = express.Router(); 
+// router.use(bodyParser.urlencoded({extended: false}));  
+// router.use(bodyParser.json());  
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -25,3 +34,5 @@ app.disable('x-powered-by');
 app.listen('3000', function() {
     console.log('> listening on port 3000');
 });
+
+

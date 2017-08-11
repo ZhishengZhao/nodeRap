@@ -3,21 +3,18 @@ var webpack = require('webpack');
 var ip = require('ip').address()
 
 module.exports = {
-    entry: './src/demostep1',
+    entry: './src/demostep1/index.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
     module: {
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             loader: 'babel-loader',
             include: path.resolve(__dirname, 'src'),
             exclude: /node_modules/
         }, {
-        //     test: /\.css$/,
-        //     loader: 'style-loader!css-loader!postcss-loader'
-        // }, {
             test: /\.css$/,
             use: ['style-loader', 'css-loader', 'postcss-loader']
         }, {
@@ -46,7 +43,7 @@ module.exports = {
         compress: false,
         inline: true,
         hot: true, // 热加载
-        port: 8080,
+        port: 8088,
         host: ip
     },
     plugins: [

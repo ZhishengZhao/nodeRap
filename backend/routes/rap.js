@@ -76,7 +76,7 @@ router.post('/edit', function(req, res, next) {
     }).catch(next);
 });
 router.post('/getIterParamsByIterId', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -85,6 +85,36 @@ router.post('/getIterParamsByIterId', function(req, res, next) {
     let iterId = req.fields.iterId
 
     rapRecord.getRecordsByIterId(iterId).then(function(result) {
+        res.send({
+            result: result,
+            success: true
+        });
+    }).catch(next);
+});
+router.get('/getIterParamsByIterId', function(req, res, next) {
+    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.query);
+    res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    let iterId = req.fields.iterId
+
+    rapRecord.getRecordsByIterId(iterId).then(function(result) {
+        res.send({
+            result: result,
+            success: true
+        });
+    }).catch(next);
+});
+router.get('/getInterfaceList', function(req, res, next) {
+    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    rapInterface.getList().then(function(result) {
         res.send({
             result: result,
             success: true

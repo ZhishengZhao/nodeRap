@@ -1,21 +1,21 @@
 var express = require('express')
-var webpack = require('webpack')
+// var webpack = require('webpack')
 
-var webpackDevMiddleware = require("webpack-dev-middleware");
-var webpack = require("webpack");
+// var webpackDevMiddleware = require("webpack-dev-middleware");
+// var webpack = require("webpack");
 var config = require('./webpackconfig.js')
-var compiler = webpack({
-    // configuration
-    output: { path: '/' }
-});
+// var compiler = webpack({
+//     // configuration
+//     output: { path: '/' }
+// });
 
-app.use(webpackDevMiddleware(compiler, {
-    config
-}));
-
-
+// app.use(webpackDevMiddleware(compiler, {
+//     config
+// }));
 
 
+
+console.log(process);
 
 var args = require('minimist')(process.argv.slice(2));
 
