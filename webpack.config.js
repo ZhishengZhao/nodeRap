@@ -1,9 +1,10 @@
 var path = require('path');
 var webpack = require('webpack');
-var ip = require('ip').address()
+var ip = require('ip').address();
 
 module.exports = {
-    entry: './src/demostep1/index.js',
+    // entry: './src/demostep1/index.js',
+    entry: './src/module/main.js',
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
@@ -51,4 +52,4 @@ module.exports = {
         // happyPack('css', 'css-loader'),
         // happyPack('sass', 'sass-loader')
     ]
-}
+};

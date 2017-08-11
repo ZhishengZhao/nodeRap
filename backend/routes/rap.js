@@ -10,14 +10,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/paramsSave', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
     res.setHeader('Access-Control-Allow-Credentials', true);
 
     var paramList = JSON.parse(req.fields.responseParams);
-    console.log('&&&&&&&&&&&&&', paramList);
 
     rapRecord.deleteRecordsByIterId(req.fields.recordId).then();
 
@@ -58,7 +57,7 @@ router.post('/paramsSave', function(req, res, next) {
 });
 
 router.post('/edit', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -76,7 +75,7 @@ router.post('/edit', function(req, res, next) {
     }).catch(next);
 });
 router.post('/getIterParamsByIterId', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -92,7 +91,7 @@ router.post('/getIterParamsByIterId', function(req, res, next) {
     }).catch(next);
 });
 router.get('/getIterParamsByIterId', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.query);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.query);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -108,7 +107,7 @@ router.get('/getIterParamsByIterId', function(req, res, next) {
     }).catch(next);
 });
 router.get('/getInterfaceList', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -122,7 +121,7 @@ router.get('/getInterfaceList', function(req, res, next) {
     }).catch(next);
 });
 router.post('/getInterfaceList', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -137,7 +136,7 @@ router.post('/getInterfaceList', function(req, res, next) {
 });
 
 router.post('/addInterface', function(req, res, next) {
-    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
+    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
@@ -153,6 +152,21 @@ router.post('/addInterface', function(req, res, next) {
     }
 
     rapInterface.addInterface(inter).then(function(result) {
+        res.send({
+            result: result,
+            success: true
+        });
+    }).catch(next);
+});
+
+router.post('/deleteInterface', function(req, res, next) {
+    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields.iterId);
+    res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    rapInterface.deleteInterface(req.fields.iterId).then(function(result) {
         res.send({
             result: result,
             success: true

@@ -19,6 +19,7 @@
                         <h3>接口列表</h3>
                         <el-tree :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick"></el-tree>
                         <el-button v-if="editFlag" @click="openInterDialog" type="info">add</el-button>
+                        <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
                     </div>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
@@ -183,8 +184,11 @@
 </template>
 <script>
 import { _get, _post } from '../store/base.js'
-import rapHead from './head.vue'
-import rapFooter from './footer.vue'
+import rapHead from '../components/head.vue'
+import rapFooter from '../components/footer.vue'
+import {
+    getIndexs
+} from '../libs/tools.js'
 export default {
     filters: {},
     data() {
@@ -233,15 +237,13 @@ export default {
         this.getInterfaceList()
     },
     methods: {
-        getIndexs(row, column, cell) {
-            var len = cell.className.length
-            var colIndex = parseInt(cell.className.substr(len - 1) - 1) % 4
-            var rowIndex = cell.closest('tr').rowIndex
-            // console.log('当前点击的是第'+colIndex+'列, 第'+rowIndex+'行')
-            return {
-                rowIndex: rowIndex,
-                colIndex: colIndex
-            }
+        deleteInterface() {
+            var iterId = this.curIterfaceId
+            _post('http://localhost:3000/deleteInterface', iterId, (data) => {
+                if (data && data.success) {
+                    alert('delete success')
+                }
+            })
         },
         saveResponse() {
             // let params = {
@@ -267,7 +269,7 @@ export default {
             })
 
             this.editFlag = false;
-            thi.curColIndex = -1;
+            this.curColIndex = -1;
             this.curRowIndex = -1;
         },
         saveAll() {
@@ -309,7 +311,7 @@ export default {
         },
         goEditResponse(row, column, cell, event) {
             if (this.editFlag) {
-                let indexs = this.getIndexs(row, column, cell)
+                let indexs = getIndexs(row, column, cell)
                 this.curColIndex = indexs.colIndex
                 this.curRowIndex = indexs.rowIndex
 
