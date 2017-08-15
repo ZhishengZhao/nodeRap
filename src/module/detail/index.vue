@@ -9,6 +9,7 @@
                 <div class="block fr">
                     <el-button type="info" @click="goEditAll">编辑</el-button>
                     <el-button type="info" @click="saveAll">保存</el-button>
+                    <el-button type="info" @click="goRequest">请求接口</el-button>
                 </div>
             </el-row>
         </div>
@@ -23,33 +24,6 @@
                     </div>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
-                    <!-- <div class="area_interinfo mb20">
-                        <h3>接口详情</h3>
-                        <p>
-                            <span class="wd70 mr20">
-                                接口名称
-                            </span>
-                            <span>
-                                {{interfaceInfo.name}}
-                            </span>
-                        </p>
-                        <p>
-                            <span class="wd70 mr20">
-                                请求类型
-                            </span>
-                            <span>
-                                {{interfaceInfo.type}}
-                            </span>
-                        </p>
-                        <p>
-                            <span class="wd70 mr20">
-                                请求url
-                            </span>
-                            <span>
-                                {{interfaceInfo.url}}
-                            </span>
-                        </p>
-                    </div> -->
                     <interface-detail :detail="interfaceInfo"></interface-detail>
                     <div class="grid-content bg-purple-light">                       
                         <div class="area_request">
@@ -109,7 +83,6 @@
                                 prop="key"
                                 width="180">
                                     <template scope="scope">
-                                    <!-- {{scope.row.index}}/{{curRowIndex}}/{{curColIndex}}/{{scope.row.index == curRowIndex}}/{{curColIndex == 0}} -->
                                         <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 0" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
                                         <span v-else class="show_value" >{{ scope.row.key }}</span>
                                     </template>
@@ -199,14 +172,14 @@ export default {
             responseParams: [],
             interList: [],
             defaultProps: {
-              label: 'name'
+                label: 'name'
             },
             dialogFormVisible: false,
             form: {
-              name: '',
-              type: '',
-              link: '',
-              desc: ''
+                name: '',
+                type: '',
+                link: '',
+                desc: ''
             },
             curIterfaceId: '',
             editFlag: false,
@@ -240,29 +213,25 @@ export default {
         this.getInterfaceList()
     },
     methods: {
+        goRequest() {
+            this.$router.push({
+                path: 'requestData'
+            })
+        },
         deleteInterface() {
             var iterId = this.curIterfaceId
-            _post('http://localhost:3000/rap/getInterfaceList', null, (data) => {
+            _post('rap/getInterfaceList', null, (data) => {
                 if (data && data.success) {
                     alert('delete success')
                 }
             })
         },
         saveResponse() {
-            // let params = {
-            //     parasType: this.parasType,
-            //     recordId: this.curIterfaceId,
-            //     key: this.resKey,
-            //     value: this.resValue,
-            //     valueType: this.resType,
-            //     parentId: '',
-            //     comments: this.resComment
-            // }
             var params = {
                 recordId: this.curIterfaceId,
                 responseParams: JSON.stringify(this.responseParams)
             }
-            _post('http://localhost:3000/rap/paramsSave', params, (data) => {
+            _post('rap/paramsSave', params, (data) => {
                 // this.backdata = data.result
                 if (data && data.success) {
                     this.dialogFormVisible = false
@@ -344,7 +313,7 @@ export default {
                 resParamsId: '',
                 reqParamsId: ''
             }
-            _post('http://localhost:3000/rap/addInterface', {inter}, (data) => {
+            _post('rap/addInterface', {inter}, (data) => {
                 // this.backdata = data.result
                 if (data && data.success) {
                     this.dialogFormVisible = false
@@ -353,7 +322,7 @@ export default {
             })
         },
         getInterfaceList() {
-            _post('http://localhost:3000/rap/getInterfaceList', {}, (data) => {
+            _post('rap/getInterfaceList', {}, (data) => {
                 if (data && data.result && data.success) {
                     let i = 0
                     let temparr = []
@@ -382,8 +351,11 @@ export default {
             this.getInterfaceParams(iterId)
         },
         getInterfaceParams(iterId) {
-            _post('http://localhost:3000/rap/getIterParamsByIterId', {iterId}, (data) => {
-                // console.log(data)
+            let params = {
+                iterId: iterId,
+                type: 'rap'
+            }
+            _post('rap/getIterParamsByIterId', params, (data) => {
                 let tempArrRes = []
                 let tempArrReq = []
                 if (data && data.result && data.success) {
@@ -433,39 +405,5 @@ export default {
 
 </script>
 <style lang="scss">
-* {
-    box-sizing: border-box;
-}
-.fr {
-    float: right;
-}
-.mb20 {
-    margin-bottom: 20px;
-}
-.wid1080 {
-    width: 1080px;
-    margin: 0 auto;
-}
-.content_top {
-    padding: 20px;
-}
-.content {
-    background: #f2f2f2;
-    padding: 10px 20px 30px 20px;
-    border-radius: 5px 5px 20px 20px;
-}
-.area_interinfo {
-    // margin-bottom: 20px;
-}
 
-.el-tree {
-    background: #f2f2f2;
-    border: none;
-}
-.show_input {
-    display: none;
-}
-.btn_mine {
-
-}
 </style>

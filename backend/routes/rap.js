@@ -37,23 +37,7 @@ router.post('/paramsSave', function(req, res, next) {
                 });
             }
         }).catch(next);
-    }
-
-
-    // rapRecord.create({
-    //     parasType: req.fields.parasType,
-    //     recordId: req.fields.recordId,
-    //     key: req.fields.key,
-    //     value: req.fields.value,
-    //     valueType: req.fields.valueType,
-    //     parentId: '',
-    //     comments: req.fields.comments
-    // }).then(function(result) {
-    //     res.send({
-    //         result: result,
-    //         success: true
-    //     });
-    // }).catch(next);    
+    }  
 });
 
 router.post('/edit', function(req, res, next) {
@@ -63,10 +47,6 @@ router.post('/edit', function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    // res.send({
-    //     name: 'heioray'
-    // });  
-
     rapRecord.getRecords().then(function(result) {
         res.send({
             result: result,
@@ -74,22 +54,34 @@ router.post('/edit', function(req, res, next) {
         });
     }).catch(next);
 });
+
 router.post('/getIterParamsByIterId', function(req, res, next) {
-    // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req);
+    console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.fields);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    let iterId = req.fields.iterId
+    var iterId = req.fields.iterId,
+        type = req.fields.type || 'normal';
 
-    rapRecord.getRecordsByIterId(iterId).then(function(result) {
-        res.send({
-            result: result,
-            success: true
-        });
-    }).catch(next);
+    if (type !== 'normal') {
+        rapRecord.getRecordsByIterId(iterId).then(function(result) {
+            res.send({
+                result: result,
+                success: true
+            });
+        }).catch(next);
+    } else {
+        rapRecord.getRecordsByIterId(iterId).then(function(result) {
+            res.send({
+                result: list2Json(result),
+                success: true
+            });
+        }).catch(next);
+    }
 });
+
 router.get('/getIterParamsByIterId', function(req, res, next) {
     // console.log('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', req.query);
     res.setHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
@@ -97,7 +89,7 @@ router.get('/getIterParamsByIterId', function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    let iterId = req.fields.iterId
+    var iterId = req.fields.iterId;
 
     rapRecord.getRecordsByIterId(iterId).then(function(result) {
         res.send({
@@ -142,14 +134,14 @@ router.post('/addInterface', function(req, res, next) {
     res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS,DELETE,PUT");
     res.setHeader('Access-Control-Allow-Credentials', true);
 
-    let inter = {
+    var inter = {
         name: req.fields['inter[name]'],
         desc: req.fields['inter[desc]'],
         reqType: req.fields['inter[reqType]'],
         reqUrl: req.fields['inter[reqUrl]'],
         resParamsId: req.fields['inter[resParamsId]'],
         reqParamsId: req.fields['inter[reqParamsId]']
-    }
+    };
 
     rapInterface.addInterface(inter).then(function(result) {
         res.send({
@@ -175,3 +167,25 @@ router.post('/deleteInterface', function(req, res, next) {
 });
 
 module.exports = router;
+
+function list2Json(list) {
+    var jsonObj = {};
+    for (var i = list.length - 1; i >= 0; i--) {
+        jsonObj[list[i].key] = handleValue(list[i]);
+    }
+    // console.log('jsonObj', jsonObj);
+    return jsonObj;
+}
+
+function handleValue(obj) {
+    if (obj.valueType == 'string') {
+        return obj.value;
+    } else if (obj.valueType == 'number'){
+        return parseInt(obj.value);
+    } else if (obj.valueType == 'boolean'){
+        return obj.value.indexOf('false') == -1;
+    } else {
+        return obj.value;
+    }
+}
+
