@@ -4,10 +4,11 @@ var MongoStore = require('connect-mongo');
 // var config = require('config-lite');
 var routes = require('./routes');
 var bodyParser = require('body-parser'); 
+var cors =  require('cors');
 
 var app = express();
 
-// app.set('views', './build/views')
+app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // app.use(require('body-parser')());
@@ -23,6 +24,8 @@ app.use(require('express-formidable')({
     uploadDir: path.join(__dirname, 'public/img'),
     keepExtensions: true // 保留文件后缀
 }));
+
+app.use(cors());
 
 // 路由
 routes(app);

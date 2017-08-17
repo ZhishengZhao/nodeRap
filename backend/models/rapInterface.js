@@ -1,15 +1,15 @@
 var Interface = require('../lib/mongo').Interface;
 
 module.exports = {
-    addInterface: function addInterface(interface) {
+    create: function create(interface) {
         return Interface.create(interface).exec();
     },
-    deleteInterface: function deleteInterface(iterID) {
+    deleteByID: function deleteByID(iterID) {
         return Interface.remove({
             _id: iterID
         }).exec();
     },
-    getList: function getList(postId) {
+    getAll: function getAll(postId) {
         return Interface.find({}).exec();
     }
 };
