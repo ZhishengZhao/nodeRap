@@ -7,6 +7,8 @@ var cors =  require('cors');
 
 var app = express();
 
+app.use(cors());
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
  
@@ -18,8 +20,6 @@ app.use(require('express-formidable')({
     uploadDir: path.join(__dirname, 'public/img'),
     keepExtensions: true // 保留文件后缀
 }));
-
-app.use(cors());
 
 // 路由
 routes(app);

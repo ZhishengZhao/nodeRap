@@ -4,7 +4,7 @@ Vue.use(VueResource)
 Vue.http.options.emulateJSON = true
 
 export const _get = (url, data, callback, catchCallback) => {
-    url += 'http://localhost:3000'
+    url = 'http://localhost:3000/' + url
     Vue.http.get(url, {
         params: data
     }).then((response) => {

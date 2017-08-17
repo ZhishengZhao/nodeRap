@@ -9,6 +9,6 @@ router.post('/getIterParamsByIterId', recordsController.getRecordsByInterID);
 
 router.post('/getInterfaceList', interfaceController.getAll);
 router.post('/addInterface', interfaceController.addInterface);
-router.post('/deleteInterface', interfaceController.deleteInterface);
+router.get('/deleteInterface', interfaceController.deleteInterface);
 
 module.exports = router;

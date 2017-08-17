@@ -5,6 +5,7 @@ module.exports = {
         return Interface.create(interface).exec();
     },
     deleteByID: function deleteByID(iterID) {
+        console.log('> models-deleteByID-iterID:', iterID)
         return Interface.remove({
             _id: iterID
         }).exec();

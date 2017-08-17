@@ -18,8 +18,8 @@ module.exports = {
         }).catch(next);
     },
     deleteInterface: function(req, res, next) {
-        var params = req.fields.iterId;
-        rapInterface.deleteByID(params).then(function(result) {
+        var iterId = req.query.iterId;
+        rapInterface.deleteByID(iterId).then(function(result) {
             res.send({
                 result: result,
                 success: true

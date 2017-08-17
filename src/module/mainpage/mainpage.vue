@@ -2,7 +2,7 @@
     created by zhaozhisheng on 08/15/2017
  -->
 <template>
-    <div class="page wid1080">
+    <div class="page_main wid1080">
         <h1>我的项目</h1>
         <hr/>
         <section class="area_projects">
@@ -61,7 +61,6 @@ export default {
             this.getProjectList()
         },
         goPage(_id) {
-            console.log('_id', typeof _id)
             this.$router.push({
                 path: 'detail',
                 quert: {
@@ -74,7 +73,6 @@ export default {
         },
         projectAddConfirm() {
             _post('project/add', this.form, (data) => {
-                console.log('result',data)
                 if (data.success) {
                     this.dialogFormVisible = false
                     this.getProjectList()
@@ -83,7 +81,6 @@ export default {
         },
         getProjectList() {
             _post('project/getAll', this.form, (data) => {
-                console.log('result',data)
                 if (data.success) {
                     this.projectList = data.result
                 }
@@ -100,7 +97,7 @@ export default {
 
 </script>
 <style lang="scss">
-.page {
+.page_main {
     padding-top: 50px;
 }
 .unit_project {
