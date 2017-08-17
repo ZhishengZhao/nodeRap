@@ -8,6 +8,7 @@
             <el-row :gutter="20">
                 <div class="block fr">
                     <el-button type="info" @click="goEditAll">编辑</el-button>
+                    <el-button type="info" @click="cancelAll">取消</el-button>
                     <el-button type="info" @click="saveAll">保存</el-button>
                     <el-button type="info" @click="goRequest">请求接口</el-button>
                 </div>
@@ -213,6 +214,9 @@ export default {
         this.getInterfaceList()
     },
     methods: {
+        cancelAll() {
+            this.editFlag = false;
+        },
         goRequest() {
             this.$router.push({
                 path: 'requestData'

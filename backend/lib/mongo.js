@@ -25,4 +25,8 @@ exports.Interface = mongolass.model('Interface', {
     reqParamsId: { type: 'string' }
 });
 
+exports.Project = mongolass.model('Project', {
+    name: { type: 'string' },
+    desc: { type: 'string' }
+});
 // exports.Interface.index({ _id: -1 }).exec();
