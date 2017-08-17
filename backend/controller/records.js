@@ -7,7 +7,7 @@ module.exports = {
         rapRecord.deleteRecordsByIterId(req.fields.recordId).then();
 
         for (var i = paramList.length - 1; i >= 0; i--) {
-            rapRecord.create({
+            var params = {
                 parasType: 'res',
                 recordId: req.fields.recordId,
                 key: paramList[i].key,
@@ -15,7 +15,9 @@ module.exports = {
                 valueType: paramList[i].type,
                 parentId: '',
                 comments: paramList[i].comments
-            }).then(function(result) {
+            };
+
+            rapRecord.create(params).then(function(result) {
                 if (i == 1) {
                     res.send({
                         result: result,

@@ -224,7 +224,7 @@ export default {
         },
         deleteInterface() {
             var iterId = this.curIterfaceId
-            _post('rap/getInterfaceList', null, (data) => {
+            _post('rap/deleteInterface', null, (data) => {
                 if (data && data.success) {
                     alert('delete success')
                 }
