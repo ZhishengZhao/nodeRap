@@ -6,6 +6,7 @@ import detail from './detail/index.vue';
 import request from './detail/request.vue';
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
+import NotFound from './404.vue';
 // const request = resolve => require('./detail/request.vue', resolve);
 
 let configRoutes = [{
@@ -40,6 +41,13 @@ let configRoutes = [{
             title: '请求接口'
         }
     }]
+}, {
+    path: '*',
+    component: NotFound,
+    name: 'notfound',
+    meta: {
+        title: '我去，丢了'
+    }
 }];
 
 export default configRoutes

@@ -2,40 +2,52 @@
     created by zhaozhisheng on 08/15/2017
  -->
 <template>
-    <div class="page_main wid1080">
-        <h1>我的项目</h1>
-        <hr/>
-        <section class="area_projects">
-            <div v-for="item in projectList" class="unit_project" @click="goPage(item._id)">
-                <p class="unit_project__title">
-                    {{item.name}}
-                </p>
-                <p class="unit_project__desc">
-                    {{item.desc}}
-                </p>
-            </div>
-            <div class="unit_project unit_project__plus" @click="goAddProject">
-            </div>
-        </section> 
-        <el-dialog :visible.sync="dialogFormVisible">
-          <el-form ref="form" :model="form" label-width="80px">
-              <el-form-item label="项目名称">
-                <el-input v-model="form.name"></el-input>
-              </el-form-item>
-              <el-form-item label="项目描述">
-                <el-input v-model="form.desc"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="projectAddConfirm">确定</el-button>
-                <el-button @click="dialogFormVisible = false">取消</el-button>
-              </el-form-item>
-            </el-form>
-        </el-dialog>
+    <div>
+        <rap-head></rap-head>
+        <div class="page_main wid1080">
+            <el-row :gutter="20">
+                <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
+                    <ul>
+                        <li>我的项目</li>
+                        <li>业务列表</li>
+                    </ul>
+                </el-col>
+                <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
+                    <section class="area_projects">
+                        <div v-for="item in projectList" class="unit_project" @click="goPage(item._id)">
+                            <p class="unit_project__title">
+                                {{item.name}}
+                            </p>
+                            <p class="unit_project__desc">
+                                {{item.desc}}
+                            </p>
+                        </div>
+                        <div class="unit_project unit_project__plus" @click="goAddProject">
+                        </div>
+                    </section> 
+                </el-col>
+            </el-row>
+            
+            <el-dialog :visible.sync="dialogFormVisible">
+              <el-form ref="form" :model="form" label-width="80px">
+                  <el-form-item label="项目名称">
+                    <el-input v-model="form.name"></el-input>
+                  </el-form-item>
+                  <el-form-item label="项目描述">
+                    <el-input v-model="form.desc"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="projectAddConfirm">确定</el-button>
+                    <el-button @click="dialogFormVisible = false">取消</el-button>
+                  </el-form-item>
+                </el-form>
+            </el-dialog>
+        </div>
     </div>
 </template>
 <script>
 import { _get, _post } from '../../store/base.js'
-
+import rapHead from '../common/raphead.vue'
 export default {
     name: 'mainpage',
     data() {
@@ -52,6 +64,7 @@ export default {
 
     },
     components: {
+        rapHead
     },
     mounted() {
         this.init()
@@ -63,7 +76,7 @@ export default {
         goPage(_id) {
             this.$router.push({
                 path: 'detail',
-                quert: {
+                query: {
                     id: _id
                 }
             })

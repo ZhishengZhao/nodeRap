@@ -159,8 +159,8 @@
 </template>
 <script>
 import { _get, _post } from '../../store/base.js'
-import rapHead from '../../components/head.vue'
-import rapFooter from '../../components/footer.vue'
+import rapHead from '../common/raphead.vue'
+import rapFooter from '../common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
 import {
     getIndexs
@@ -224,12 +224,9 @@ export default {
         },
         deleteInterface() {
             var iterId = this.curIterfaceId
-            console.log('iterId', iterId)
             _get('rap/deleteInterface', {iterId}, (data) => {
                 if (data && data.success) {
-                    console.log(data)
                     this.getInterfaceList()
-                    // alert('delete success')
                 }
             })
         },
@@ -239,7 +236,6 @@ export default {
                 responseParams: JSON.stringify(this.responseParams)
             }
             _post('rap/paramsSave', params, (data) => {
-                // this.backdata = data.result
                 if (data && data.success) {
                     this.dialogFormVisible = false
                     this.editFlag = false
@@ -281,9 +277,6 @@ export default {
         },
         goEditAll() {
             this.editFlag = true
-        },
-        goSaveEditAll() {
-            // console.log('requestParams', this.requestParams)
         },
         goEditRequest(row, column, cell, event) {
             // console.log(row, column, cell, event)

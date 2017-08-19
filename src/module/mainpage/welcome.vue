@@ -3,15 +3,20 @@
  -->
 <template>
     <div class="page">
-        <p class="title">
-            NODE & RAP
-        </p>
-        <p class="btn" @click="goPage('main')">
-            进入首页
-        </p>
+        <rap-head></rap-head>
+        <div class="part_main">
+            <p class="page_title">
+                
+            </p>
+            <p class="btn" @click="goPage('main')">
+            </p>
+        </div>
+        <!-- <joy-cooper></joy-cooper> -->
     </div>
 </template>
 <script>
+import rapHead from '../common/raphead.vue'
+import joyCooper from '../joy/cooperation.vue'
 export default {
     name: 'welcome',
     data() {
@@ -23,6 +28,8 @@ export default {
 
     },
     components: {
+        rapHead,
+        joyCooper
     },
     mounted() {
     },
@@ -35,28 +42,24 @@ export default {
     }
 }
 </script>
-<style lang="scss">
-.page {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
+<style lang="scss" scoped>
+.part_main {
+    height: 800px;
+    padding: 100px;
+    margin: 0 auto;
 }
-.title {
-    text-align: center;
-    font-size: 50px;
-    font-weight: bold;
-    // line-height: 200px;
-    margin: 200px 100px 100px;
+.page_title {
+    width: 900px;
+    height: 260px;
+    margin: 30px auto;
+    background: url('../../assets/images/logo.png') 0 center no-repeat;
+    background-size: cover;
 }
 .btn {
-    margin: 0 auto;
-    width: 120px;
-    height: 40px;
-    line-height: 40px;
-    border: 1px solid #000;
-    border-radius: 7px;
-    text-align: center;
+    width: 210px;
+    height: 94px;
+    margin: 30px auto;
+    background: url('../../assets/images/enter.png') 0 center no-repeat;
+    background-size: cover;
 }
 </style>

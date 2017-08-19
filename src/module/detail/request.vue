@@ -3,6 +3,7 @@
  -->
 <template>
     <div class="rap_page">
+        <rap-head></rap-head>
         <div class="content_top wid1080">
             <el-row :gutter="20">
                 <div class="block fr">
@@ -27,6 +28,7 @@
     </div>
 </template>
 <script>
+import rapHead from '../common/raphead.vue'
 import { _get, _post } from '../../store/base.js'
 import { JsonFormater } from '../../libs/jsonformate.js'
 export default {
@@ -50,6 +52,7 @@ export default {
 
     },
     components: {
+        rapHead
     },
     mounted() {
         this.getInterfaceList()
