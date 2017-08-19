@@ -4,13 +4,12 @@
 <template>
     <div>
         <rap-head></rap-head>
-        <div class="page_main wid1080">
+        <div class="page_main wid1080 content">
             <el-row :gutter="20">
                 <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
-                    <ul>
-                        <li>我的项目</li>
-                        <li>业务列表</li>
-                    </ul>
+                    <h3>我的项目</h3>
+                    <h3>分组列表</h3>
+                    <el-tree :data="interList" :props="defaultProps" @node-click="getProjectsByCondition"></el-tree>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
                     <section class="area_projects">
@@ -26,8 +25,7 @@
                         </div>
                     </section> 
                 </el-col>
-            </el-row>
-            
+            </el-row>            
             <el-dialog :visible.sync="dialogFormVisible">
               <el-form ref="form" :model="form" label-width="80px">
                   <el-form-item label="项目名称">
@@ -57,6 +55,10 @@ export default {
             form: {
                 name: '',
                 desc: ''
+            },
+            interList: [],
+            defaultProps: {
+                label: 'name'
             }
         }
     },
@@ -68,6 +70,7 @@ export default {
     },
     mounted() {
         this.init()
+        this.getInterfaceList()
     },
     methods: {
         init() {
@@ -98,11 +101,25 @@ export default {
                     this.projectList = data.result
                 }
             })
-            this.projectList.push({
-                id: '',
-                name: '项目测试',
-                desc: '',
-                owner: ''
+        },
+        getProjectsByCondition() {
+
+        },
+        getInterfaceList() {
+            _post('rap/getInterfaceList', {}, (data) => {
+                if (data && data.result && data.success) {
+                    let i = 0
+                    let temparr = []
+                    for(; i < data.result.length; i++) {
+                        temparr.push({
+                            name: data.result[i].name,
+                            id: data.result[i]._id,
+                            type: data.result[i].reqType,
+                            url: data.result[i].reqUrl
+                        })
+                    }
+                    this.interList = temparr
+                }
             })
         }
     }
@@ -110,9 +127,6 @@ export default {
 
 </script>
 <style lang="scss">
-.page_main {
-    padding-top: 50px;
-}
 .unit_project {
     float: left;
     width: 200px;
@@ -121,17 +135,8 @@ export default {
     border-radius: 5px;
     margin: 20px 20px 0 0;
     padding: 10px;
-    // text-align: center;
-    &:nth-child(5) {
-        margin-right: 0;
-    }
 }
 .unit_project__title {
-    // line-height: 30px;
-    // font-size: 15px;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
-    // white-space: nowrap;
     font-size: 18px;    
     color: #6D8095;
     white-space: nowrap;
@@ -139,13 +144,6 @@ export default {
     overflow: hidden;
 }
 .unit_project__desc {
-    // height: 50px;
-    // width: 200px;
-    // line-height: 30px;
-    // text-indent: 30px;
-    // font-size: 15px;
-    // overflow: hidden;
-    // text-overflow: ellipsis;
     color: rgba(0, 0, 0, 0.3);
     text-overflow: ellipsis;
     width: 182px;

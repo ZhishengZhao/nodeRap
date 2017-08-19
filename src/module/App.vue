@@ -39,6 +39,7 @@ export default {
     background: #f2f2f2;
     padding: 10px 20px 30px 20px;
     border-radius: 5px 5px 20px 20px;
+    margin-top: 50px;
 }
 .el-tree {
     background: #f2f2f2;

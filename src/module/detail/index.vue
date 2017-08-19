@@ -4,7 +4,7 @@
 <template>
     <div class="rap_page">
         <rap-head></rap-head>
-        <div class="content_top wid1080">
+        <div class="content wid1080">
             <el-row :gutter="20">
                 <div class="block fr">
                     <el-button type="info" @click="goEditAll">编辑</el-button>
@@ -13,8 +13,6 @@
                     <el-button type="info" @click="goRequest">请求接口</el-button>
                 </div>
             </el-row>
-        </div>
-        <div class="content wid1080">
             <el-row :gutter="20">
                 <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
                     <div class="grid-content bg-purple">
