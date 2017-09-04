@@ -12,5 +12,11 @@ module.exports = {
     },
     getAll: function getAll(postId) {
         return Interface.find({}).exec();
+    },
+    getrByPID: function getrByPID(projectId) {
+        console.log(projectId, typeof projectId)
+        return Interface.find({
+            projectId: projectId
+        }).exec();
     }
 };

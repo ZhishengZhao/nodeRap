@@ -22,7 +22,8 @@ exports.Interface = mongolass.model('Interface', {
     reqType: { type: 'string' },
     reqUrl: { type: 'string' },
     resParamsId: { type: 'string' },
-    reqParamsId: { type: 'string' }
+    reqParamsId: { type: 'string' },
+    projectId: { type: 'string'}
 });
 
 exports.Project = mongolass.model('Project', {

@@ -8,7 +8,8 @@ module.exports = {
             reqType: req.fields['inter[reqType]'],
             reqUrl: req.fields['inter[reqUrl]'],
             resParamsId: req.fields['inter[resParamsId]'],
-            reqParamsId: req.fields['inter[reqParamsId]']
+            reqParamsId: req.fields['inter[reqParamsId]'],
+            projectId: req.fields['inter[projectId]']
         };
         rapInterface.create(params).then(function(result) {
             res.send({
@@ -34,4 +35,13 @@ module.exports = {
             });
         }).catch(next);
     },
+    getRecordsByPID: function(req, res, next) {
+        var projectId = req.fields.pid;
+        rapInterface.getrByPID(projectId).then(function(result) {
+            res.send({
+                result: result,
+                success: true
+            });
+        }).catch(next);
+    }
 };

@@ -197,7 +197,8 @@ export default {
             curColIndex: -1,
             editValue: '',
             propOrder: ['key', 'comments', 'type', 'value'],
-            typeList: ['number', 'string', 'object', 'boolean']
+            typeList: ['number', 'string', 'object', 'boolean'],
+            projectId: this.$route.query.id
         }
     },
     computed: {
@@ -292,7 +293,6 @@ export default {
         },
         setEditValue(type) {
             if (type == 'res') {
-                // console.log('====================', this.editValue)
                 this.responseParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
             } else {
                 this.requestParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
@@ -309,7 +309,8 @@ export default {
                 reqType: this.form.type,
                 reqUrl: this.form.link,
                 resParamsId: '',
-                reqParamsId: ''
+                reqParamsId: '',
+                projectId: this.projectId
             }
             _post('rap/addInterface', {inter}, (data) => {
                 // this.backdata = data.result
@@ -320,7 +321,8 @@ export default {
             })
         },
         getInterfaceList() {
-            _post('rap/getInterfaceList', {}, (data) => {
+            var pid = this.projectId
+            _post('rap/getInterfaceListByProjectID', {pid}, (data) => {
                 if (data && data.result && data.success) {
                     let i = 0
                     let temparr = []

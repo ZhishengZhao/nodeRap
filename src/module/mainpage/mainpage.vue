@@ -81,6 +81,9 @@ export default {
                 path: 'detail',
                 query: {
                     id: _id
+                },
+                params: {
+                    id: _id
                 }
             })
         },
