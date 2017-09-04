@@ -71,19 +71,27 @@
                             <el-button v-show="editFlag" type="info" @click="importJson('req')">导入json</el-button>
                         </div>
                         <div class="area_response">
-                            <h3>响应参数</h3><el-button v-show="editFlag" type="info" @click="addResponseList">添加一组响应</el-button>
+                            <h3>响应参数</h3>
+                            <!-- <el-button v-show="editFlag" type="info" @click="addResponseList">添加一组响应</el-button> -->
                             <el-table
                             border
                             @cell-dblclick = "goEditResponse"
                             :data="responseParams"
                             style="width: 100%">
                                 <el-table-column
+                                label="op"
+                                width="50">
+                                    <template scope="scope">
+                                        <span>X</span>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
                                 label="变量名"
                                 prop="key"
                                 width="180">
                                     <template scope="scope">
                                         <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 0" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
-                                        <span v-else class="show_value" >{{ scope.row.key }}</span>
+                                        <span v-else class="show_value" @mouseover="flagShow(scope.row.type)">{{ scope.row.key }}</span>
                                     </template>
                                 </el-table-column>
                                 <el-table-column
@@ -213,6 +221,12 @@ export default {
         this.getInterfaceList()
     },
     methods: {
+        flagShow(type) {
+            if (editFlag && type == 'object') {
+                console.log('----', type);
+
+            }
+        },
         cancelAll() {
             this.editFlag = false;
         },
