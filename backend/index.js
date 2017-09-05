@@ -2,16 +2,14 @@ var path = require('path');
 var express = require('express');
 var MongoStore = require('connect-mongo');
 var routes = require('./routes');
-var bodyParser = require('body-parser'); 
-var cors =  require('cors');
+var bodyParser = require('body-parser');
+var cors = require('cors');
 
 var app = express();
 
-app.use(cors());
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
- 
+
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -21,8 +19,11 @@ app.use(require('express-formidable')({
     keepExtensions: true // 保留文件后缀
 }));
 
+app.use(cors());
 // 路由
-routes(app);
+// routes(app);
+app.use('/rap', require('./routes/rap'));
+app.use('/project', require('./routes/project'));
 
 // 禁用response header里面的x-powered-by
 app.disable('x-powered-by');
@@ -31,5 +32,3 @@ app.disable('x-powered-by');
 app.listen('3000', function() {
     console.log('> listening on port 3000');
 });
-
-

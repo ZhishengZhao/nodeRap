@@ -3,6 +3,7 @@
 
 import App from './App.vue';
 import detail from './detail/index.vue';
+import detailNew from './detail/indexnew.vue';
 import request from './detail/request.vue';
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
@@ -19,21 +20,28 @@ let configRoutes = [{
         meta: {
             title: '欢迎页'
         }
-    },{
+    }, {
         path: 'mainpage',
         component: mainpage,
         name: 'mainpage',
         meta: {
             title: '首页'
         }
-    },{
+    }, {
         path: 'detail',
-        component: detail,
+        component: detailNew,
         name: 'rapDetail',
         meta: {
             title: '详情页'
         }
-    },{
+    }, {
+        path: 'detailold',
+        component: detail,
+        name: 'rapDetailold',
+        meta: {
+            title: '详情页old'
+        }
+    }, {
         path: 'requestData',
         component: request,
         name: 'requestData',

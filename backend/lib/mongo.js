@@ -23,11 +23,16 @@ exports.Interface = mongolass.model('Interface', {
     reqUrl: { type: 'string' },
     resParamsId: { type: 'string' },
     reqParamsId: { type: 'string' },
-    projectId: { type: 'string'}
+    projectId: { type: 'string' }
 });
 
 exports.Project = mongolass.model('Project', {
     name: { type: 'string' },
     desc: { type: 'string' }
+});
+
+exports.JsonRecord = mongolass.model('JsonRecord', {
+    content: { type: 'string' },
+    pid: { type: 'string' }
 });
 // exports.Interface.index({ _id: -1 }).exec();
