@@ -101,7 +101,8 @@ export default {
             projectId: this.$route.query.id,
             /* 接口内容 */
             responseParams: '',
-            updateFlag: false
+            updateFlag: false,
+            editRecordId: ''
         }
     },
     computed: {
@@ -159,20 +160,28 @@ export default {
             })
         },
         getInterfaceParams(pid) {
-            // _post('rap/getIterParamsByIterId', { iterId }, (data) => {
-            _post('rap/getJsonRecordByPid', { pid }, (data) => {
-                if (data && data.result && data.success) {
-                    this.responseParams = JSON.stringify(data.result)
-                    if (!this.editFlag) {
-                        let contentInter = data.result
-                        var options = {
-                            dom: '#container' //对应容器的css选择器
-                        };
-                        var jf = new JsonFormater(options); //创建对象
-                        jf.doFormat(contentInter); //格式化json
-                    }
+            _post('rap/getFinalJRByPid', { pid }, (data) => {
+                if (typeof data == 'string') {
+                    data = JSON.parse(data)
+                }
+
+                if (!this.editFlag) {
+                    let contentInter = data
+                    var options = {
+                        dom: '#container' //对应容器的css选择器
+                    };
+                    var jf = new JsonFormater(options); //创建对象
+                    jf.doFormat(contentInter); //格式化json
                 }
             })
+
+            // _post('rap/getJsonRecordByPid', { pid }, (data) => {
+            //     if (typeof data !== 'string') {
+            //         data = JSON.stringify(data)
+            //     }
+
+            //     this.responseParams = data
+            // })
         },
         // 新增接口
         goAddInterface() {
@@ -194,12 +203,22 @@ export default {
         },
         goUpdate() {
             this.updateFlag = true
+            let pid = this.curIterfaceId
+            _post('rap/getJsonRecordByPid', { pid }, (data) => {
+                if (typeof data == 'string') {
+                    data = JSON.parse(data)
+                }
+                this.editRecordId = data[0]._id
+                this.responseParams = data[0].content
+
+            })
         },
         goUpdateSubmit() {
             let txt = this.responseParams
-            this.responseParams = JSON.stringify(this.json2mock(txt))
-            _post('rap/addJsonRecord', {
-                pid: this.curIterfaceId,
+            // this.responseParams = JSON.stringify(this.json2mock(txt))
+            this.responseParams = txt // JSON.stringify(this.json2mock(txt))
+            _post('rap/updateJsonRecord', {
+                _id: this.editRecordId,
                 content: this.responseParams
             }, (data) => {
                 if (data && data.success) {
@@ -233,6 +252,8 @@ export default {
 }
 </script>
 <style lang="scss">
+@import '../../assets/styles/jsonformate.css';
+
 .edit_input {
     width: 750px;
     height: 560px;
@@ -249,55 +270,5 @@ export default {
 
 .el-form-item__content {
     text-align: center;
-}
-
-.jf-ObjectBrace {
-    color: #00AA00;
-    font-weight: bold;
-}
-
-.jf-ArrayBrace {
-    color: #0033FF;
-    font-weight: bold;
-}
-
-.jf-PropertyName {
-    color: #CC0000;
-    font-weight: bold;
-}
-
-.jf-String {
-    color: #007777;
-}
-
-.jf-Number {
-    color: #AA00AA;
-}
-
-.jf-Boolean {
-    color: #0000FF;
-}
-
-.jf-Null {
-    color: #0000FF;
-}
-
-.jf-Comma {
-    color: #000000;
-    font-weight: bold;
-}
-
-pre.jf-CodeContainer {
-    margin-top: 0;
-    margin-bottom: 0;
-    text-align: left;
-}
-
-.content_inter {
-    padding-top: 20px;
-}
-
-.content_inter_2 {
-    padding-top: 20px;
 }
 </style>

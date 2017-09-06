@@ -9,7 +9,12 @@ module.exports = {
     },
     getByPid: function getByPid(pid) {
         return JsonRecord.find({
-            pid: pid
+            pid: '' + pid + ''
         }).exec();
+    },
+    update: function update(params) {
+        return JsonRecord.update({
+            _id: params._id
+        }, { $set: { content: params.content } }).exec();
     }
 };

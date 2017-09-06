@@ -29,6 +29,7 @@
         "ip": "^1.1.5",
         "lodash": "^4.17.4",
         "minimist": "^1.2.0",
+        "mockjs": "^1.0.1-beta3",
         "moment": "^2.18.1",
         "mongolass": "^2.4.5",
         "node-sass": "^4.5.3",

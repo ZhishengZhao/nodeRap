@@ -22,8 +22,9 @@ app.use(require('express-formidable')({
 app.use(cors());
 // 路由
 // routes(app);
-app.use('/rap', require('./routes/rap'));
 app.use('/project', require('./routes/project'));
+app.use('/rap', require('./routes/rap'));
+// app.use('/jsonrecords', require('./routes/jsonrecords'));
 
 // 禁用response header里面的x-powered-by
 app.disable('x-powered-by');

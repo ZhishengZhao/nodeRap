@@ -1,0 +1,49 @@
+.jf-ObjectBrace {
+    color: #000;
+    font-weight: bold;
+}
+
+.jf-ArrayBrace {
+    color: #0033FF;
+    font-weight: bold;
+}
+
+.jf-PropertyName {
+    color: #e4d973;
+    font-weight: bold;
+}
+
+.jf-String {
+    color: #765da5;
+}
+
+.jf-Number {
+    color: #765da5;
+}
+
+.jf-Boolean {
+    color: #765da5;
+}
+
+.jf-Null {
+    color: #765da5;
+}
+
+.jf-Comma {
+    color: #000000;
+    font-weight: bold;
+}
+
+pre.jf-CodeContainer {
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.content_inter {
+    padding-top: 20px;
+}
+
+.content_inter_2 {
+    padding-top: 20px;
+}

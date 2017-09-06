@@ -43,5 +43,14 @@ module.exports = {
                 success: true
             });
         }).catch(next);
+    },
+    getInterId: function(req, res, next) {
+        var projectId = req.params.projectId;
+        rapInterface.getrByPID(projectId).then(function(result) {
+            res.send({
+                result: result,
+                success: true
+            });
+        }).catch(next);
     }
 };

@@ -7,7 +7,6 @@
         <div class="content_top wid1080">
             <el-row :gutter="20">
                 <div class="block fr">
-                    
                 </div>
             </el-row>
         </div>
@@ -37,7 +36,7 @@ export default {
         return {
             interList: [],
             defaultProps: {
-              label: 'name'
+                label: 'name'
             },
             curIterfaceId: '',
             interfaceInfo: {
@@ -63,7 +62,7 @@ export default {
                 if (data && data.result && data.success) {
                     let i = 0
                     let temparr = []
-                    for(; i < data.result.length; i++) {
+                    for (; i < data.result.length; i++) {
                         temparr.push({
                             name: data.result[i].name,
                             id: data.result[i]._id,
@@ -86,11 +85,11 @@ export default {
             this.getInterfaceParams(iterId)
         },
         getInterfaceParams(iterId) {
-            _post('rap/getIterParamsByIterId', {iterId}, (data) => {
+            _post('rap/getIterParamsByIterId', { iterId }, (data) => {
                 if (data && data.result && data.success) {
                     let contentInter = data.result
                     var options = {
-                        dom : '#container' //对应容器的css选择器
+                        dom: '#container' //对应容器的css选择器
                     };
                     var jf = new JsonFormater(options); //创建对象
                     jf.doFormat(contentInter); //格式化json
@@ -99,42 +98,10 @@ export default {
         }
     }
 }
-
 </script>
 <style lang="scss">
-.jf-ObjectBrace {
-    color: #00AA00;
-    font-weight: bold;
-}
-.jf-ArrayBrace {
-    color: #0033FF;
-    font-weight: bold;
-}
-.jf-PropertyName {
-    color: #CC0000;
-    font-weight: bold;
-}
-.jf-String {
-    color: #007777;
-}
-.jf-Number {
-    color: #AA00AA;
-}
-.jf-Boolean {
-    color: #0000FF;
-}
-.jf-Null {
-    color: #0000FF;
-}
-.jf-Comma {
-    color: #000000;
-    font-weight: bold;
-}
-pre.jf-CodeContainer {
-    margin-top: 0;
-    margin-bottom: 0;
-    text-align: left;
-}
+@import '../../assets/styles/jsonformate.css';
+
 .content_inter {
     padding-top: 20px;
 }
