@@ -7,12 +7,14 @@ import detailNew from './detail/indexnew.vue';
 import request from './detail/request.vue';
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
+import register from './mainpage/register.vue';
 import NotFound from './404.vue';
 // const request = resolve => require('./detail/request.vue', resolve);
 
 let configRoutes = [{
     path: '/pages',
     component: App,
+    redirect: { name: 'welcome' },
     children: [{
         path: 'welcome',
         component: welcome,
@@ -47,6 +49,13 @@ let configRoutes = [{
         name: 'requestData',
         meta: {
             title: '请求接口'
+        }
+    }, {
+        path: 'register',
+        component: register,
+        name: 'register',
+        meta: {
+            title: '注册页面'
         }
     }]
 }, {
