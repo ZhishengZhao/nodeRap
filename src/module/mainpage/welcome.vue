@@ -53,7 +53,6 @@ export default {
     methods: {
         goPage(params) {
             _get('rap/isLogin', null, (data) => {
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
                 if (data.success && data.result) {
                     this.$router.push({
                         path: 'mainpage'
@@ -64,7 +63,20 @@ export default {
             })
         },
         goLogin() {
-
+            var user = {
+                name: form.name,
+                pwd: form.pwd
+            }
+            _post('rap/login', user, (data) => {
+                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+                if (data.success && data.result) {
+                    this.$router.push({
+                        path: 'mainpage'
+                    })
+                } else {
+                    this.loginShow = true
+                }
+            })
         },
         goRegister() {
             this.$router.push({
