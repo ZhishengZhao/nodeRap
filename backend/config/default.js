@@ -5,5 +5,5 @@ module.exports = {
         key: 'noderap',
         maxAge: 2592000000
     },
-    mongodb: 'mongodb://localhost:27017/rapdb'
+    mongodb: 'mongodb://localhost:27017/test'
 };

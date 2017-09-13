@@ -64,17 +64,18 @@ export default {
         },
         goLogin() {
             var user = {
-                name: form.name,
-                pwd: form.pwd
+                name: this.form.name,
+                pwd: this.form.pwd
             }
             _post('rap/login', user, (data) => {
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-                if (data.success && data.result) {
-                    this.$router.push({
-                        path: 'mainpage'
-                    })
+                this.loginShow = false
+                if (data.success) {
+                    console.log('登陆成功，跳转主页')
+                    // this.$router.push({
+                    //     path: 'mainpage'
+                    // })
                 } else {
-                    this.loginShow = true
+                    alert(data.desc || '系统异常 稍后再试')
                 }
             })
         },

@@ -28,7 +28,8 @@ exports.Interface = mongolass.model('Interface', {
 
 exports.Project = mongolass.model('Project', {
     name: { type: 'string' },
-    desc: { type: 'string' }
+    desc: { type: 'string' },
+    author: { type: 'string' }
 });
 
 exports.JsonRecord = mongolass.model('JsonRecord', {

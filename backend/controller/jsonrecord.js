@@ -1,4 +1,6 @@
 var rapJsonRecord = require('../models/rapJsonRecord');
+var rapInterface = require('../models/rapInterface');
+var url = require('url');
 var Mock = require('mockjs')
 
 module.exports = {
@@ -35,7 +37,7 @@ module.exports = {
                 data = Mock.mock(result)
             }
 
-            res.send(data);
+            res.send(result);
         }).catch(next);
     },
     updateRecord: function(req, res, next) {
@@ -43,11 +45,40 @@ module.exports = {
             content: req.fields.content,
             _id: req.fields._id
         };
+        // console.log('==========', params);
         rapJsonRecord.update(params).then(function(result) {
             res.send({
                 result: result,
                 success: true
             });
+        }).catch(next);
+    },
+    // responseData: function(projectId, reqPath) {
+    responseData: function(req, res, next) {
+        // var querys = url.parse(req.url, true).query;
+        // console.log(req.url, querys, req.params.projectId);
+        var tempIndex = req.url.indexOf('?') == -1 ? req.url.length : req.url.indexOf('?')
+        var reqPath = '/' + req.url.substring(0, tempIndex).split('/').splice(3).join('/')
+
+        rapInterface.getByPidAndPath(req.params.projectId, reqPath).then(function(result) {
+            if (result.length) {
+                rapJsonRecord.getByPid(result[0]._id).then(function(result) {
+                    var data = {}
+
+                    if (result.length) {
+                        result = JSON.parse(result[0].content)
+
+                        // 利用mockjs语法生成随机结果
+                        data = Mock.mock(result)
+                    }
+
+                    // console.log('result[0]._id', result);
+                    // res.send(JSON.parse(result[0].content));
+                    res.send(data);
+                }).catch(next);
+            } else {
+                res.send({});
+            }
         }).catch(next);
     }
 };

@@ -8,6 +8,7 @@
             <el-row :gutter="20" class="border">
                 <div class="block fr">
                     <el-button type="info" @click="editFlag = true">编辑</el-button>
+                    <el-button type="info" @click="goAddPage">添加页面</el-button>
                     <el-button type="info" @click="editFlag = false">取消</el-button>
                 </div>
             </el-row>
@@ -16,17 +17,17 @@
                     <div class="grid-content bg-purple">
                         <h3>接口列表</h3>
                         <el-tree :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick"></el-tree>
-                        <el-button v-if="editFlag" @click="openInterDialog" type="info">add</el-button>
+                        <el-button v-if="editFlag" @click="dialogFormVisible = true" type="info">add</el-button>
                         <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
                     </div>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20 border">
                     <interface-detail :detail="interfaceInfo" class="border"></interface-detail>
-                    <div class="grid-content bg-purple-light border">
-                        <div class="content_inter">
-                            <el-button type="info" v-if="editFlag" @click="goUpdate">更新</el-button>
-                            <div id='container'></div>
-                        </div>
+                    <div class="grid-content bg-purple-light border content_inter">
+                        <h3>接口参数</h3>
+                        <hr>
+                        <el-button type="info" v-if="editFlag" @click="goUpdate">更新</el-button>
+                        <div id='container'></div>
                     </div>
                 </el-col>
             </el-row>
@@ -56,7 +57,7 @@
                 </el-form>
             </el-dialog>
             <el-dialog class="bor-radius_50" :visible.sync="updateFlag">
-                <el-form ref="form" :model="form">
+                <el-form ref="form">
                     <el-form-item>
                         <textarea name="" cols="30" rows="10" class="edit_input" ref="editParams" v-model="responseParams">
                         </textarea>
@@ -64,6 +65,20 @@
                     <el-form-item>
                         <el-button type="primary" @click="goUpdateSubmit">确定</el-button>
                         <el-button @click="updateFlag = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <el-dialog class="bor-radius_50" :visible.sync="updateFlag2">
+                <el-form ref="form" :model="formPage">
+                    <el-form-item label="名称">
+                        <el-input v-model="formPage.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="说明">
+                        <el-input type="textarea" v-model="formPage.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="goAddPage">确定</el-button>
+                        <el-button @click="dialogFormVisible = false">取消</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -91,18 +106,23 @@ export default {
                 link: '',
                 desc: ''
             },
+            formPage: {
+                name: '',
+                desc: ''
+            },
             curIterfaceId: '',
             editFlag: false,
             interfaceInfo: {
                 name: '',
                 type: '',
-                url: ''
+                url: '',
+                projectId: this.$route.query.id
             },
             projectId: this.$route.query.id,
             /* 接口内容 */
             responseParams: '',
             updateFlag: false,
-            editRecordId: ''
+            updateFlag2: false
         }
     },
     computed: {
@@ -117,15 +137,14 @@ export default {
         this.getInterfaceList()
     },
     methods: {
-        // 初始化事件
+        /* 初始化事件 */
         // 获取接口列表
         getInterfaceList() {
-            var pid = this.projectId
+            let pid = this.projectId
             _post('rap/getInterfaceListByProjectID', { pid }, (data) => {
                 if (data && data.result && data.success) {
-                    let i = 0
                     let temparr = []
-                    for (; i < data.result.length; i++) {
+                    for (let i = 0; i < data.result.length; i++) {
                         temparr.push({
                             name: data.result[i].name,
                             id: data.result[i]._id,
@@ -138,19 +157,51 @@ export default {
                 }
             })
         },
-        // 非初始化事件
+        /* 非初始化--交互事件 */
+        // 左侧列表点击
         iterfaceNodeClick(data) {
-            let iterId = data.id
+            Object.assign(this.interfaceInfo, data)
             this.curIterfaceId = data.id
-            let iterName = data.name
-            this.interfaceInfo.name = data.name
-            this.interfaceInfo.type = data.type
-            this.interfaceInfo.url = data.url
-            this.getInterfaceParams(iterId)
+            this.getInterfaceParams(data.id)
         },
-        openInterDialog() {
-            this.dialogFormVisible = true
+        // 新增页面
+        goAddPage() {
+            let inter = {
+                name: this.formPage.name,
+                desc: this.formPage.desc,
+                projectId: this.projectId,
+                pid: 0
+            }
+            _post('rap/addInterface', { inter }, (data) => {
+                if (data && data.success) {
+                    this.dialogFormVisible = false
+                    this.getInterfaceList()
+                }
+            })
         },
+        // 新增接口
+        goAddInterface() {
+            if (this.form.link.indexOf('/') != 0) {
+                this.form.link = '/' + this.form.link
+            }
+
+            let inter = {
+                name: this.form.name,
+                desc: this.form.desc,
+                reqType: this.form.type,
+                reqUrl: this.form.link,
+                resParamsId: '',
+                reqParamsId: '',
+                projectId: this.projectId
+            }
+            _post('rap/addInterface', { inter }, (data) => {
+                if (data && data.success) {
+                    this.dialogFormVisible = false
+                    this.getInterfaceList()
+                }
+            })
+        },
+        // 接口删除
         deleteInterface() {
             var iterId = this.curIterfaceId
             _get('rap/deleteInterface', { iterId }, (data) => {
@@ -159,8 +210,37 @@ export default {
                 }
             })
         },
+        // 接口更新1
+        goUpdate() {
+            this.updateFlag = true
+            let pid = this.curIterfaceId
+            _post('rap/getJsonRecordByPid', { pid }, (data) => {
+                if (typeof data == 'string') {
+                    data = JSON.parse(data)
+                }
+
+                this.responseParams = data[0].content
+            })
+        },
+        // 接口更新2
+        goUpdateSubmit() {
+            let txt = this.responseParams
+            // this.responseParams = JSON.stringify(this.json2mock(txt))
+            this.responseParams = txt // JSON.stringify(this.json2mock(txt))
+            _post('rap/updateJsonRecord', {
+                _id: this.curIterfaceId,
+                content: this.responseParams
+            }, (data) => {
+                if (data && data.success) {
+                    this.updateFlag = false
+                    this.getInterfaceList()
+                }
+            })
+        },
+        // 获取接口参数
         getInterfaceParams(pid) {
             _post('rap/getFinalJRByPid', { pid }, (data) => {
+                console.log('data', data)
                 if (typeof data == 'string') {
                     data = JSON.parse(data)
                 }
@@ -183,50 +263,8 @@ export default {
             //     this.responseParams = data
             // })
         },
-        // 新增接口
-        goAddInterface() {
-            let inter = {
-                name: this.form.name,
-                desc: this.form.desc,
-                reqType: this.form.type,
-                reqUrl: this.form.link,
-                resParamsId: '',
-                reqParamsId: '',
-                projectId: this.projectId
-            }
-            _post('rap/addInterface', { inter }, (data) => {
-                if (data && data.success) {
-                    this.dialogFormVisible = false
-                    this.getInterfaceList()
-                }
-            })
-        },
-        goUpdate() {
-            this.updateFlag = true
-            let pid = this.curIterfaceId
-            _post('rap/getJsonRecordByPid', { pid }, (data) => {
-                if (typeof data == 'string') {
-                    data = JSON.parse(data)
-                }
-                this.editRecordId = data[0]._id
-                this.responseParams = data[0].content
-
-            })
-        },
-        goUpdateSubmit() {
-            let txt = this.responseParams
-            // this.responseParams = JSON.stringify(this.json2mock(txt))
-            this.responseParams = txt // JSON.stringify(this.json2mock(txt))
-            _post('rap/updateJsonRecord', {
-                _id: this.editRecordId,
-                content: this.responseParams
-            }, (data) => {
-                if (data && data.success) {
-                    this.updateFlag = false
-                    this.getInterfaceList()
-                }
-            })
-        },
+        /* 非初始化--辅助处理 */
+        // 接口删除
         json2mock(tar) {
             let jsonObj = tar
             if (typeof jsonObj == 'string') {
@@ -270,5 +308,18 @@ export default {
 
 .el-form-item__content {
     text-align: center;
+}
+
+#container {
+    background-color: #272822;
+    min-height: 350px;
+}
+
+.content_inter {
+    padding-top: 20px;
+}
+
+.content_inter_2 {
+    padding-top: 20px;
 }
 </style>

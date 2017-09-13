@@ -1,4 +1,5 @@
 var rapInterface = require('../models/rapInterface');
+var rapJsonRecord = require('../models/rapJsonRecord');
 
 module.exports = {
     addInterface: function(req, res, next) {
@@ -12,10 +13,18 @@ module.exports = {
             projectId: req.fields['inter[projectId]']
         };
         rapInterface.create(params).then(function(result) {
-            res.send({
-                result: result,
-                success: true
-            });
+            var pid = result.ops[0]._id + '';
+
+            var params = {
+                content: '{}',
+                pid: pid
+            };
+            rapJsonRecord.create(params).then(function(result) {
+                res.send({
+                    result: result,
+                    success: true
+                });
+            }).catch(next);
         }).catch(next);
     },
     deleteInterface: function(req, res, next) {

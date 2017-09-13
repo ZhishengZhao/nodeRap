@@ -35,7 +35,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 // 处理表单及文件上传的中间件
 app.use(require('express-formidable')({
     uploadDir: path.join(__dirname, 'public/img'),

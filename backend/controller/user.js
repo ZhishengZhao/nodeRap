@@ -19,6 +19,7 @@ module.exports = {
         }).catch(next);
     },
     isLogin: function(req, res, next) {
+        console.log('00000--------req.session', req.session);
         var isLogin = false;
 
         if (req.session && req.session.user) {
@@ -31,23 +32,31 @@ module.exports = {
         });
     },
     login: function(req, res, next) {
-        var name = req.fields.user.name;
-        var password = sha1(req.fields.user.pwd);
+        console.log(req.fields);
+        var name = req.fields.name;
+        var password = sha1(req.fields.pwd);
         var errInfo = '';
 
         rapUser.getUserByName(name).then(function(user) {
-            if (!user) {
+            var success = true,
+                errInfo = '';
+            if (!user.length) {
                 errInfo = '用户不存在';
-            } else if (password !== user.password) {
+                success = false;
+            } else if (password !== user[0].password) {
                 errInfo = '密码错误';
+                success = false;
+            } else {
+                delete user[0].password;
+                console.log(user);
+                req.session.user = user[0];
+                console.log('--------req.session', req.session);
             }
 
-            delete user.password;
-            req.session.user = user;
             res.send({
                 result: '',
-                desc: '',
-                success: true
+                desc: errInfo,
+                success: success
             });
         }).catch(next);
     },

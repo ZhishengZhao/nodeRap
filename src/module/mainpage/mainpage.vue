@@ -23,21 +23,21 @@
                         </div>
                         <div class="unit_project unit_project__plus" @click="goAddProject">
                         </div>
-                    </section> 
+                    </section>
                 </el-col>
-            </el-row>            
+            </el-row>
             <el-dialog :visible.sync="dialogFormVisible">
-              <el-form ref="form" :model="form" label-width="80px">
-                  <el-form-item label="项目名称">
-                    <el-input v-model="form.name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="项目描述">
-                    <el-input v-model="form.desc"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="projectAddConfirm">确定</el-button>
-                    <el-button @click="dialogFormVisible = false">取消</el-button>
-                  </el-form-item>
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="项目名称">
+                        <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="项目描述">
+                        <el-input v-model="form.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="projectAddConfirm">确定</el-button>
+                        <el-button @click="dialogFormVisible = false">取消</el-button>
+                    </el-form-item>
                 </el-form>
             </el-dialog>
         </div>
@@ -69,13 +69,9 @@ export default {
         rapHead
     },
     mounted() {
-        this.init()
-        this.getInterfaceList()
+        this.getProjectList()
     },
     methods: {
-        init() {
-            this.getProjectList()
-        },
         goPage(_id) {
             this.$router.push({
                 path: 'detail',
@@ -91,7 +87,7 @@ export default {
             this.dialogFormVisible = true
         },
         projectAddConfirm() {
-            _post('project/add', this.form, (data) => {
+            _post('rap/add', this.form, (data) => {
                 if (data.success) {
                     this.dialogFormVisible = false
                     this.getProjectList()
@@ -99,7 +95,7 @@ export default {
             })
         },
         getProjectList() {
-            _post('project/getAll', this.form, (data) => {
+            _post('rap/getAll', null, (data) => {
                 if (data.success) {
                     this.projectList = data.result
                 }
@@ -107,27 +103,27 @@ export default {
         },
         getProjectsByCondition() {
 
-        },
-        getInterfaceList() {
-            _post('rap/getInterfaceList', {}, (data) => {
-                if (data && data.result && data.success) {
-                    let i = 0
-                    let temparr = []
-                    for(; i < data.result.length; i++) {
-                        temparr.push({
-                            name: data.result[i].name,
-                            id: data.result[i]._id,
-                            type: data.result[i].reqType,
-                            url: data.result[i].reqUrl
-                        })
-                    }
-                    this.interList = temparr
-                }
-            })
         }
+        // ,
+        // getInterfaceList() {
+        //     _post('rap/getInterfaceList', {}, (data) => {
+        //         if (data && data.result && data.success) {
+        //             let i = 0
+        //             let temparr = []
+        //             for (; i < data.result.length; i++) {
+        //                 temparr.push({
+        //                     name: data.result[i].name,
+        //                     id: data.result[i]._id,
+        //                     type: data.result[i].reqType,
+        //                     url: data.result[i].reqUrl
+        //                 })
+        //             }
+        //             this.interList = temparr
+        //         }
+        //     })
+        // }
     }
 }
-
 </script>
 <style lang="scss">
 .unit_project {
@@ -139,13 +135,15 @@ export default {
     margin: 20px 20px 0 0;
     padding: 10px;
 }
+
 .unit_project__title {
-    font-size: 18px;    
+    font-size: 18px;
     color: #6D8095;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
+
 .unit_project__desc {
     color: rgba(0, 0, 0, 0.3);
     text-overflow: ellipsis;
@@ -155,6 +153,7 @@ export default {
     white-space: nowrap;
     overflow: hidden;
 }
+
 .unit_project__plus {
     border: 1px dashed #DDD;
     position: relative;

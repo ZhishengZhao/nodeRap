@@ -14,9 +14,14 @@ module.exports = {
         return Interface.find({}).exec();
     },
     getrByPID: function getrByPID(projectId) {
-        console.log(projectId, typeof projectId)
         return Interface.find({
             projectId: projectId
+        }).exec();
+    },
+    getByPidAndPath: function getrByPID(projectId, reqPath) {
+        return Interface.find({
+            projectId: projectId,
+            reqUrl: reqPath
         }).exec();
     }
 };
