@@ -1,5 +1,7 @@
 var rapJsonRecord = require('../models/rapJsonRecord');
 var rapInterface = require('../models/rapInterface');
+var JsonRecord = require('../lib/mongo').JsonRecord;
+var ObjectID = require('mongodb').ObjectID;
 var url = require('url');
 var Mock = require('mockjs')
 
@@ -43,15 +45,29 @@ module.exports = {
     updateRecord: function(req, res, next) {
         var params = {
             content: req.fields.content,
-            _id: req.fields._id
+            _id: new ObjectID(req.fields._id),
+            pid: req.fields.pid
         };
-        // console.log('==========', params);
-        rapJsonRecord.update(params).then(function(result) {
-            res.send({
-                result: result,
-                success: true
-            });
+        console.log('==========', params);
+        JsonRecord.remove({ pid: req.fields.pid }).then(function(result) {
+            var params = {
+                content: req.fields.content,
+                pid: req.fields.pid
+            };
+            rapJsonRecord.create(params).then(function(result) {
+                res.send({
+                    result: result,
+                    success: true
+                });
+            }).catch(next);
         }).catch(next);
+        // rapJsonRecord.update(params).then(function(result) {
+        //     // console.log('11111111111==========', result);
+        //     res.send({
+        //         result: result,
+        //         success: true
+        //     });
+        // }).catch(next);
     },
     // responseData: function(projectId, reqPath) {
     responseData: function(req, res, next) {

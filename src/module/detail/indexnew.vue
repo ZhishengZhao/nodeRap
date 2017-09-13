@@ -229,7 +229,8 @@ export default {
             this.responseParams = txt // JSON.stringify(this.json2mock(txt))
             _post('rap/updateJsonRecord', {
                 _id: this.curIterfaceId,
-                content: this.responseParams
+                content: this.responseParams,
+                pid: this.curIterfaceId
             }, (data) => {
                 if (data && data.success) {
                     this.updateFlag = false
