@@ -4,13 +4,14 @@ var rapJsonRecord = require('../models/rapJsonRecord');
 module.exports = {
     addInterface: function(req, res, next) {
         var params = {
-            name: req.fields['inter[name]'],
-            desc: req.fields['inter[desc]'],
-            reqType: req.fields['inter[reqType]'],
-            reqUrl: req.fields['inter[reqUrl]'],
-            resParamsId: req.fields['inter[resParamsId]'],
-            reqParamsId: req.fields['inter[reqParamsId]'],
-            projectId: req.fields['inter[projectId]']
+            name: req.fields.name,
+            desc: req.fields.desc,
+            reqType: req.fields.reqType || '',
+            reqUrl: req.fields.reqUrl || '',
+            resParamsId: req.fields.resParamsId || '',
+            reqParamsId: req.fields.reqParamsId || '',
+            projectId: req.fields.projectId,
+            pid: req.fields.pid
         };
         rapInterface.create(params).then(function(result) {
             var pid = result.ops[0]._id + '';

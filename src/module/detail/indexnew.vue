@@ -7,16 +7,18 @@
         <div class="content wid1080">
             <el-row :gutter="20" class="border">
                 <div class="block fr">
-                    <el-button type="info" @click="editFlag = true">编辑</el-button>
-                    <el-button type="info" @click="goAddPage">添加页面</el-button>
-                    <el-button type="info" @click="editFlag = false">取消</el-button>
+                    <el-button type="info" v-if="!editFlag" @click="editFlag = true">编辑</el-button>
+                    <el-button type="info" v-if="editFlag" @click="addPageShow = true">添加页面</el-button>
+                    <el-button type="info" v-if="editFlag" @click="editFlag = false">取消</el-button>
                 </div>
             </el-row>
             <el-row :gutter="20" class="border">
                 <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20 border">
                     <div class="grid-content bg-purple">
-                        <h3>接口列表</h3>
-                        <el-tree :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick"></el-tree>
+                        <h3>取点花</h3>
+                        <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+                        </el-input>
+                        <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode"></el-tree>
                         <el-button v-if="editFlag" @click="dialogFormVisible = true" type="info">add</el-button>
                         <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
                     </div>
@@ -68,7 +70,7 @@
                     </el-form-item>
                 </el-form>
             </el-dialog>
-            <el-dialog class="bor-radius_50" :visible.sync="updateFlag2">
+            <el-dialog class="bor-radius_50" :visible.sync="addPageShow">
                 <el-form ref="form" :model="formPage">
                     <el-form-item label="名称">
                         <el-input v-model="formPage.name"></el-input>
@@ -97,6 +99,7 @@ export default {
         return {
             interList: [],
             defaultProps: {
+                children: 'children',
                 label: 'name'
             },
             dialogFormVisible: false,
@@ -111,6 +114,7 @@ export default {
                 desc: ''
             },
             curIterfaceId: '',
+            curPageId: '',
             editFlag: false,
             interfaceInfo: {
                 name: '',
@@ -122,7 +126,13 @@ export default {
             /* 接口内容 */
             responseParams: '',
             updateFlag: false,
-            updateFlag2: false
+            addPageShow: false,
+            filterText: ''
+        }
+    },
+    watch: {
+        filterText(val) {
+            this.$refs.interTree.filter(val);
         }
     },
     computed: {
@@ -149,20 +159,57 @@ export default {
                             name: data.result[i].name,
                             id: data.result[i]._id,
                             type: data.result[i].reqType,
-                            url: data.result[i].reqUrl
+                            url: data.result[i].reqUrl,
+                            pid: data.result[i].pid
                         })
                     }
-                    this.interList = temparr
+                    this.interList = this.arrHandle(temparr)
+                    // console.log('interList', this.interList)
                     this.iterfaceNodeClick(this.interList[0])
                 }
             })
         },
+        arrHandle(arr) {
+            let pidArr = []
+            let childArr = []
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].pid == 0) {
+                    arr[i].children = []
+                    arr[i].children.push({
+                        name: '添加接口',
+                        id: '0',
+                        type: '0',
+                        url: '0',
+                        pid: arr[i].id
+                    })
+                    pidArr.push(arr[i])
+                } else {
+                    childArr.push(arr[i])
+                }
+            }
+            for (let m = 0; m < childArr.length; m++) {
+                for (let n = 0; n < pidArr.length; n++) {
+                    if (childArr[m].pid == pidArr[n].id) {
+                        pidArr[n].children.push(childArr[m])
+                    }
+                }
+            }
+
+            return pidArr
+        },
         /* 非初始化--交互事件 */
         // 左侧列表点击
         iterfaceNodeClick(data) {
-            Object.assign(this.interfaceInfo, data)
-            this.curIterfaceId = data.id
-            this.getInterfaceParams(data.id)
+            if (data.id == '0' && this.editFlag) {
+                this.dialogFormVisible = true
+                this.curPageId = data.pid
+            } else if (data.pid != '0' && data.id != '0') {
+                Object.assign(this.interfaceInfo, data)
+                this.curIterfaceId = data.id
+                this.getInterfaceParams(data.id)
+            } else {
+                this.curPageId = data.id
+            }
         },
         // 新增页面
         goAddPage() {
@@ -172,9 +219,9 @@ export default {
                 projectId: this.projectId,
                 pid: 0
             }
-            _post('rap/addInterface', { inter }, (data) => {
+            _post('rap/addInterface', inter, (data) => {
                 if (data && data.success) {
-                    this.dialogFormVisible = false
+                    this.addPageShow = false
                     this.getInterfaceList()
                 }
             })
@@ -192,9 +239,10 @@ export default {
                 reqUrl: this.form.link,
                 resParamsId: '',
                 reqParamsId: '',
-                projectId: this.projectId
+                projectId: this.projectId,
+                pid: this.curPageId
             }
-            _post('rap/addInterface', { inter }, (data) => {
+            _post('rap/addInterface', inter, (data) => {
                 if (data && data.success) {
                     this.dialogFormVisible = false
                     this.getInterfaceList()
@@ -241,7 +289,7 @@ export default {
         // 获取接口参数
         getInterfaceParams(pid) {
             _post('rap/getFinalJRByPid', { pid }, (data) => {
-                console.log('data', data)
+                // console.log('data', data)
                 if (typeof data == 'string') {
                     data = JSON.parse(data)
                 }
@@ -265,6 +313,10 @@ export default {
             // })
         },
         /* 非初始化--辅助处理 */
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
+        },
         // 接口删除
         json2mock(tar) {
             let jsonObj = tar
