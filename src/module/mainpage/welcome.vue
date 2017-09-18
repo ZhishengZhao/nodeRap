@@ -5,7 +5,7 @@
     <div class="page">
         <rap-head></rap-head>
         <div class="part_main">
-            <p class="page_title">
+            <p class="page_title" @click="showJoy = true">
             </p>
             <p class="btn" @click="goPage('main')">
             </p>
@@ -24,7 +24,7 @@
                 </el-form-item>
             </el-form>
         </el-dialog>
-        <!-- <joy-cooper></joy-cooper> -->
+        <joy-cooper v-show="showJoy"></joy-cooper>
     </div>
 </template>
 <script>
@@ -39,7 +39,8 @@ export default {
             form: {
                 name: '',
                 pwd: ''
-            }
+            },
+            showJoy: false
         }
     },
     computed: {
