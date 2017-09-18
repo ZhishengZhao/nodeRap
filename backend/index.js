@@ -41,10 +41,16 @@ app.use(require('express-formidable')({
     keepExtensions: true // 保留文件后缀
 }));
 
-app.use(cors());
+// app.use(cors());
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    next();
+});
 // 路由
 // routes(app);
-app.use('/project', require('./routes/project'));
+// app.use('/project', require('./routes/project'));
 app.use('/rap', require('./routes/rap'));
 // app.use('/jsonrecords', require('./routes/jsonrecords'));
 

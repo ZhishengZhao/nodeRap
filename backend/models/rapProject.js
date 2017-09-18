@@ -9,5 +9,15 @@ module.exports = {
         //     author: userId
         // }).exec();
         return Project.find().exec();
+    },
+    update: function update(params) {
+        return Project.update({
+            _id: params._id
+        }, { $set: { name: params.name, desc: params.desc } }).exec();
+    },
+    deleteByID: function deleteByID(id) {
+        return Project.remove({
+            _id: id
+        }).exec();
     }
 };

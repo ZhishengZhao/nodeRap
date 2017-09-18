@@ -29,7 +29,9 @@ router.post('/registe', userController.registe);
 
 /* Project */
 router.post('/add', projectController.addPorject);
-router.post('/getAll', projectController.getAllProjects);
+router.get('/getAll', projectController.getAllProjects);  
+router.post('/updateProjectById', projectController.updateProjectById);
+router.get('/deleteProjectById', projectController.deleteById); 
 
 
 router.get('/mock/:projectId/*', jsonRecordsController.responseData);

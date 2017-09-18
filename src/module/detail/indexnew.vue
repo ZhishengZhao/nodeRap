@@ -186,7 +186,9 @@ export default {
                     }
                     this.interList = this.arrHandle(temparr)
                     // console.log('interList', this.interList)
-                    this.iterfaceNodeClick(this.leafNodes[0])
+                    if (this.leafNodes.length) {
+                        this.iterfaceNodeClick(this.leafNodes[0])
+                    }
                 }
             })
         },

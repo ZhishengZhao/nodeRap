@@ -6,25 +6,6 @@
         <rap-head></rap-head>
         <div class="page_main wid1080 content">
             <el-row :gutter="20">
-                <!-- <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
-                    <h3>我的项目</h3>
-                    <h3>分组列表</h3>
-                    <el-tree :data="interList" :props="defaultProps" @node-click="getProjectsByCondition"></el-tree>
-                </el-col>
-                <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
-                    <section class="area_projects">
-                        <div v-for="item in projectList" class="unit_project" @click="goPage(item._id)">
-                            <p class="unit_project__title">
-                                {{item.name}}
-                            </p>
-                            <p class="unit_project__desc">
-                                {{item.desc}}
-                            </p>
-                        </div>
-                        <div class="unit_project unit_project__plus" @click="goAddProject">
-                        </div>
-                    </section>
-                </el-col> -->
                 <section class="area_projects">
                     <div class="area_check">
                         <!-- <ul class="switch_check">
@@ -33,7 +14,7 @@
                         </ul> -->
                         <p class="text_filter_container fr">
                             <el-input placeholder="输入关键字进行过滤" class="text_filter_cotent" v-model="filterText"></el-input>
-                            <el-button type="info" class="text_filter_search" @click="getProjectsByCondition">搜索</el-button>
+                            <el-button type="info" class="text_filter_search" @click="showFilter">搜索</el-button>
                         </p>
                     </div>
                     <div v-for="item in projectList" class="unit_project" @mouseover="showEditPanel(item._id)" @mouseleave="curFocusId = -1" >
@@ -80,6 +61,7 @@ export default {
     name: 'mainpage',
     data() {
         return {
+            originProjectList: [],
             projectList: [],
             dialogFormVisible: false,
             form: {
@@ -95,6 +77,11 @@ export default {
             curFocusId: '',
             editFlag: false
         }
+    },
+    watch: {
+        // filterText(curVal, oldVal) {
+        //     this.showFilter(curVal)
+        // }
     },
     computed: {
 
@@ -120,7 +107,7 @@ export default {
         },
         projectAddConfirm() {
             if (this.editFlag) {
-                _post('rap/add', this.form, (data) => {
+                _post('rap/updateProjectById', this.form, (data) => {
                     if (data.success) {
                         this.dialogFormVisible = false
                         this.getProjectList()
@@ -136,14 +123,12 @@ export default {
             }
         },
         getProjectList() {
-            _post('rap/getAll', null, (data) => {
+            _get('rap/getAll', null, (data) => {
                 if (data.success) {
                     this.projectList = data.result
+                    this.originProjectList = data.result
                 }
             })
-        },
-        getProjectsByCondition() {
-
         },
         getList(type) {
 
@@ -157,12 +142,31 @@ export default {
             this.dialogFormVisible = true
         },
         goDelete(item) {
+            let _id = item._id
             if (window.confirm('你是认真的么，删了可就没了')) {
-                _post('rap/delete', item._id, (data) => {
+                _get('rap/deleteProjectById', {_id}, (data) => {
                     if (data.success) {
                         this.getProjectList()
                     }
                 })
+            }
+        },
+        showFilter() {
+            let val = this.filterText
+            console.log('filter txt=' + val)
+            if (!val) {
+                this.projectList = this.originProjectList
+            } else {
+                let temp = this.originProjectList
+                let temparr = []
+                console.log('filter temp=', temp)
+                for (let i = 0; i < temp.length; i++) {
+                    if (temp[i].name.indexOf(val) !== -1 || temp[i].desc.indexOf(val) !== -1) {
+                        temparr.push(temp[i])
+                    }
+                }
+
+                this.projectList = temparr
             }
         }
         // ,
