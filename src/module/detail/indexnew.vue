@@ -15,7 +15,7 @@
             <el-row :gutter="20" class="border">
                 <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20 border">
                     <div class="grid-content bg-purple">
-                        <h3>取点花</h3>
+                        <h3>{{projectName}}</h3>
                         <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                         </el-input>
                         <el-tree 
@@ -140,6 +140,7 @@ export default {
                 projectId: this.$route.query.id
             },
             projectId: this.$route.query.id,
+            projectName: this.$route.query.name,
             /* 接口内容 */
             responseParams: '',
             updateFlag: false,
@@ -420,6 +421,8 @@ export default {
 #container {
     background-color: #272822;
     min-height: 350px;
+    width: 100%;
+    overflow: scroll;
 }
 
 .content_inter {
@@ -439,7 +442,8 @@ export default {
 }
 
 .trigle_topright {
-    position: relative;
+    position: absolute;
+    right: 28px;
     width: 0;
     height: 0;
     border: 80px solid #ccc;

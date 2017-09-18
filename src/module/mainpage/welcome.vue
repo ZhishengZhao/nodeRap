@@ -52,14 +52,18 @@ export default {
     mounted() {},
     methods: {
         goPage(params) {
-            _get('rap/isLogin', null, (data) => {
-                if (data.success && data.result) {
-                    this.$router.push({
-                        path: 'mainpage'
-                    })
-                } else {
-                    this.loginShow = true
-                }
+            // _get('rap/isLogin', null, (data) => {
+            //     if (data.success && data.result) {
+            //         this.$router.push({
+            //             path: 'mainpage'
+            //         })
+            //     } else {
+            //         this.loginShow = true
+            //     }
+            // })
+
+            this.$router.push({
+                path: 'mainpage'
             })
         },
         goLogin() {

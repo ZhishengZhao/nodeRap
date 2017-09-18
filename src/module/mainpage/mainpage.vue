@@ -6,7 +6,7 @@
         <rap-head></rap-head>
         <div class="page_main wid1080 content">
             <el-row :gutter="20">
-                <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
+                <!-- <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
                     <h3>我的项目</h3>
                     <h3>分组列表</h3>
                     <el-tree :data="interList" :props="defaultProps" @node-click="getProjectsByCondition"></el-tree>
@@ -24,7 +24,37 @@
                         <div class="unit_project unit_project__plus" @click="goAddProject">
                         </div>
                     </section>
-                </el-col>
+                </el-col> -->
+                <section class="area_projects">
+                    <div class="area_check">
+                        <!-- <ul class="switch_check">
+                            <li @click="getList('mine')" class="active">我的</li>
+                            <li @click="getList('other')">别人的</li>
+                        </ul> -->
+                        <p class="text_filter_container fr">
+                            <el-input placeholder="输入关键字进行过滤" class="text_filter_cotent" v-model="filterText"></el-input>
+                            <el-button type="info" class="text_filter_search" @click="getProjectsByCondition">搜索</el-button>
+                        </p>
+                    </div>
+                    <div v-for="item in projectList" class="unit_project" @mouseover="showEditPanel(item._id)" @mouseleave="curFocusId = -1" >
+                        <div @click="goPage(item)" >
+                            <p class="unit_project__title">
+                                {{item.name}}
+                            </p>
+                            <p class="unit_project__desc">
+                                {{item.desc}}
+                            </p>
+                        </div>
+                        <p class="part_edit" v-show="item._id == curFocusId">
+                            <ul>
+                                <li @click="goEdit(item)">E</li>
+                                <li @click="goDelete(item)">D</li>
+                            </ul>
+                        </p>
+                    </div>
+                    <div class="unit_project unit_project__plus" @click="goAddProject">
+                    </div>
+                </section>
             </el-row>
             <el-dialog :visible.sync="dialogFormVisible">
                 <el-form ref="form" :model="form" label-width="80px">
@@ -53,13 +83,17 @@ export default {
             projectList: [],
             dialogFormVisible: false,
             form: {
+                _id: '',
                 name: '',
                 desc: ''
             },
             interList: [],
             defaultProps: {
                 label: 'name'
-            }
+            },
+            filterText: '',
+            curFocusId: '',
+            editFlag: false
         }
     },
     computed: {
@@ -72,14 +106,12 @@ export default {
         this.getProjectList()
     },
     methods: {
-        goPage(_id) {
+        goPage(item) {
             this.$router.push({
                 path: 'detail',
                 query: {
-                    id: _id
-                },
-                params: {
-                    id: _id
+                    id: item._id,
+                    name: item.name
                 }
             })
         },
@@ -87,12 +119,21 @@ export default {
             this.dialogFormVisible = true
         },
         projectAddConfirm() {
-            _post('rap/add', this.form, (data) => {
-                if (data.success) {
-                    this.dialogFormVisible = false
-                    this.getProjectList()
-                }
-            })
+            if (this.editFlag) {
+                _post('rap/add', this.form, (data) => {
+                    if (data.success) {
+                        this.dialogFormVisible = false
+                        this.getProjectList()
+                    }
+                })
+            } else {
+                _post('rap/add', this.form, (data) => {
+                    if (data.success) {
+                        this.dialogFormVisible = false
+                        this.getProjectList()
+                    }
+                })
+            }
         },
         getProjectList() {
             _post('rap/getAll', null, (data) => {
@@ -103,6 +144,26 @@ export default {
         },
         getProjectsByCondition() {
 
+        },
+        getList(type) {
+
+        },
+        showEditPanel(_id) {
+            this.curFocusId = _id
+        },
+        goEdit(item) {
+            this.editFlag = true
+            Object.assign(this.form, item)
+            this.dialogFormVisible = true
+        },
+        goDelete(item) {
+            if (window.confirm('你是认真的么，删了可就没了')) {
+                _post('rap/delete', item._id, (data) => {
+                    if (data.success) {
+                        this.getProjectList()
+                    }
+                })
+            }
         }
         // ,
         // getInterfaceList() {
@@ -127,13 +188,34 @@ export default {
 </script>
 <style lang="scss">
 .unit_project {
+    position: relative;
     float: left;
     width: 200px;
     height: 130px;
     border: 1px solid #DDD;
     border-radius: 5px;
-    margin: 20px 20px 0 0;
+    margin: 10px 30px;
     padding: 10px;
+    .part_edit {
+        position: absolute;
+        right: -20px;
+        top: -1px;
+        width: 20px;
+        height: 130px;
+        background: #ad9a99;
+        border-bottom-right-radius: 5px;
+        border-top-right-radius: 5px;
+        li {
+            list-style: none;
+            line-height: 65px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            &:first-child {
+                border-bottom: 1px solid #fff;
+            }
+        }
+    }
 }
 
 .unit_project__title {
@@ -167,4 +249,55 @@ export default {
     -o-transition: .3s;
     transition: .3s;
 }
+.clearfix:after {
+    content: '.';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+}
+
+.clearfix {
+    display: block;
+}
+
+.area_check {
+    height: 50px;
+    .switch_check {
+        display: inline-block;
+        padding-top: 7px;
+        li {
+            float: left;
+            list-style: none;
+            line-height: 50px;
+            display: inline-block;
+            width: 60px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            border: 1px solid #ad9a99;
+            border-radius: 2px;
+        }
+        .active {
+            background: #ad9a99;
+        }
+    }
+}
+
+.text_filter_container {
+    width: 275px;
+    margin-top: 7px;
+    .text_filter_cotent {
+        width: 200px;
+    }
+    .text_filter_search {
+        width: 70px;
+    }
+}
+
+.fr {
+    float: right;
+}
+
 </style>
