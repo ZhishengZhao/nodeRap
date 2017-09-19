@@ -8,5 +8,13 @@ module.exports = {
             rowIndex: rowIndex,
             colIndex: colIndex
         };
+    },
+
+    getUrl: function(url) {
+        var origin = window.location.origin.split(':');
+        origin.pop();
+        origin.join('');
+        url = origin.join(':') + ':3000/' + url;
+        return url;
     }
 };

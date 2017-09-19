@@ -34,6 +34,7 @@
     </div>
 </template>
 <script>
+// import { getUrl } from '../libs/tools.js';
 export default {
     props: {
         detail: {
@@ -47,7 +48,12 @@ export default {
     },
     computed: {
         url() {
-            return 'http://localhost:3000/rap/mock/' + this.detail.projectId + this.detail.url
+            var origin = window.location.origin.split(':')
+            origin.pop()
+            origin.join('')
+            let url = origin.join(':') + ':3000/rap/mock/' + this.detail.projectId + this.detail.url
+            return url
+            // return 'http://localhost:3000/rap/mock/' + this.detail.projectId + this.detail.url
         }
     },
     components: {
