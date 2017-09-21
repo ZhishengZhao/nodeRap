@@ -4,6 +4,7 @@
 import App from './App.vue';
 import detail from './detail/index.vue';
 import detailNew from './detail/indexnew.vue';
+import preview from './detail/preview.vue';
 import request from './detail/request.vue';
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
@@ -42,6 +43,13 @@ let configRoutes = [{
         name: 'rapDetailold',
         meta: {
             title: '详情页old'
+        }
+    }, {
+        path: 'preview',
+        component: preview,
+        name: 'rappreview',
+        meta: {
+            title: '接口预览'
         }
     }, {
         path: 'requestData',

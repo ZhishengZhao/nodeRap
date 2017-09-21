@@ -18,12 +18,8 @@
                         <h3>{{projectName}}</h3>
                         <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                         </el-input>
-                        <el-tree 
-                            ref="interTree" 
-                            :data="interList" 
-                            :props="defaultProps" 
-                            @node-click="iterfaceNodeClick" 
-                            :filter-node-method="filterNode">  <!-- :render-content="renderContent" -->
+                        <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode">
+                            <!-- :render-content="renderContent" -->
                         </el-tree>
                         <el-button v-if="editFlag" @click="dialogFormVisible = true" type="info">add</el-button>
                         <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
@@ -34,7 +30,7 @@
                     <div class="grid-content bg-purple-light border content_inter">
                         <h3>接口参数</h3>
                         <div class="fr trigle_topright" v-if="editFlag">
-                            <p @click="goUpdate" >更新</p>
+                            <p @click="goUpdate">更新</p>
                         </div>
                         <div id='container'></div>
                     </div>
@@ -56,13 +52,9 @@
                     <el-form-item label="请求链接">
                         <el-input v-model="form.link"></el-input>
                     </el-form-item>
-                    <el-form-item label="请求链接">
+                    <el-form-item label="所属页面">
                         <el-select v-model="curPageId" placeholder="请选择">
-                            <el-option
-                                v-for="item in pageOptions"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </el-form-item>
@@ -97,7 +89,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="goAddPage">确定</el-button>
-                        <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <el-button @click="addPageShow = false">取消</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -131,6 +123,7 @@ export default {
                 desc: ''
             },
             curIterfaceId: '',
+            curIterfaceName: '',
             curPageId: '',
             editFlag: false,
             interfaceInfo: {
@@ -234,6 +227,7 @@ export default {
             } else if (data.pid != '0' && data.id != '0') {
                 Object.assign(this.interfaceInfo, data)
                 this.curIterfaceId = data.id
+                this.curIterfaceName = data.name
                 this.getInterfaceParams(data.id)
             } else {
                 this.curPageId = data.id
@@ -256,6 +250,10 @@ export default {
         },
         // 新增接口
         goAddInterface() {
+            if (this.curPageId == '') {
+                alert('请先添加一个页面，在添加接口')
+                return
+            }
             if (this.form.link.indexOf('/') != 0) {
                 this.form.link = '/' + this.form.link
             }
@@ -279,12 +277,15 @@ export default {
         },
         // 接口删除
         deleteInterface() {
+            let context = '确定删除' + this.curIterfaceName + '？'
+            // if (window.comfirm(context)) {
             var iterId = this.curIterfaceId
             _get('rap/deleteInterface', { iterId }, (data) => {
                 if (data && data.success) {
                     this.getInterfaceList()
                 }
             })
+            // }
         },
         // 接口更新1
         goUpdate() {
@@ -367,30 +368,38 @@ export default {
 
             return jsonObj
         },
-        renderContent:function(createElement, { node, data }) {  
-            var self = this;  
-            return createElement('span', [  
-                createElement('span', node.label),  
-                createElement('span', {attrs:{  
-                    style:"float: right; margin-right: 20px"  
-                }},[  
-                    createElement('el-button',{attrs:{  
-                        size:"mini",
-                        class: self.setClass(node)  
-                    },on:{  
-                        click:function() {  
-                            console.info("点击了节点" + data.id + "的添加按钮");    
-                        }  
-                    }},"添加"),  
-                    createElement('el-button',{attrs:{  
-                        size:"mini"  
-                    },on:{  
-                        click:function() {  
-                            console.info("点击了节点" + data.id + "的删除按钮");  
-                        }  
-                    }},"删除")
-                ]),  
-            ]);  
+        renderContent: function(createElement, { node, data }) {
+            var self = this;
+            return createElement('span', [
+                createElement('span', node.label),
+                createElement('span', {
+                    attrs: {
+                        style: "float: right; margin-right: 20px"
+                    }
+                }, [
+                    createElement('el-button', {
+                        attrs: {
+                            size: "mini",
+                            class: self.setClass(node)
+                        },
+                        on: {
+                            click: function() {
+                                console.info("点击了节点" + data.id + "的添加按钮");
+                            }
+                        }
+                    }, "添加"),
+                    createElement('el-button', {
+                        attrs: {
+                            size: "mini"
+                        },
+                        on: {
+                            click: function() {
+                                console.info("点击了节点" + data.id + "的删除按钮");
+                            }
+                        }
+                    }, "删除")
+                ]),
+            ]);
         },
         setClass(node) {
             console.log('node=', node)
@@ -428,6 +437,7 @@ export default {
 }
 
 .content_inter {
+    position: relative;
     padding-top: 20px;
 }
 
@@ -445,7 +455,7 @@ export default {
 
 .trigle_topright {
     position: absolute;
-    right: 28px;
+    right: 0;
     width: 0;
     height: 0;
     border: 80px solid #ccc;
