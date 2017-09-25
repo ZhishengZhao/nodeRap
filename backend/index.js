@@ -9,9 +9,6 @@ var cors = require('cors');
 
 var app = express();
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 // 设置静态文件目录
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -41,18 +38,17 @@ app.use(require('express-formidable')({
     keepExtensions: true // 保留文件后缀
 }));
 
+// 路由
 // app.use(cors());
+// routes(app);
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
     next();
 });
-// 路由
-// routes(app);
-// app.use('/project', require('./routes/project'));
-app.use('/rap', require('./routes/rap'));
-// app.use('/jsonrecords', require('./routes/jsonrecords'));
+
+app.use('/rap', require('./routes/index'));
 
 // 禁用response header里面的x-powered-by
 app.disable('x-powered-by');
