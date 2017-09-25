@@ -1,74 +1,93 @@
-var path = require('path');
-var webpack = require('webpack');
-var ip = require('ip').address();
+var path = require('path')
+var utils = require('./utils')
+var config = require('../config')
+var vueLoaderConfig = require('./vue-loader.conf')
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
+var HappyPack = require('happypack');
+var happyThreadPool = HappyPack.ThreadPool({
+    size: 4
+});
+var entries = {}
+entries.main = './src/main.js'
+// if (process.env.npm_config_entry) {
+//     entries.main = process.env.npm_config_entry
+// } else {
+//     entries = utils.getEntry(config.entries) // 获得入口js文件
+//     entries.main = './src/main.js'
+// }
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir)
 }
 
+function happyPack(type, loader) {
+    return new HappyPack({
+        id: type,
+        cache: false,
+        //threads: 4,
+        debug: false,
+        threadPool: happyThreadPool,
+        loaders: [loader]
+    })
+}
+
 module.exports = {
-    // entry: './src/demostep1/index.js',
-    entry: './src/module/main.js',
+    entry: entries,
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        path: process.env.NODE_ENV === 'production' ? config.build.assetsRoot : config.dev.assetsRoot,
+        filename: '[name].js'
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            // 'src': path.join(__dirname, '..','src'),
-            // 'components': path.join(__dirname, '..','src/components'),
-            // 'libs': path.join(__dirname, '..','src/libs'),
-            // 'module': path.join(__dirname, '..','src/module'),
-            // 'store': path.join(__dirname, '..','src/store')
+            'vue$': 'vue/dist/vue.esm.js',
+            '@': resolve('src'),
             'src': resolve('src'),
+            'assets': resolve('src/assets'),
             'components': resolve('src/components'),
-            'libs': resolve('src/libs'),
             'module': resolve('src/module'),
+            'libs': resolve('src/libs'),
             'store': resolve('src/store')
         }
     },
     module: {
         rules: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            include: path.resolve(__dirname, 'src'),
-            exclude: /node_modules/
-        }, {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader']
-        }, {
-            test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-            loader: 'file-loader'
-        }, {
-            test: /\.(png|jpg)$/,
-            loader: "url-loader?limit=8192"
+            test: /\.(js|vue)$/,
+            loader: 'eslint-loader',
+            enforce: 'pre',
+            include: [resolve('src')],
+            options: {
+                formatter: require('eslint-friendly-formatter')
+            }
         }, {
             test: /\.vue$/,
-            exclude: /node_modules/,
-            loader: 'vue-loader'
+            loader: 'vue-loader',
+            include: [resolve('src')],
+            options: vueLoaderConfig
         }, {
-            test: /\.scss$/,
-            use: [{
-                loader: "style-loader" // creates style nodes from JS strings 
-            }, {
-                loader: "css-loader" // translates CSS into CommonJS 
-            }, {
-                loader: "sass-loader" // compiles Sass to CSS 
-            }]
+            test: /\.js$/,
+            loader: 'happypack/loader?id=js',
+            include: [resolve('src')]
+        }, {
+            test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+            loader: 'url-loader',
+            query: {
+                limit: 10000,
+                name: utils.assetsPath('img/[name].[hash:7].[ext]')
+            }
+        }, {
+            test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+            loader: 'url-loader',
+            query: {
+                limit: 10000,
+                name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+            }
         }]
     },
-    devServer: {
-        contentBase: path.join(__dirname, ''), // '' 的时候默认访问到index.html  src的时候就成了文件ftp服务器的样子
-        compress: false,
-        inline: true,
-        hot: true, // 热加载
-        port: 8088,
-        host: ip
-    },
     plugins: [
-        new webpack.HotModuleReplacementPlugin() //热加载插件
-        // happyPack('css', 'css-loader'),
-        // happyPack('sass', 'sass-loader')
+        happyPack('js', 'babel-loader'),
+        happyPack('eslint', 'eslint-loader'),
+        happyPack('css', 'css-loader'),
+        happyPack('sass', 'sass-loader')
     ]
-};
+}

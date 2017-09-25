@@ -13,11 +13,11 @@ import NotFound from './404.vue';
 // const request = resolve => require('./detail/request.vue', resolve);
 
 let configRoutes = [{
-    path: '/pages',
+    path: '/',
     component: App,
     redirect: { name: 'welcome' },
     children: [{
-        path: 'welcome',
+        path: '',
         component: welcome,
         name: 'welcome',
         meta: {

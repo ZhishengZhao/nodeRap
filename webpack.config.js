@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var ip = require('ip').address();
 
 function resolve(dir) {
-    return path.join(__dirname, '..', dir)
+    return path.join(__dirname, '..', dir);
 }
 
 module.exports = {
