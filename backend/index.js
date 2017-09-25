@@ -3,7 +3,7 @@ var express = require('express');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var config = require('./config/default.js');
-var routes = require('./routes');
+var routes = require('./routes.js');
 var bodyParser = require('body-parser');
 var cors = require('cors');
 
@@ -38,8 +38,13 @@ app.use(require('express-formidable')({
     keepExtensions: true // 保留文件后缀
 }));
 
+// 解析 application/json
+// app.use(bodyParser.json()); 
+// 解析 application/x-www-form-urlencoded
+// app.use(bodyParser.urlencoded());
+
 // 路由
-// app.use(cors());
+// app.use(cors()); // 这个组件有bug，后面研究研究
 // routes(app);
 app.all('*', function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -48,12 +53,12 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.use('/rap', require('./routes/index'));
+app.use('/rap', require('./routes.js'));
 
 // 禁用response header里面的x-powered-by
 app.disable('x-powered-by');
 
 // 监听端口，启动程序 
 app.listen(config.port, function() {
-    console.log('> listening on port 3000');
+    console.log('> listening on port ' + config.port);
 });

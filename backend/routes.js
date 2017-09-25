@@ -3,11 +3,11 @@ var url = require('url');
 
 var router = express.Router();
 
-var interfaceController = require('../controller/interface.js');
-var recordsController = require('../controller/records.js');
-var jsonRecordsController = require('../controller/jsonrecord.js');
-var userController = require('../controller/user.js');
-var projectController = require('../controller/project.js');
+var interfaceController = require('./controller/interface.js');
+var recordsController = require('./controller/records.js');
+var jsonRecordsController = require('./controller/jsonrecord.js');
+var userController = require('./controller/user.js');
+var projectController = require('./controller/project.js');
 
 router.post('/paramsSave', recordsController.addRecords);
 router.post('/getIterParamsByIterId', recordsController.getRecordsByInterID);
