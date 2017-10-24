@@ -21,8 +21,9 @@
                         <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode">
                             <!-- :render-content="renderContent" -->
                         </el-tree>
-                        <el-button v-if="editFlag" @click="dialogFormVisible = true" type="info">add</el-button>
+                        <el-button v-if="editFlag" @click="editInterface(false)" type="info">add</el-button>
                         <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
+                        <!-- <el-button v-if="editFlag" @click="editInterface(true)" type="info">update</el-button> -->
                     </div>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20 border">
@@ -100,7 +101,7 @@
 import rapHead from '../common/raphead.vue'
 import rapFooter from '../common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
-import { _get, _post } from '../../store/base.js'
+import { _get, _post } from '../../libs/base.js'
 import { JsonFormater } from '../../libs/jsonformate.js'
 export default {
     filters: {},
@@ -126,6 +127,7 @@ export default {
             curIterfaceName: '',
             curPageId: '',
             editFlag: false,
+            interEditFlag: false,
             interfaceInfo: {
                 name: '',
                 type: '',
@@ -248,6 +250,11 @@ export default {
                 }
             })
         },
+        // 接口主体更新
+        editInterface(editflag) {
+            this.dialogFormVisible = true
+            this.interEditFlag = editflag
+        },
         // 新增接口
         goAddInterface() {
             if (this.curPageId == '') {
@@ -263,12 +270,13 @@ export default {
                 desc: this.form.desc,
                 reqType: this.form.type,
                 reqUrl: this.form.link,
-                resParamsId: '',
-                reqParamsId: '',
                 projectId: this.projectId,
                 pid: this.curPageId
             }
-            _post('rap/addInterface', inter, (data) => {
+
+            let editUrl = this.interEditFlag ? 'rap/updateInterface' : 'rap/addInterface'
+
+            _post(editUrl, inter, (data) => {
                 if (data && data.success) {
                     this.dialogFormVisible = false
                     this.getInterfaceList()
@@ -287,7 +295,7 @@ export default {
             })
             // }
         },
-        // 接口更新1
+        // 接口内容更新
         goUpdate() {
             this.updateFlag = true
             let pid = this.curIterfaceId
@@ -299,7 +307,7 @@ export default {
                 this.responseParams = data[0].content
             })
         },
-        // 接口更新2
+        // 接口内容更新提交
         goUpdateSubmit() {
             let txt = this.responseParams
             // this.responseParams = JSON.stringify(this.json2mock(txt))

@@ -30,7 +30,7 @@
 <script>
 import rapHead from '../common/raphead.vue'
 import joyCooper from '../joy/cooperation.vue'
-import { _get, _post } from '../../store/base.js'
+import { _get, _post } from '../../libs/base.js'
 export default {
     name: 'welcome',
     data() {

@@ -7,7 +7,6 @@ function resolve(dir) {
 }
 
 module.exports = {
-    // entry: './src/demostep1/index.js',
     entry: './src/module/main.js',
     output: {
         filename: 'bundle.js',
@@ -63,7 +62,7 @@ module.exports = {
         compress: false,
         inline: true,
         hot: true, // 热加载
-        port: 8088,
+        port: 8091,
         host: ip
     },
     plugins: [

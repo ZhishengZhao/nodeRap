@@ -28,7 +28,7 @@
 </template>
 <script>
 import rapHead from '../common/raphead.vue'
-import { _get, _post } from '../../store/base.js'
+import { _get, _post } from '../../libs/base.js'
 import { JsonFormater } from '../../libs/jsonformate.js'
 export default {
     filters: {},

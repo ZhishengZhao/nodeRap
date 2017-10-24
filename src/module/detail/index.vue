@@ -164,7 +164,7 @@
     </div>
 </template>
 <script>
-import { _get, _post } from '../../store/base.js'
+import { _get, _post } from '../../libs/base.js'
 import rapHead from '../common/raphead.vue'
 import rapFooter from '../common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'

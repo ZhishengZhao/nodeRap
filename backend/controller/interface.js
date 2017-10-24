@@ -6,10 +6,8 @@ module.exports = {
         var params = {
             name: req.fields.name,
             desc: req.fields.desc,
-            reqType: req.fields.reqType || '',
+            reqType: req.fields.reqType || 'post',
             reqUrl: req.fields.reqUrl || '',
-            resParamsId: req.fields.resParamsId || '',
-            reqParamsId: req.fields.reqParamsId || '',
             projectId: req.fields.projectId,
             pid: req.fields.pid
         };
@@ -26,6 +24,23 @@ module.exports = {
                     success: true
                 });
             }).catch(next);
+        }).catch(next);
+    }, 
+    updateInterface: function(req, res, next) {
+        var params = {
+            _id: req.fields.id,
+            name: req.fields.name,
+            desc: req.fields.desc,
+            reqType: req.fields.reqType || 'post',
+            reqUrl: req.fields.reqUrl || '',
+            projectId: req.fields.projectId,
+            pid: req.fields.pid
+        };
+        rapInterface.update(params).then(function(result) {
+            res.send({
+                result: result,
+                success: true
+            });
         }).catch(next);
     },
     deleteInterface: function(req, res, next) {

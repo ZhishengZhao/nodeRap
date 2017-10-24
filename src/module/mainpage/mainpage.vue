@@ -55,7 +55,7 @@
     </div>
 </template>
 <script>
-import { _get, _post } from '../../store/base.js'
+import { _get, _post } from '../../libs/base.js'
 import rapHead from '../common/raphead.vue'
 export default {
     name: 'mainpage',

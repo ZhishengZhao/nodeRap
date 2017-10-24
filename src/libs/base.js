@@ -1,6 +1,6 @@
 import Vue from 'Vue';
 import VueResource from 'vue-resource';
-import { getUrl } from '../libs/tools.js';
+import { getUrl } from './tools.js';
 Vue.use(VueResource);
 Vue.http.options.emulateJSON = true;
 
