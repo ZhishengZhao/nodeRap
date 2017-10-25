@@ -11,7 +11,8 @@
     "dev": "npm run dev:server && npm run dev:client",
     "dev:server": "supervisor --harmony backend/index.js",
     "dev:client": "",
-    "build": "wevpack --conf webpack.config.js"
+    "build": "webpack --conf build/webpack.build.config.js",
+    "dev:on": "node build/dev.js"
   },
   "keywords": [],
   "author": "",
@@ -51,6 +52,7 @@
   "devDependencies": {
     "babel-plugin-component": "^0.10.0",
     "body-parser": "^1.18.2",
+    "clean-webpack-plugin": "^0.1.17",
     "cowsay": "^1.1.9",
     "css-loader": "^0.28.4",
     "ejs": "^2.5.7",
