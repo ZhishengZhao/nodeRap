@@ -157,7 +157,7 @@ router.beforeEach((to, from, next) => {
 })
 
 new Vue({
-    el: '#app',
+    el: '#hiRap',
     router,
     render: h => h(App)
 })

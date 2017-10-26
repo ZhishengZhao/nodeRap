@@ -3,23 +3,18 @@ var webpack = require('webpack');
 var ip = require('ip').address();
 
 function resolve(dir) {
-    return path.join(__dirname, '..', dir);
+    return path.join(__dirname, './', dir);
 }
 
 module.exports = {
     entry: './src/module/main.js',
     output: {
-        filename: 'bundle.js',
-        path: path.resolve(__dirname, 'dist')
+        filename: 'main.js',
+        path: path.resolve(__dirname, '../dist')
     },
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            // 'src': path.join(__dirname, '..','src'),
-            // 'components': path.join(__dirname, '..','src/components'),
-            // 'libs': path.join(__dirname, '..','src/libs'),
-            // 'module': path.join(__dirname, '..','src/module'),
-            // 'store': path.join(__dirname, '..','src/store')
             'src': resolve('src'),
             'components': resolve('src/components'),
             'libs': resolve('src/libs'),

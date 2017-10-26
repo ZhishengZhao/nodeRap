@@ -1,12 +1,12 @@
 const express = require('express');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
-var bodyParser = require('body-parser');
-var ip = require('ip').address();
+const config = require('./webpack.dev.config.js');
+const basicConfig = require('../config/index.js');
+const bodyParser = require('body-parser');
+const ip = require('ip').address();
 
 const app = express();
-const basicConfig = require('../config/index.js');
-const config = require('./webpack.dev.config.js');
 const compiler = webpack(config);
 
 app.use(webpackDevMiddleware(compiler, {

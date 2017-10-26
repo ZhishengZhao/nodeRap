@@ -6,7 +6,9 @@
   "scripts": {
     "dev:beserver": "supervisor --harmony backend/index.js",
     "dev": "node build/dev.js",
-    "build": "webpack --conf build/webpack.build.config.js",
+    "build": "npm run build:client && npm run build:server",
+    "build:server": "node build/build_server.js",
+    "build:client": "webpack --config build/webpack.build.config.js",
     "lint": "",
     "test": ""
   },
