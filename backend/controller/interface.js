@@ -4,12 +4,12 @@ var rapJsonRecord = require('../models/rapJsonRecord');
 module.exports = {
     addInterface: function(req, res, next) {
         var params = {
-            name: req.fields.name,
-            desc: req.fields.desc,
-            reqType: req.fields.reqType || 'post',
-            reqUrl: req.fields.reqUrl || '',
-            projectId: req.fields.projectId,
-            pid: req.fields.pid
+            name: req.body.name,
+            desc: req.body.desc,
+            reqType: req.body.reqType || 'post',
+            reqUrl: req.body.reqUrl || '',
+            projectId: req.body.projectId,
+            pid: req.body.pid
         };
         rapInterface.create(params).then(function(result) {
             var pid = result.ops[0]._id + '';
@@ -28,13 +28,13 @@ module.exports = {
     }, 
     updateInterface: function(req, res, next) {
         var params = {
-            _id: req.fields.id,
-            name: req.fields.name,
-            desc: req.fields.desc,
-            reqType: req.fields.reqType || 'post',
-            reqUrl: req.fields.reqUrl || '',
-            projectId: req.fields.projectId,
-            pid: req.fields.pid
+            _id: req.body.id,
+            name: req.body.name,
+            desc: req.body.desc,
+            reqType: req.body.reqType || 'post',
+            reqUrl: req.body.reqUrl || '',
+            projectId: req.body.projectId,
+            pid: req.body.pid
         };
         rapInterface.update(params).then(function(result) {
             res.send({
@@ -61,7 +61,7 @@ module.exports = {
         }).catch(next);
     },
     getRecordsByPID: function(req, res, next) {
-        var projectId = req.fields.pid;
+        var projectId = req.body.pid;
         rapInterface.getrByPID(projectId).then(function(result) {
             res.send({
                 result: result,

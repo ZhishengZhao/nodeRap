@@ -4,12 +4,12 @@ var sha1 = require('sha1');
 module.exports = {
     addUser: function(req, res, next) {
         var params = {
-            name: req.fields.content,
-            password: req.fields.pid,
-            email: req.fields.pid,
-            avatar: req.fields.pid,
-            gender: req.fields.pid,
-            bio: req.fields.pid
+            name: req.body.content,
+            password: req.body.pid,
+            email: req.body.pid,
+            avatar: req.body.pid,
+            gender: req.body.pid,
+            bio: req.body.pid
         };
         rapUser.create(params).then(function(result) {
             res.send({
@@ -32,9 +32,9 @@ module.exports = {
         });
     },
     login: function(req, res, next) {
-        console.log(req.fields);
-        var name = req.fields.name;
-        var password = sha1(req.fields.pwd);
+        console.log(req.body);
+        var name = req.body.name;
+        var password = sha1(req.body.pwd);
         var errInfo = '';
 
         rapUser.getUserByName(name).then(function(user) {
@@ -61,15 +61,15 @@ module.exports = {
         }).catch(next);
     },
     registe: function(req, res, next) {
-        console.log(req.fields);
+        console.log(req.body);
         var user = {
-            name: req.fields.name,
-            gender: req.fields.gender,
-            bio: req.fields.desc,
-            avatar: req.fields.avatar,
+            name: req.body.name,
+            gender: req.body.gender,
+            bio: req.body.desc,
+            avatar: req.body.avatar,
             // avatar: req.files.avatar.path.split(path.sep).pop(),
-            password: req.fields.pwd,
-            repassword: req.fields.pwdConfirm
+            password: req.body.pwd,
+            repassword: req.body.pwdConfirm
         };
 
         var errInfo = '';
@@ -137,8 +137,8 @@ module.exports = {
         });
     },
     logout: function(req, res, next) {
-        var name = req.fields.name;
-        var password = sha1(req.fields.pwd);
+        var name = req.body.name;
+        var password = sha1(req.body.pwd);
 
         rapUser.getUserByName(name).then(function(user) {
             if (!user) {

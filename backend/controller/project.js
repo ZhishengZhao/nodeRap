@@ -10,8 +10,8 @@ module.exports = {
         //     });
         // } else {
         var params = {
-            name: req.fields.name,
-            desc: req.fields.desc,
+            name: req.body.name,
+            desc: req.body.desc,
             author: 'req.session.user._id'
         };
 
@@ -44,9 +44,9 @@ module.exports = {
     },
     updateProjectById: function(req, res, next) {
         var params = {
-            name: req.fields.name,
-            desc: req.fields.desc,
-            _id: req.fields._id
+            name: req.body.name,
+            desc: req.body.desc,
+            _id: req.body._id
         };
         rapProject.update(params).then(function(result) {
             res.send({
@@ -56,7 +56,6 @@ module.exports = {
         }).catch(next);
     },
     deleteById: function(req, res, next) {
-        console.log(req.query);
         var projectId = req.query._id;
 
         rapProject.deleteByID(projectId).then(function(result) {

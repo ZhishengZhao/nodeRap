@@ -14,7 +14,7 @@
                         </ul> -->
                         <p class="text_filter_container fr">
                             <el-input placeholder="输入关键字进行过滤" class="text_filter_cotent" v-model="filterText"></el-input>
-                            <el-button type="info" class="text_filter_search" @click="showFilter">搜索</el-button>
+                            <el-button type="info" class="text_filter_search" @click="search">搜索</el-button>
                         </p>
                     </div>
                     <div v-for="item in projectList" class="unit_project" @mouseover="showEditPanel(item._id)" @mouseleave="curFocusId = -1" >
@@ -55,8 +55,8 @@
     </div>
 </template>
 <script>
-import { _get, _post } from '../../libs/base.js'
 import rapHead from '../common/raphead.vue'
+import { project } from '../api/api.js'
 export default {
     name: 'mainpage',
     data() {
@@ -80,7 +80,7 @@ export default {
     },
     watch: {
         // filterText(curVal, oldVal) {
-        //     this.showFilter(curVal)
+        //     this.search(curVal)
         // }
     },
     computed: {
@@ -107,14 +107,14 @@ export default {
         },
         projectAddConfirm() {
             if (this.editFlag) {
-                _post('rap/updateProjectById', this.form, (data) => {
+                project.update(this.form, (data) => {
                     if (data.success) {
                         this.dialogFormVisible = false
                         this.getProjectList()
                     }
                 })
             } else {
-                _post('rap/add', this.form, (data) => {
+                project.add(this.form, (data) => {
                     if (data.success) {
                         this.dialogFormVisible = false
                         this.getProjectList()
@@ -123,7 +123,7 @@ export default {
             }
         },
         getProjectList() {
-            _get('rap/getAll', null, (data) => {
+            project.getList(null, (data) => {
                 if (data.success) {
                     this.projectList = data.result
                     this.originProjectList = data.result
@@ -144,16 +144,15 @@ export default {
         goDelete(item) {
             let _id = item._id
             if (window.confirm('你是认真的么，删了可就没了')) {
-                _get('rap/deleteProjectById', {_id}, (data) => {
+                project.delete({_id}, (data) => {
                     if (data.success) {
                         this.getProjectList()
                     }
                 })
             }
         },
-        showFilter() {
+        search() {
             let val = this.filterText
-            console.log('filter txt=' + val)
             if (!val) {
                 this.projectList = this.originProjectList
             } else {
@@ -169,24 +168,6 @@ export default {
                 this.projectList = temparr
             }
         }
-        // ,
-        // getInterfaceList() {
-        //     _post('rap/getInterfaceList', {}, (data) => {
-        //         if (data && data.result && data.success) {
-        //             let i = 0
-        //             let temparr = []
-        //             for (; i < data.result.length; i++) {
-        //                 temparr.push({
-        //                     name: data.result[i].name,
-        //                     id: data.result[i]._id,
-        //                     type: data.result[i].reqType,
-        //                     url: data.result[i].reqUrl
-        //                 })
-        //             }
-        //             this.interList = temparr
-        //         }
-        //     })
-        // }
     }
 }
 </script>

@@ -1,9 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var bodyParser = require('body-parser')
-
-// create application/json parser
-var jsonParser = bodyParser.json()
 
 var interfaceController = require('./controller/interface.js');
 var recordsController = require('./controller/records.js');
@@ -14,6 +10,10 @@ var projectController = require('./controller/project.js');
 /* Interface */
 router.post('/getInterfaceList', interfaceController.getAll);
 router.post('/getInterfaceListByProjectID', interfaceController.getRecordsByPID);
+// router.post('/getInterfaceListByProjectID', function(req, res, next) {
+//     console.log('params', req);
+//     console.log('req.body', req.body);
+// }); 
 router.post('/addInterface', interfaceController.addInterface);
 router.post('/updateInterface', interfaceController.updateInterface);
 router.get('/deleteInterface', interfaceController.deleteInterface);
@@ -45,11 +45,14 @@ router.get('/deleteProjectById', projectController.deleteById);
 
 /* Mock */
 router.get('/mock/:projectId/*', jsonRecordsController.responseData);
+// router.get('/mock/:projectId/*', function(req, res, next) {
+//     console.log('getMock', req.params);
+// }); 
 router.post('/mock/:projectId/*', jsonRecordsController.responseData);
 
 /* Example */
-router.post('/mock/projectId/11', function(req, res, next) {
-    console.log(req);
-});
+// router.post('/mock/projectId/11', function(req, res, next) {
+//     console.log(req);
+// });
 
 module.exports = router;

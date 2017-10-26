@@ -2,14 +2,14 @@ var rapRecord = require('../models/rapRecords');
 
 module.exports = {
     addRecords: function(req, res, next) {
-        var paramList = JSON.parse(req.fields.responseParams);
+        var paramList = JSON.parse(req.body.responseParams);
 
-        rapRecord.deleteRecordsByIterId(req.fields.recordId).then();
+        rapRecord.deleteRecordsByIterId(req.body.recordId).then();
 
         for (var i = paramList.length - 1; i >= 0; i--) {
             var params = {
                 parasType: 'res',
-                recordId: req.fields.recordId,
+                recordId: req.body.recordId,
                 key: paramList[i].key,
                 value: paramList[i].value,
                 valueType: paramList[i].type,
@@ -36,8 +36,8 @@ module.exports = {
         }).catch(next);
     },
     getRecordsByInterID: function(req, res, next) {
-        var iterId = req.fields.iterId,
-            type = req.fields.type || 'normal';
+        var iterId = req.body.iterId,
+            type = req.body.type || 'normal';
 
         if (type !== 'normal') {
             rapRecord.getRecordsByIterId(iterId).then(function(result) {

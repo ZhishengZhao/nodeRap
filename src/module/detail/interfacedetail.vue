@@ -48,12 +48,7 @@ export default {
     },
     computed: {
         url() {
-            var origin = window.location.origin.split(':')
-            origin.pop()
-            origin.join('')
-            let url = origin.join(':') + ':3000/rap/mock/' + this.detail.projectId + this.detail.url
-            return url
-            // return 'http://localhost:3000/rap/mock/' + this.detail.projectId + this.detail.url
+            return (window.location.origin + '/rap/mock/' + this.detail.projectId + this.detail.url)
         }
     },
     components: {

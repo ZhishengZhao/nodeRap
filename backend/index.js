@@ -39,15 +39,9 @@ app.use(require('express-formidable')({
 }));
 
 // 解析 application/json
-app.use(bodyParser.json()); 
-// 解析 application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json()); 
 
-// app.use(function (req, res) {
-//     res.setHeader('Content-Type', 'text/plain')
-//     res.write('you posted:\n')
-//     res.end(JSON.stringify(req.body, null, 2))
-// });
 
 // 路由
 // app.use(cors()); // 这个组件有bug，后面研究研究

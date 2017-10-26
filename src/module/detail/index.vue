@@ -5,180 +5,111 @@
     <div class="rap_page">
         <rap-head></rap-head>
         <div class="content wid1080">
-            <el-row :gutter="20">
+            <el-row :gutter="20" class="border">
                 <div class="block fr">
-                    <el-button type="info" @click="goEditAll">编辑</el-button>
-                    <el-button type="info" @click="cancelAll">取消</el-button>
-                    <el-button type="info" @click="saveAll">保存</el-button>
-                    <el-button type="info" @click="goRequest">请求接口</el-button>
+                    <el-button type="info" v-if="!editFlag" @click="editFlag = true">编辑</el-button>
+                    <el-button type="info" v-if="editFlag" @click="addPageShow = true">添加页面</el-button>
+                    <el-button type="info" v-if="editFlag" @click="editFlag = false">取消</el-button>
                 </div>
             </el-row>
-            <el-row :gutter="20">
-                <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20">
+            <el-row :gutter="20" class="border">
+                <el-col :span="6" class="pad20 grid-content bg-purple-dark bor20 border">
                     <div class="grid-content bg-purple">
-                        <h3>接口列表</h3>
-                        <el-tree :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick"></el-tree>
-                        <el-button v-if="editFlag" @click="openInterDialog" type="info">add</el-button>
+                        <h3>{{projectName}}</h3>
+                        <el-input placeholder="输入关键字进行过滤" v-model="filterText">
+                        </el-input>
+                        <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode">
+                            <!-- :render-content="renderContent" -->
+                        </el-tree>
+                        <el-button v-if="editFlag" @click="editInterface(false)" type="info">add</el-button>
                         <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
+                        <!-- <el-button v-if="editFlag" @click="editInterface(true)" type="info">update</el-button> -->
                     </div>
                 </el-col>
-                <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20">
-                    <interface-detail :detail="interfaceInfo"></interface-detail>
-                    <div class="grid-content bg-purple-light">                       
-                        <div class="area_request">
-                            <h3>请求参数</h3>
-                            <el-table
-                            border
-                            @cell-dblclick = "goEditRequest"
-                            :data="requestParams"
-                            style="width: 100%">
-                                <el-table-column
-                                label="变量名"
-                                prop="key"
-                                width="180">
-                                    <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.key }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="inputColumn1"></el-input></span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="含义"
-                                prop="comments"
-                                width="180">
-                                    <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.comments }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="inputColumn1"></el-input></span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="类型"
-                                prop="type">
-                                    <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.type }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="inputColumn1"></el-input></span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="备注"
-                                prop="value">
-                                    <template scope="scope">
-                                        <span v-if="!editFlag">{{ scope.row.value }}</span>
-                                        <span v-if="editFlag" class="cell-edit-input"><el-input v-model="inputColumn1"></el-input></span>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                            <el-button v-show="editFlag" type="info" @click="addParams('req')">添加参数</el-button>
-                            <el-button v-show="editFlag" type="info" @click="importJson('req')">导入json</el-button>
+                <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20 border">
+                    <interface-detail :detail="interfaceInfo" class="border"></interface-detail>
+                    <div class="grid-content bg-purple-light border content_inter">
+                        <h3>接口参数</h3>
+                        <div class="fr trigle_topright" v-if="editFlag">
+                            <p @click="goUpdate">更新</p>
                         </div>
-                        <div class="area_response">
-                            <h3>响应参数</h3>
-                            <!-- <el-button v-show="editFlag" type="info" @click="addResponseList">添加一组响应</el-button> -->
-                            <el-table
-                            border
-                            @cell-dblclick = "goEditResponse"
-                            :data="responseParams"
-                            style="width: 100%">
-                                <el-table-column
-                                label="op"
-                                width="50">
-                                    <template scope="scope">
-                                        <span>X</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="变量名"
-                                prop="key"
-                                width="180">
-                                    <template scope="scope">
-                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 0" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
-                                        <span v-else class="show_value" @mouseover="flagShow(scope.row.type)">{{ scope.row.key }}</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="含义"
-                                prop="comments"
-                                width="180">
-                                    <template scope="scope">
-                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 1" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
-                                        <span v-else class="show_value" >{{ scope.row.comments }}</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="类型"
-                                prop="type"
-                                type="select">
-                                    <template scope="scope">
-                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 2" class="cell-edit-input">
-                                            <select v-model="editValue" @change="setEditValue('res')">
-                                                <option v-for="item in typeList" :value="item">
-                                                    {{item}}
-                                                </option>
-                                            </select>
-                                            <!-- <el-input v-model="editValue" @change="setEditValue('res')"></el-input> -->
-                                        </span>
-                                        <span v-else class="show_value" >{{ scope.row.type }}</span>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                label="备注"
-                                prop="value">
-                                    <template scope="scope">
-                                        <span v-if="editFlag && scope.row.index == curRowIndex && curColIndex == 3" class="cell-edit-input"><el-input v-model="editValue" @change="setEditValue('res')"></el-input></span>
-                                        <span v-else class="show_value" >{{ scope.row.value }}</span>
-                                    </template>
-                                </el-table-column>
-                            </el-table>
-                            <el-button v-show="editFlag" type="info" @click="addParams('res')">添加参数</el-button>
-                            <el-button v-show="editFlag" type="info" @click="importJson('res')">导入json</el-button>
-                            <el-button v-show="editFlag" type="info" @click="saveResponse">保存测试</el-button>
-                        </div>
+                        <div id='container'></div>
                     </div>
                 </el-col>
             </el-row>
         </div>
         <div class="other">
             <el-dialog :visible.sync="dialogFormVisible">
-              <el-form ref="form" :model="form" label-width="80px">
-                  <el-form-item label="名称">
-                    <el-input v-model="form.name"></el-input>
-                  </el-form-item>
-                  <el-form-item label="请求类型">
-                    <el-radio-group v-model="form.type">
-                      <el-radio label="get"></el-radio>
-                      <el-radio label="post"></el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item label="请求链接">
-                    <el-input v-model="form.link"></el-input>
-                  </el-form-item>              
-                  <el-form-item label="说明">
-                    <el-input type="textarea" v-model="form.desc"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="primary" @click="goAddInterface">确定</el-button>
-                    <el-button @click="dialogFormVisible = false">取消</el-button>
-                  </el-form-item>
+                <el-form ref="form" :model="form" label-width="80px">
+                    <el-form-item label="名称">
+                        <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="请求类型">
+                        <el-radio-group v-model="form.type">
+                            <el-radio label="get"></el-radio>
+                            <el-radio label="post"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="请求链接">
+                        <el-input v-model="form.link"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属页面">
+                        <el-select v-model="curPageId" placeholder="请选择">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="说明">
+                        <el-input type="textarea" v-model="form.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="goAddInterface">确定</el-button>
+                        <el-button @click="dialogFormVisible = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <el-dialog class="bor-radius_50" :visible.sync="updateFlag">
+                <el-form ref="form">
+                    <el-form-item>
+                        <textarea name="" cols="30" rows="10" class="edit_input" ref="editParams" v-model="responseParams">
+                        </textarea>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="goUpdateSubmit">确定</el-button>
+                        <el-button @click="updateFlag = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <el-dialog class="bor-radius_50" :visible.sync="addPageShow">
+                <el-form ref="form" :model="formPage">
+                    <el-form-item label="名称">
+                        <el-input v-model="formPage.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="说明">
+                        <el-input type="textarea" v-model="formPage.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="goAddPage">确定</el-button>
+                        <el-button @click="addPageShow = false">取消</el-button>
+                    </el-form-item>
                 </el-form>
             </el-dialog>
         </div>
     </div>
 </template>
 <script>
-import { _get, _post } from '../../libs/base.js'
 import rapHead from '../common/raphead.vue'
 import rapFooter from '../common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
-import {
-    getIndexs
-} from '../../libs/tools.js'
+import { project, inter, jsonRecords } from '../api/api.js'
+import { JsonFormater } from '../../libs/jsonformate.js'
 export default {
     filters: {},
     data() {
         return {
-            requestParams: [],
-            responseParams: [],
             interList: [],
             defaultProps: {
+                children: 'children',
                 label: 'name'
             },
             dialogFormVisible: false,
@@ -188,25 +119,36 @@ export default {
                 link: '',
                 desc: ''
             },
+            formPage: {
+                name: '',
+                desc: ''
+            },
             curIterfaceId: '',
+            curIterfaceName: '',
+            curPageId: '',
             editFlag: false,
+            interEditFlag: false,
             interfaceInfo: {
                 name: '',
                 type: '',
-                url: ''
+                url: '',
+                projectId: this.$route.query.id
             },
-            inputColumn1: '',
-            resKey: '',
-            resValue: '',
-            resType: '',
-            resComment: '',
-            parasType: 'res',
-            curRowIndex: -1,
-            curColIndex: -1,
-            editValue: '',
-            propOrder: ['key', 'comments', 'type', 'value'],
-            typeList: ['number', 'string', 'object', 'boolean'],
-            projectId: this.$route.query.id
+            projectId: this.$route.query.id,
+            projectName: this.$route.query.name,
+            /* 接口内容 */
+            responseParams: '',
+            updateFlag: false,
+            addPageShow: false,
+            filterText: '',
+            pageOptions: [],
+            value: '',
+            leafNodes: []
+        }
+    },
+    watch: {
+        filterText(val) {
+            this.$refs.interTree.filter(val);
         }
     },
     computed: {
@@ -221,203 +163,309 @@ export default {
         this.getInterfaceList()
     },
     methods: {
-        flagShow(type) {
-            if (editFlag && type == 'object') {
-                console.log('----', type);
-
-            }
-        },
-        cancelAll() {
-            this.editFlag = false;
-        },
-        goRequest() {
-            this.$router.push({
-                path: 'requestData'
+        /* 初始化事件 */
+        // 获取接口列表
+        getInterfaceList() {
+            let pid = this.projectId
+            inter.getListByPID({ pid }, (data) => {
+                if (data && data.result && data.success) {
+                    let temparr = []
+                    for (let i = 0; i < data.result.length; i++) {
+                        temparr.push({
+                            name: data.result[i].name,
+                            id: data.result[i]._id,
+                            type: data.result[i].reqType,
+                            url: data.result[i].reqUrl,
+                            pid: data.result[i].pid
+                        })
+                    }
+                    this.interList = this.arrHandle(temparr)
+                    // console.log('interList', this.interList)
+                    if (this.leafNodes.length) {
+                        this.iterfaceNodeClick(this.leafNodes[0])
+                    }
+                }
             })
         },
-        deleteInterface() {
-            var iterId = this.curIterfaceId
-            _get('rap/deleteInterface', {iterId}, (data) => {
+        arrHandle(arr) {
+            let pidArr = []
+            let childArr = []
+            for (let i = 0; i < arr.length; i++) {
+                if (arr[i].pid == 0) {
+                    arr[i].children = []
+                    // arr[i].children.push({
+                    //     name: '添加接口',
+                    //     id: '0',
+                    //     type: '0',
+                    //     url: '0',
+                    //     pid: arr[i].id
+                    // })
+                    pidArr.push(arr[i])
+                    this.pageOptions.push({
+                        value: arr[i].id,
+                        label: arr[i].name
+                    })
+                } else {
+                    childArr.push(arr[i])
+                }
+            }
+            this.leafNodes = childArr
+            for (let m = 0; m < childArr.length; m++) {
+                for (let n = 0; n < pidArr.length; n++) {
+                    if (childArr[m].pid == pidArr[n].id) {
+                        pidArr[n].children.push(childArr[m])
+                    }
+                }
+            }
+
+            return pidArr
+        },
+        /* 非初始化--交互事件 */
+        // 左侧列表点击
+        iterfaceNodeClick(data) {
+            if (data.id == '0' && this.editFlag) {
+                this.dialogFormVisible = true
+                this.curPageId = data.pid
+            } else if (data.pid != '0' && data.id != '0') {
+                Object.assign(this.interfaceInfo, data)
+                this.curIterfaceId = data.id
+                this.curIterfaceName = data.name
+                this.getInterfaceParams(data.id)
+            } else {
+                this.curPageId = data.id
+            }
+        },
+        // 新增页面
+        goAddPage() {
+            let inter = {
+                name: this.formPage.name,
+                desc: this.formPage.desc,
+                projectId: this.projectId,
+                pid: 0
+            }
+
+            inter.add(inter, (data) => {
                 if (data && data.success) {
+                    this.addPageShow = false
                     this.getInterfaceList()
                 }
             })
         },
-        saveResponse() {
-            var params = {
-                recordId: this.curIterfaceId,
-                responseParams: JSON.stringify(this.responseParams)
-            }
-            _post('rap/paramsSave', params, (data) => {
-                if (data && data.success) {
-                    this.dialogFormVisible = false
-                    this.editFlag = false
-                    this.getInterfaceList()
-                }
-            })
-
-            this.editFlag = false;
-            this.curColIndex = -1;
-            this.curRowIndex = -1;
-        },
-        saveAll() {
-            // this.responseParams
-            this.editFlag = false
-        },
-        addResponseList() {
-
-        },
-        addParams(tar) {
-            if (tar === 'req') {
-                var count = this.requestParams.length
-                this.requestParams.push({
-                    index: count,
-                    key: '',
-                    comments: '',
-                    type: '',
-                    value: ''
-                })
-            } else {
-                var count = this.responseParams.length
-                this.responseParams.push({
-                    index: count,
-                    key: '',
-                    comments: '',
-                    type: '',
-                    value: ''
-                })
-            }
-        },
-        goEditAll() {
-            this.editFlag = true
-        },
-        goEditRequest(row, column, cell, event) {
-            // console.log(row, column, cell, event)
-        },
-        goEditResponse(row, column, cell, event) {
-            if (this.editFlag) {
-                let indexs = getIndexs(row, column, cell)
-                this.curColIndex = indexs.colIndex
-                this.curRowIndex = indexs.rowIndex
-
-                var tempObj = this.responseParams[this.curRowIndex]
-
-                this.editValue = tempObj[this.propOrder[this.curColIndex]]
-            }
-        },
-        setEditValue(type) {
-            if (type == 'res') {
-                this.responseParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
-            } else {
-                this.requestParams[this.curRowIndex][this.propOrder[this.curColIndex]] = this.editValue
-            }
-        },
-        openInterDialog() {
+        // 接口主体更新
+        editInterface(editflag) {
             this.dialogFormVisible = true
+            this.interEditFlag = editflag
         },
+        // 新增接口
         goAddInterface() {
-            // let inter = this.form
+            if (this.curPageId == '') {
+                alert('请先添加一个页面，在添加接口')
+                return
+            }
+            if (this.form.link.indexOf('/') != 0) {
+                this.form.link = '/' + this.form.link
+            }
+
             let inter = {
                 name: this.form.name,
                 desc: this.form.desc,
                 reqType: this.form.type,
                 reqUrl: this.form.link,
-                resParamsId: '',
-                reqParamsId: '',
-                projectId: this.projectId
+                projectId: this.projectId,
+                pid: this.curPageId
             }
-            _post('rap/addInterface', {inter}, (data) => {
-                // this.backdata = data.result
+
+            // let editUrl = this.interEditFlag ? 'rap/updateInterface' : 'rap/addInterface'
+            let action = this.interEditFlag ? 'update' : 'add'
+
+            inter[action](inter, (data) => {
                 if (data && data.success) {
                     this.dialogFormVisible = false
                     this.getInterfaceList()
                 }
             })
         },
-        getInterfaceList() {
-            var pid = this.projectId
-            _post('rap/getInterfaceListByProjectID', {pid}, (data) => {
-                if (data && data.result && data.success) {
-                    let i = 0
-                    let temparr = []
-                    for(; i < data.result.length; i++) {
-                        temparr.push({
-                            name: data.result[i].name,
-                            id: data.result[i]._id,
-                            type: data.result[i].reqType,
-                            url: data.result[i].reqUrl
-                        })
-                    }
-                    this.interList = temparr
-                    this.iterfaceNodeClick(this.interList[0])
+        // 接口删除
+        deleteInterface() {
+            let context = '确定删除' + this.curIterfaceName + '？'
+            // if (window.comfirm(context)) {
+            var iterId = this.curIterfaceId
+            inter.delete({ iterId }, (data) => {
+                if (data && data.success) {
+                    this.getInterfaceList()
                 }
             })
+            // }
         },
-        iterfaceNodeClick(data) {
-            // console.log(data);
-            let iterId = data.id
-            this.curIterfaceId = data.id
-            let iterName = data.name
-            // this.getIterParams(iterId)
-            this.interfaceInfo.name = data.name
-            this.interfaceInfo.type = data.type
-            this.interfaceInfo.url = data.url
-            this.getInterfaceParams(iterId)
-        },
-        getInterfaceParams(iterId) {
-            let params = {
-                iterId: iterId,
-                type: 'rap'
-            }
-            _post('rap/getIterParamsByIterId', params, (data) => {
-                let tempArrRes = []
-                let tempArrReq = []
-                if (data && data.result && data.success) {
-                    let i = 0
-                    for (; i < data.result.length; i++) {
-                        if (data.result[i].parasType === 'req') {
-                            tempArrReq.push({
-                                index: i,
-                                key: data.result[i].key,
-                                comments: data.result[i].comments,
-                                type: data.result[i].valueType,
-                                value: data.result[i].value
-                            })
-                        } else {
-                            tempArrRes.push({
-                                index: i,
-                                key: data.result[i].key,
-                                comments: data.result[i].comments,
-                                type: data.result[i].valueType,
-                                value: data.result[i].value
-                            })
-                        }
-                    }
+        // 接口内容更新
+        goUpdate() {
+            this.updateFlag = true
+            let pid = this.curIterfaceId
+            jsonRecords.getItem({ pid }, (data) => {
+                if (typeof data == 'string') {
+                    data = JSON.parse(data)
                 }
-                this.responseParams = tempArrRes
-                this.requestParams = tempArrReq
-            })
-        },
-        getIterParams() {
 
+                this.responseParams = data[0].content
+            })
         },
-        handleEdit:function(row){
-            // console.log('>>>>>>>>>>>>>>>>>>>>', row)
-        //遍历数组改变editeFlag
+        // 接口内容更新提交
+        goUpdateSubmit() {
+            let txt = this.responseParams
+            // this.responseParams = JSON.stringify(this.json2mock(txt))
+            this.responseParams = txt // JSON.stringify(this.json2mock(txt))
+            jsonRecords.update({
+                _id: this.curIterfaceId,
+                content: this.responseParams,
+                pid: this.curIterfaceId
+            }, (data) => {
+                if (data && data.success) {
+                    this.updateFlag = false
+                    this.getInterfaceList()
+                }
+            })
         },
-        handleSave:function(row){
-            //保存数据，向后台取数据
+        // 获取接口参数
+        getInterfaceParams(pid) {
+            jsonRecords.getFormatedItem({ pid }, (data) => {
+                if (typeof data == 'string') {
+                    data = JSON.parse(data)
+                }
+
+                let contentInter = data
+                var options = {
+                    dom: '#container' //对应容器的css选择器
+                };
+                var jf = new JsonFormater(options); //创建对象
+                jf.doFormat(contentInter); //格式化json
+            })
         },
-        handleMouseEnter:function(row, column, cell, event){
-          cell.children[0].children[1].style.color="black";
+        /* 非初始化--辅助处理 */
+        filterNode(value, data) {
+            if (!value) return true;
+            return data.name.indexOf(value) !== -1;
         },
-        handleMouseOut:function(row, column, cell, event){
-          cell.children[0].children[1].style.color="#ffffff";
+        // 接口删除
+        json2mock(tar) {
+            let jsonObj = tar
+            if (typeof jsonObj == 'string') {
+                jsonObj = JSON.parse(jsonObj)
+            }
+
+            let keys = Object.keys(jsonObj)
+            for (let i = 0; i < keys.length; i++) {
+                if (jsonObj[keys[i]] instanceof Array) {
+                    if (!/\|[0-9]/.test(keys[i])) {
+                        let newKey = keys[i] + '|' + jsonObj[keys[i]].length
+                        jsonObj[newKey] = jsonObj[keys[i]]
+                        delete jsonObj[keys[i]]
+                    }
+                } else if (typeof jsonObj[keys[i]] == 'object') {
+                    this.json2mock(jsonObj[keys[i]])
+                }
+            }
+
+            return jsonObj
+        },
+        renderContent: function(createElement, { node, data }) {
+            var self = this;
+            return createElement('span', [
+                createElement('span', node.label),
+                createElement('span', {
+                    attrs: {
+                        style: "float: right; margin-right: 20px"
+                    }
+                }, [
+                    createElement('el-button', {
+                        attrs: {
+                            size: "mini",
+                            class: self.setClass(node)
+                        },
+                        on: {
+                            click: function() {
+                                console.info("点击了节点" + data.id + "的添加按钮");
+                            }
+                        }
+                    }, "添加"),
+                    createElement('el-button', {
+                        attrs: {
+                            size: "mini"
+                        },
+                        on: {
+                            click: function() {
+                                console.info("点击了节点" + data.id + "的删除按钮");
+                            }
+                        }
+                    }, "删除")
+                ]),
+            ]);
+        },
+        setClass(node) {
+            console.log('node=', node)
+            return node.data.pid == 0 ? '' : 'dom_hide'
         }
     }
 }
-
 </script>
 <style lang="scss">
+@import '../../assets/styles/jsonformate.css';
 
+.edit_input {
+    width: 750px;
+    height: 560px;
+}
+
+.border {
+    border: 1px solid transparent;
+}
+
+.el-dialog--small {
+    width: auto;
+    border-radius: 10px;
+}
+
+.el-form-item__content {
+    text-align: center;
+}
+
+#container {
+    background-color: #272822;
+    min-height: 350px;
+    width: 100%;
+    overflow: scroll;
+}
+
+.content_inter {
+    position: relative;
+    padding-top: 20px;
+}
+
+.content_inter_2 {
+    padding-top: 20px;
+}
+
+.dom_hide {
+    display: none;
+}
+
+.fr {
+    float: right;
+}
+
+.trigle_topright {
+    position: absolute;
+    right: 0;
+    width: 0;
+    height: 0;
+    border: 80px solid #ccc;
+    border-bottom: 80px solid transparent;
+    border-left: 80px solid transparent;
+    p {
+        position: absolute;
+        right: -63px;
+        top: -54px;
+        font-size: 29px;
+        color: #fff;
+    }
+}
 </style>

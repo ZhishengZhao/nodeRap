@@ -30,7 +30,7 @@
 <script>
 import rapHead from '../common/raphead.vue'
 import joyCooper from '../joy/cooperation.vue'
-import { _get, _post } from '../../libs/base.js'
+import { user } from '../api/api.js'
 export default {
     name: 'welcome',
     data() {
@@ -53,7 +53,7 @@ export default {
     mounted() {},
     methods: {
         goPage(params) {
-            // _get('rap/isLogin', null, (data) => {
+            // user.isLogin(null, (data) => {
             //     if (data.success && data.result) {
             //         this.$router.push({
             //             path: 'mainpage'
@@ -72,7 +72,8 @@ export default {
                 name: this.form.name,
                 pwd: this.form.pwd
             }
-            _post('rap/login', user, (data) => {
+
+            user.login(user, (data) => {
                 this.loginShow = false
                 if (data.success) {
                     console.log('登陆成功，跳转主页')
