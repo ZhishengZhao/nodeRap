@@ -1,13 +1,20 @@
-const express = require('express');
-const webpack = require('webpack');
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const config = require('./webpack.dev.config.js');
-const basicConfig = require('../config/index.js');
-const bodyParser = require('body-parser');
-const ip = require('ip').address();
+var express = require('express');
+var webpack = require('webpack');
+var webpackDevMiddleware = require('webpack-dev-middleware');
+var config = require('./webpack.dev.config.js');
+var basicConfig = require('../config/index.js');
+var bodyParser = require('body-parser');
+var history = require('connect-history-api-fallback');
+var ip = require('ip').address();
 
-const app = express();
-const compiler = webpack(config);
+var app = express();
+var compiler = webpack(config);
+
+app.use(history({
+    // prefix: '/pages',
+    index: '/main.html', // 覆盖默认页面
+    verbose: true // 是否记录日志，和logger相关。开启的时候会使用console.log.bind(console)。控制台直接输出
+}));
 
 app.use(webpackDevMiddleware(compiler, {
     public: config.output.publicPath

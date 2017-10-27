@@ -6,6 +6,7 @@
   "scripts": {
     "dev:beserver": "supervisor --harmony backend/index.js",
     "dev": "node build/dev.js",
+    "dev:server": "supervisor --harmony build/build_server.js",
     "build": "npm run build:client && npm run build:server",
     "build:server": "node build/build_server.js",
     "build:client": "webpack --config build/webpack.build.config.js",
@@ -51,6 +52,7 @@
     "babel-plugin-component": "^0.10.0",
     "body-parser": "^1.18.2",
     "clean-webpack-plugin": "^0.1.17",
+    "connect-history-api-fallback": "^1.4.0",
     "cowsay": "^1.1.9",
     "css-loader": "^0.28.4",
     "ejs": "^2.5.7",

@@ -2,6 +2,10 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 // const CleanWebpackPlugin = require('clean-webpack-plugin');
 
+function resolve(dir) {
+    return path.join(__dirname, '../', dir);
+}
+
 module.exports = {
     entry: {
         main: './src/module/main.js'
@@ -12,6 +16,16 @@ module.exports = {
         publicPath: '/'
     },
     devtool: 'inline-source-map',
+    resolve: {
+        extensions: ['.js', '.vue', '.json'],
+        alias: {
+            'src': resolve('src'),
+            'components': resolve('src/components'),
+            'libs': resolve('src/libs'),
+            'module': resolve('src/module'),
+            'store': resolve('src/store')
+        }
+    },
     module: {
         rules: [{
             test: /\.js$/,
