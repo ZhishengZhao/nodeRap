@@ -1,68 +1,16 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
+var merge = require('webpack-merge');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+var baseWebpackConfig = require('./webpack.base.config.js');
 
-function resolve(dir) {
-    return path.join(__dirname, '../', dir);
-}
-
-module.exports = {
-    entry: {
-        main: './src/module/main.js'
-    },
-    output: {
-        filename: '[name].js',
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: '/'
-    },
+module.exports = merge(baseWebpackConfig, {
     devtool: 'inline-source-map',
-    resolve: {
-        extensions: ['.js', '.vue', '.json'],
-        alias: {
-            'src': resolve('src'),
-            'components': resolve('src/components'),
-            'libs': resolve('src/libs'),
-            'module': resolve('src/module'),
-            'store': resolve('src/store')
-        }
-    },
-    module: {
-        rules: [{
-            test: /\.js$/,
-            loader: 'babel-loader',
-            include: path.resolve(__dirname, 'src'),
-            exclude: /node_modules/
-        }, {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader', 'postcss-loader']
-        }, {
-            test: /\.(eot|svg|ttf|woff|woff2)(\?\S*)?$/,
-            loader: 'file-loader'
-        }, {
-            test: /\.(png|jpg)$/,
-            loader: "url-loader?limit=8192"
-        }, {
-            test: /\.vue$/,
-            exclude: /node_modules/,
-            loader: 'vue-loader'
-        }, {
-            test: /\.scss$/,
-            use: [{
-                loader: "style-loader" // creates style nodes from JS strings 
-            }, {
-                loader: "css-loader" // translates CSS into CommonJS 
-            }, {
-                loader: "sass-loader" // compiles Sass to CSS 
-            }]
-        }]
-    },
     plugins: [
         new HtmlWebpackPlugin({
-            chunks: ['main'],
-            filename: 'main.html',
-            template: 'index.html', // use common index.html template
-            inject: true, // js插入位置
-            title: 'main.html'
+            chunks: ['main'], // 入口名称
+            filename: 'main.html', // 生成文件名称
+            template: 'index.html', // 根目录index模板
+            inject: true, // 插入js
+            title: 'main.html' // title
         })
     ]
-};
+});

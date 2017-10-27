@@ -4,11 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:beserver": "supervisor --harmony backend/index.js",
-    "dev": "node build/dev.js",
-    "dev:server": "supervisor --harmony build/build_server.js",
+    "dev": "node build/server.js env_dev",
+    "dev:server": "supervisor --harmony build/server.js env_pro",
     "build": "npm run build:client && npm run build:server",
-    "build:server": "node build/build_server.js",
+    "build:server": "node build/server.js env_pro",
     "build:client": "webpack --config build/webpack.build.config.js",
     "lint": "",
     "test": ""
@@ -54,6 +53,7 @@
     "clean-webpack-plugin": "^0.1.17",
     "connect-history-api-fallback": "^1.4.0",
     "cowsay": "^1.1.9",
+    "cross-env": "^5.1.0",
     "css-loader": "^0.28.4",
     "ejs": "^2.5.7",
     "eslint-friendly-formatter": "^3.0.0",
