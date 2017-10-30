@@ -75,5 +75,5 @@ app.use('/rap', require('../backend/routes.js'));
 
 
 app.listen(basicConfig.port, function() {
-    console.log('listening at http://' +  ip + ':' + basicConfig.port);
+    console.log('listening at http://' +  ip + ':' + basicConfig.port + (deployEnv === 'env_dev' ? '' : '/main.html'));
 });
