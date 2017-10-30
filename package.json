@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node build/server.js env_dev",
-    "dev:server": "supervisor --harmony build/server.js env_pro",
+    "dev:server": "supervisor --harmony build/server.js",
     "build": "npm run build:client && npm run build:server",
     "build:server": "node build/server.js env_pro",
     "build:client": "webpack --config build/webpack.build.config.js",
