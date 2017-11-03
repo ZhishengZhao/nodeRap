@@ -4,7 +4,7 @@ import { creatAPI } from './base'
 const user = {
     isLogin: (params, callback) => creatAPI('rap/isLogin', 'get', params, callback),
     login: (params, callback) => creatAPI('rap/login', 'post', params, callback),
-    registe: (params, callback) => creatAPI('rap/registe', 'post', params, callback)
+    register: (params, callback) => creatAPI('rap/registe', 'post', params, callback)
 }
 
 /* Project */
@@ -12,12 +12,20 @@ const project = {
     add: (params, callback) => creatAPI('rap/add', 'post', params, callback),
     delete: (params, callback) => creatAPI('rap/deleteProjectById', 'get', params, callback),
     update: (params, callback) => creatAPI('rap/updateProjectById', 'post', params, callback),
-    getList: (params, callback) => creatAPI('rap/getAll', 'get', params, callback)  
+    getList: (params, callback) => creatAPI('rap/getAll', 'get', params, callback),
+    getMine: (params, callback) => creatAPI('rap/getAllMine', 'get', params, callback),
+    getOthers: (params, callback) => creatAPI('rap/getAllOthers', 'get', params, callback)
+}
+
+/* UserProject Relation */
+const userProject = {
+    // getList: (params, callback) => creatAPI('rap/getAll', 'get', params, callback),
+    getMyJoins: (params, callback) => creatAPI('rap/getMyJoins', 'get', params, callback)
 }
 
 /* Interface */
 const inter = {
-    add: (params, callback) => creatAPI('rap/addInterface', 'get', params, callback),
+    add: (params, callback) => creatAPI('rap/addInterface', 'post', params, callback),
     delete: (params, callback) => creatAPI('rap/deleteInterface', 'get', params, callback),
     update: (params, callback) => creatAPI('rap/updateInterface', 'post', params, callback),
     getList: (params, callback) => creatAPI('rap/getInterfaceList', 'post', params, callback),
@@ -42,5 +50,6 @@ export {
     project,
     inter,
     jsonRecords,
-    mock
+    mock,
+    userProject
 }

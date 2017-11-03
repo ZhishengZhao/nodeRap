@@ -5,32 +5,19 @@
     <div class="page">
         <rap-head></rap-head>
         <div class="part_main">
-            <p class="page_title" @click="showJoy = true">
+            <p class="title--main" @click="showJoy = !showJoy">
             </p>
-            <p class="btn" @click="goPage('main')">
+            <p class="btn--main" @click="goPage('main')">
             </p>
         </div>
-        <el-dialog :visible.sync="loginShow">
-            <el-form ref="form" :model="form">
-                <el-form-item label="用户名">
-                    <el-input v-model="form.name"></el-input>
-                </el-form-item>
-                <el-form-item label="密码">
-                    <el-input v-model="form.pwd"></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="goLogin">登录</el-button>
-                    <el-button @click="goRegister">注册</el-button>
-                </el-form-item>
-            </el-form>
-        </el-dialog>
         <joy-cooper v-show="showJoy"></joy-cooper>
     </div>
 </template>
 <script>
-import rapHead from '../common/raphead.vue'
-import joyCooper from '../joy/cooperation.vue'
-import { user } from '../api/api.js'
+import rapHead from 'common/raphead.vue'
+import joyCooper from 'joy/cooperation.vue'
+import goLogin from 'common/login/index.js'
+import { user } from 'api/api.js'
 export default {
     name: 'welcome',
     data() {
@@ -38,13 +25,15 @@ export default {
             loginShow: false,
             form: {
                 name: '',
-                pwd: ''
+                email: '',
+                pwd: '',
+                pwdconfirm: ''
             },
+            actionLogin: true,
             showJoy: false
         }
     },
     computed: {
-
     },
     components: {
         rapHead,
@@ -53,41 +42,19 @@ export default {
     mounted() {},
     methods: {
         goPage(params) {
-            // user.isLogin(null, (data) => {
-            //     if (data.success && data.result) {
-            //         this.$router.push({
-            //             path: 'mainpage'
-            //         })
-            //     } else {
-            //         this.loginShow = true
-            //     }
-            // })
-
-            this.$router.push({
-                path: 'mainpage'
-            })
-        },
-        goLogin() {
-            var user = {
-                name: this.form.name,
-                pwd: this.form.pwd
-            }
-
-            user.login(user, (data) => {
-                this.loginShow = false
-                if (data.success) {
-                    console.log('登陆成功，跳转主页')
-                    // this.$router.push({
-                    //     path: 'mainpage'
-                    // })
+            let me = this
+            user.isLogin(null, (data) => {
+                if (data.success && data.result) {
+                    me.$router.push({
+                        path: 'mainpage'
+                    })
                 } else {
-                    alert(data.desc || '系统异常 稍后再试')
+                    goLogin.create(() => {
+                        me.$router.push({
+                            path: 'mainpage'
+                        })
+                    })
                 }
-            })
-        },
-        goRegister() {
-            this.$router.push({
-                path: 'register'
             })
         }
     }
@@ -98,9 +65,10 @@ export default {
     height: 800px;
     padding: 100px;
     margin: 0 auto;
+    min-width: 900px;
 }
 
-.page_title {
+.title--main {
     width: 900px;
     height: 260px;
     margin: 30px auto;
@@ -108,7 +76,7 @@ export default {
     background-size: cover;
 }
 
-.btn {
+.btn--main {
     width: 210px;
     height: 94px;
     margin: 30px auto;

@@ -45,4 +45,8 @@ export default {
     background: #f2f2f2;
     border: none;
 }
+
+.disblock {
+    display: block;
+}
 </style>

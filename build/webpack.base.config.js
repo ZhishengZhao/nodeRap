@@ -17,7 +17,10 @@ module.exports = {
             'components': resolve('src/components'),
             'libs': resolve('src/libs'),
             'module': resolve('src/module'),
-            'store': resolve('src/store')
+            'store': resolve('src/store'),
+            'api': resolve('src/module/api'),
+            'common': resolve('src/module/common'),
+            'joy': resolve('src/module/joy')
         }
     },
     module: {

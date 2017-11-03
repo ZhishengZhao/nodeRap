@@ -30,7 +30,8 @@ exports.Interface = mongolass.model('Interface', {
 exports.Project = mongolass.model('Project', {
     name: { type: 'string' },
     desc: { type: 'string' },
-    author: { type: 'string' }
+    author: { type: 'string' },
+    parties: { type: 'string' }
 });
 
 exports.JsonRecord = mongolass.model('JsonRecord', {
@@ -48,5 +49,10 @@ exports.User = mongolass.model('User', {
 });
 
 exports.User.index({ name: 1 }, { unique: true }).exec();
+
+exports.User_project = mongolass.model('User_project', {
+    userID: { type: Mongolass.Types.ObjectId },
+    projectID: { type: Mongolass.Types.ObjectId }
+});
 
 // exports.Interface.index({ _id: -1 }).exec();

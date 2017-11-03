@@ -2,7 +2,7 @@ import App from './App.vue';
 
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
-import register from './mainpage/register.vue';
+// import register from './mainpage/register.vue';
 
 import detail from './detail/index.vue';
 
@@ -33,14 +33,16 @@ let configRoutes = [{
         meta: {
             title: '详情页'
         }
-    }, {
-        path: 'register',
-        component: register,
-        name: 'register',
-        meta: {
-            title: '注册页面'
-        }
-    }]
+    }
+    // , {
+    //     path: 'register',
+    //     component: register,
+    //     name: 'register',
+    //     meta: {
+    //         title: '注册页面'
+    //     }
+    // }
+    ]
 }, {
     path: '*',
     component: NotFound,

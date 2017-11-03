@@ -8,10 +8,11 @@
             <el-row :gutter="20">
                 <section class="area_projects">
                     <div class="area_check">
-                        <!-- <ul class="switch_check">
-                            <li @click="getList('mine')" class="active">我的</li>
-                            <li @click="getList('other')">别人的</li>
-                        </ul> -->
+                        <p class="switch_check">
+                            <el-button @click="getList('all')" type="primary">所有的</el-button>
+                            <el-button @click="getList('mine')" type="primary">我创建的</el-button>
+                            <el-button @click="getList('myjoin')" type="success">我参与的</el-button>
+                        </p>
                         <p class="text_filter_container fr">
                             <el-input placeholder="输入关键字进行过滤" class="text_filter_cotent" v-model="filterText"></el-input>
                             <el-button type="info" class="text_filter_search" @click="search">搜索</el-button>
@@ -37,26 +38,37 @@
                     </div>
                 </section>
             </el-row>
-            <el-dialog :visible.sync="dialogFormVisible">
-                <el-form ref="form" :model="form" label-width="80px">
-                    <el-form-item label="项目名称">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="项目描述">
-                        <el-input v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="projectAddConfirm">确定</el-button>
-                        <el-button @click="dialogFormVisible = false">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
+            <rap-dialog v-show="dialogFormVisible">
+                <div slot="content">
+                    <h2>Project Info</h2>
+                    <input type="text" class="disblock input__project--edit" v-model="form.name" placeholder="项目名称">
+                    <input type="text" class="disblock input__project--edit" v-model="form.desc" placeholder="项目描述">
+                    <input type="text" class="disblock input__project--edit" v-model="form.paties" placeholder="项目成员">
+                    <el-button type="primary" @click="projectAddConfirm">确定</el-button>
+                    <el-button @click="projectAddCancel">取消</el-button>
+                </div>
+            </rap-dialog>
+            <rap-dialog>
+                <div slot="content">
+                    <div class="alert__title">
+                        这里是一个测试的title
+                    </div>
+                    <div class="alert__content">
+                        谁知道这里会是什么
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea pariatur amet quisquam aspernatur adipisci neque qui corporis enim eius error explicabo cum ipsam et quae nemo cumque, distinctio eligendi nostrum.
+                    </div>
+                    <div class="alert__btns">
+                        <p class="rap--btn">呵呵</p>
+                    </div>
+                </div>
+            </rap-dialog>
         </div>
     </div>
 </template>
 <script>
-import rapHead from '../common/raphead.vue'
-import { project } from '../api/api.js'
+import rapDialog from 'src/components/dialog/index.vue'
+import rapHead from 'common/raphead.vue'
+import { project, userProject } from 'api/api.js'
 export default {
     name: 'mainpage',
     data() {
@@ -67,7 +79,10 @@ export default {
             form: {
                 _id: '',
                 name: '',
-                desc: ''
+                desc: '',
+                paties: '',
+                partyArr: [],
+                isPartyChanged: false
             },
             interList: [],
             defaultProps: {
@@ -75,22 +90,20 @@ export default {
             },
             filterText: '',
             curFocusId: '',
-            editFlag: false
+            isEdit: false,
+            belongs: 'all',
+            hideDelete: false
         }
-    },
-    watch: {
-        // filterText(curVal, oldVal) {
-        //     this.search(curVal)
-        // }
     },
     computed: {
 
     },
     components: {
-        rapHead
+        rapHead,
+        rapDialog
     },
     mounted() {
-        this.getProjectList()
+        this.getList('all')
     },
     methods: {
         goPage(item) {
@@ -106,38 +119,56 @@ export default {
             this.dialogFormVisible = true
         },
         projectAddConfirm() {
-            if (this.editFlag) {
-                project.update(this.form, (data) => {
+            this.form.partyArr = JSON.stringify(this.form.paties.split(','));
+            let action = this.isEdit ? 'update' : 'add'
+
+            project[action](this.form, (data) => {
+                if (data.success) {
+                    this.dialogFormVisible = false
+                    this.getList('all')
+                    this.clearForm()
+                }
+            })
+        },
+        projectAddCancel() {
+            this.dialogFormVisible = false
+            this.clearForm()
+        },
+        getList(type) {
+            if (type === 'all') {
+                this.belongs = 'all'
+                project.getList(null, (data) => {
                     if (data.success) {
-                        this.dialogFormVisible = false
-                        this.getProjectList()
+                        this.projectList = data.result
+                        this.originProjectList = data.result
+                    }
+                })
+            } else if (type === 'mine') {
+                this.belongs = 'mine'
+                project.getMine(null, (data) => {
+                    if (data.success) {
+                        this.projectList = data.result
+                        this.originProjectList = data.result
                     }
                 })
             } else {
-                project.add(this.form, (data) => {
+                this.belongs = 'myjoin'
+                userProject.getMyJoins(null, (data) => {
+                // project.getMyJoins(null, (data) => {
                     if (data.success) {
-                        this.dialogFormVisible = false
-                        this.getProjectList()
+                        this.projectList = data.result
+                        this.originProjectList = data.result
                     }
                 })
             }
         },
-        getProjectList() {
-            project.getList(null, (data) => {
-                if (data.success) {
-                    this.projectList = data.result
-                    this.originProjectList = data.result
-                }
-            })
-        },
-        getList(type) {
-
-        },
         showEditPanel(_id) {
-            this.curFocusId = _id
+            if (this.belongs === 'mine') {
+                this.curFocusId = _id
+            }
         },
         goEdit(item) {
-            this.editFlag = true
+            this.isEdit = true
             Object.assign(this.form, item)
             this.dialogFormVisible = true
         },
@@ -146,7 +177,7 @@ export default {
             if (window.confirm('你是认真的么，删了可就没了')) {
                 project.delete({_id}, (data) => {
                     if (data.success) {
-                        this.getProjectList()
+                        this.getList('all')
                     }
                 })
             }
@@ -166,6 +197,16 @@ export default {
                 }
 
                 this.projectList = temparr
+            }
+        },
+        clearForm() {
+            this.form = {
+                _id: '',
+                name: '',
+                desc: '',
+                paties: '',
+                partyArr: [],
+                isPartyChanged: false
             }
         }
     }
@@ -187,7 +228,7 @@ export default {
         top: -1px;
         width: 20px;
         height: 130px;
-        background: #ad9a99;
+        // background: #ad9a99;
         border-bottom-right-radius: 5px;
         border-top-right-radius: 5px;
         li {
@@ -196,8 +237,14 @@ export default {
             text-align: center;
             font-weight: bold;
             font-size: 16px;
+            border-bottom-right-radius: 5px;
+            border-top-right-radius: 5px;
             &:first-child {
                 border-bottom: 1px solid #fff;
+                background-color: #67c23a;
+            }
+            &:nth-child(2) {
+                background-color: #d62316;
             }
         }
     }
@@ -281,8 +328,40 @@ export default {
     }
 }
 
-.fr {
-    float: right;
+.input__project--edit {
+    width: 400px;
+    height: 50px;
+    line-height: 50px;
+    text-indent: 10px;
+    margin: 10px auto;
+    border: 1px solid rgba(50,58,69,.2);
+    border-radius: 5px;
+    font-size: 18px;   
+}
+
+.alert__title {
+    font-size: 20px;
+    text-align: center;
+    line-height: 28px;
+}
+.alert__content {
+    // text-align: center;
+    font-size: 18px;
+    line-height: 22px;
+}
+.alert__btns {
+    font-size: 20px;
+    line-height: 28px;
+}
+.rap--btn {
+    display: inline-block;
+    width: auto;
+    height: 28px;
+    border-radius: 10px;
+    font-size: 18px;
+    line-height: 27px;
+    padding: 0 20px;
+    background-color: #409eff;
 }
 
 </style>

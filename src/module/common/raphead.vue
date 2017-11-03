@@ -6,25 +6,38 @@
         <div class="wid1080">
             <img class="logo" src="./img/logo1.png" alt="" @click="goMainPage">
             <!-- <a class="logo_title" href="javascript:;">Heioray</a> -->
+            <!-- <span @click="goLogin">{{welcomeTxt}}</span> -->
         </div>
     </div>
 </template>
 <script>
+import { user } from '../api/api.js'
 export default {
     name: 'head',
     data() {
-        return {}
+        return {
+            isLogin: false,
+            welcomeTxt: '登录'
+        }
     },
     computed: {
 
     },
     components: {},
     mounted() {
-
+        // user.isLogin(null, (data) => {
+        //     if (data.success && data.result) {
+        //         this.isLogin = true;
+        //         this.welcomeTxt = 'Hi ' + data.result.name
+        //     }
+        // })
     },
     methods: {
         goMainPage() {
             this.$router.go(-1)
+        },
+        goLogin() {
+            this.$emit('back', 'doLogin');
         }
     }
 }

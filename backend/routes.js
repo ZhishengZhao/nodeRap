@@ -1,19 +1,24 @@
 var express = require('express');
 var router = express.Router();
 
+var checkLogin = require('./middlewares/check.js').checkLogin;
+
 var interfaceController = require('./controller/interface.js');
 var recordsController = require('./controller/records.js');
 var jsonRecordsController = require('./controller/jsonrecord.js');
 var userController = require('./controller/user.js');
 var projectController = require('./controller/project.js');
+var userProjectController = require('./controller/userproject.js');
 
-/* Interface */
-router.post('/getInterfaceList', interfaceController.getAll);
-router.post('/getInterfaceListByProjectID', interfaceController.getRecordsByPID);
 // router.post('/getInterfaceListByProjectID', function(req, res, next) {
 //     console.log('params', req);
 //     console.log('req.body', req.body);
 // }); 
+
+/* Interface */
+router.post('/getInterfaceList', interfaceController.getAll);
+router.post('/getInterfaceListByProjectID', interfaceController.getRecordsByPID);
+
 router.post('/addInterface', interfaceController.addInterface);
 router.post('/updateInterface', interfaceController.updateInterface);
 router.get('/deleteInterface', interfaceController.deleteInterface);
@@ -34,20 +39,18 @@ router.post('/login', userController.login);
 router.post('/registe', userController.registe);
 
 /* Project */
-router.post('/add', projectController.addPorject);
+router.post('/add', checkLogin, projectController.addPorject);
 router.get('/getAll', projectController.getAllProjects);  
-// router.post('/getAll', function(req, res, next) {
-//     console.log(req.fields);
-//     console.log('req.body', req.body);
-// }); 
 router.post('/updateProjectById', projectController.updateProjectById);
 router.get('/deleteProjectById', projectController.deleteById); 
+router.get('/getAllMine', checkLogin, projectController.getMine);
+
+/* User Project Relation */
+// router.get('/getAllOthers', userProjectController.getMyJoin);
+router.get('/getMyJoins', checkLogin, userProjectController.getMyJoin);
 
 /* Mock */
 router.get('/mock/:projectId/*', jsonRecordsController.responseData);
-// router.get('/mock/:projectId/*', function(req, res, next) {
-//     console.log('getMock', req.params);
-// }); 
 router.post('/mock/:projectId/*', jsonRecordsController.responseData);
 
 /* Example */

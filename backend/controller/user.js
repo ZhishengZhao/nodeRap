@@ -1,6 +1,11 @@
 var rapUser = require('../models/rapUser');
 var sha1 = require('sha1');
 
+function emailCheck(emailStr) {
+    var emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    return emailReg.test(emailStr);
+}
+
 module.exports = {
     addUser: function(req, res, next) {
         var params = {
@@ -19,25 +24,30 @@ module.exports = {
         }).catch(next);
     },
     isLogin: function(req, res, next) {
-        console.log('00000--------req.session', req.session);
+        // console.log('00000--------req.session', req.session);
         var isLogin = false;
+        var userinfo = {};
 
         if (req.session && req.session.user) {
             isLogin = true;
+            userinfo = {
+                name: req.session.user.name,
+                avatar: req.session.user.avatar
+            };
         }
 
         res.send({
-            result: isLogin,
-            success: true
+            result: userinfo,
+            success: isLogin
         });
     },
     login: function(req, res, next) {
-        console.log(req.body);
         var name = req.body.name;
         var password = sha1(req.body.pwd);
         var errInfo = '';
-
+        console.log('--------name', name);
         rapUser.getUserByName(name).then(function(user) {
+            console.log('--------user', user);
             var success = true,
                 errInfo = '';
             if (!user.length) {
@@ -48,6 +58,7 @@ module.exports = {
                 success = false;
             } else {
                 delete user[0].password;
+                // res.setHeader("Set-Cookie", ['a=000', 't=1111', 'w=2222']);
                 console.log(user);
                 req.session.user = user[0];
                 console.log('--------req.session', req.session);
@@ -64,12 +75,13 @@ module.exports = {
         console.log(req.body);
         var user = {
             name: req.body.name,
-            gender: req.body.gender,
-            bio: req.body.desc,
-            avatar: req.body.avatar,
+            email: req.body.email,
+            // gender: req.body.gender,
+            // bio: req.body.desc,
+            // avatar: req.body.avatar,
             // avatar: req.files.avatar.path.split(path.sep).pop(),
             password: req.body.pwd,
-            repassword: req.body.pwdConfirm
+            repassword: req.body.pwdconfirm
         };
 
         var errInfo = '';
@@ -78,9 +90,12 @@ module.exports = {
             if (user.name.length > 10 || user.name.length < 1) {
                 throw new Error('name\'s length should be between 1 and 10');
             }
-            if (['m', 'f', 'x'].indexOf(user.gender) === -1) {
-                throw new Error('hey man, your gender is really wird');
+            if (!emailCheck(user.email)) {
+                throw new Error('email格式不对');
             }
+            // if (['m', 'f', 'x'].indexOf(user.gender) === -1) {
+            //     throw new Error('hey man, your gender is really wird');
+            // }
             // if (!req.files.avatar.name) {
             //     throw new Error('缺少头像');
             // }
@@ -90,9 +105,9 @@ module.exports = {
             if (user.repassword !== user.password) {
                 throw new Error('two password are not the same');
             }
-            if (user.bio.length > 30 || user.bio.length < 1) {
-                throw new Error('bio\'s length should be between 1 and 30');
-            }
+            // if (user.bio.length > 30 || user.bio.length < 1) {
+            //     throw new Error('bio\'s length should be between 1 and 30');
+            // }
         } catch (e) {
             console.log(e);
             // fs.unlink(req.files.avatar.path);

@@ -98,11 +98,11 @@
     </div>
 </template>
 <script>
-import rapHead from '../common/raphead.vue'
-import rapFooter from '../common/footer.vue'
+import rapHead from 'common/raphead.vue'
+import rapFooter from 'common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
-import { project, inter, jsonRecords } from '../api/api.js'
-import { JsonFormater } from '../../libs/jsonformate.js'
+import { project, inter, jsonRecords } from 'api/api.js'
+import { JsonFormater } from 'src/libs/jsonformate.js'
 export default {
     filters: {},
     data() {
@@ -237,14 +237,14 @@ export default {
         },
         // 新增页面
         goAddPage() {
-            let inter = {
+            let params = {
                 name: this.formPage.name,
                 desc: this.formPage.desc,
                 projectId: this.projectId,
                 pid: 0
             }
 
-            inter.add(inter, (data) => {
+            inter.add(params, (data) => {
                 if (data && data.success) {
                     this.addPageShow = false
                     this.getInterfaceList()
@@ -266,7 +266,7 @@ export default {
                 this.form.link = '/' + this.form.link
             }
 
-            let inter = {
+            let params = {
                 name: this.form.name,
                 desc: this.form.desc,
                 reqType: this.form.type,
@@ -278,7 +278,7 @@ export default {
             // let editUrl = this.interEditFlag ? 'rap/updateInterface' : 'rap/addInterface'
             let action = this.interEditFlag ? 'update' : 'add'
 
-            inter[action](inter, (data) => {
+            inter[action](params, (data) => {
                 if (data && data.success) {
                     this.dialogFormVisible = false
                     this.getInterfaceList()
