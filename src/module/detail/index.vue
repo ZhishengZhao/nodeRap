@@ -193,13 +193,6 @@ export default {
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i].pid == 0) {
                     arr[i].children = []
-                    // arr[i].children.push({
-                    //     name: '添加接口',
-                    //     id: '0',
-                    //     type: '0',
-                    //     url: '0',
-                    //     pid: arr[i].id
-                    // })
                     pidArr.push(arr[i])
                     this.pageOptions.push({
                         value: arr[i].id,

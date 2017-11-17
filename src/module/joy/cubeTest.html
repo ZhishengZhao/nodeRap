@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .float_side {
+            /*display: none;*/
+            background: rgba(0, 0, 0, .5);
+            position: absolute; 
+            /*left: -20px;
+            top: -20px;*/
+            width: 240px;
+            height: 240px;
+            z-index: 99;
+        }
+        p {
+            line-height: 240px;
+            font-size: 100px;
+            text-align: center;
+            color: #fff;
+            margin: 0;
+        }
+
+        .basic_side {
+            transform-style: preserve-3d; 
+            width: 72px; 
+            height: 72px; 
+            position: absolute; 
+            border-radius: 9px; 
+            border: 4px solid rgb(0, 0, 0); 
+            opacity: 0.9; 
+        }
+    </style>
+</head>
+
+<body>
+    <div class="" style="perspective: 900px; width: 600px; height: 600px; position: absolute; background-color: rgb(102, 102, 102);">
+        <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; top: 30%; left: 30%; transform: rotate3d(1, 1, 1, 0deg);">
+            <!-- plane A -->
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 160px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 160px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 160px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 80px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div class="float_side float_side_f" style="transform: rotateX(0deg) rotateY(0deg) translateZ(0px) translateZ(140px);">
+                    <p>F</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 80px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 80px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 0px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 0px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateZ(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 0px, 80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 85, 204);"></div>
+                </div>
+            </div>
+            <!-- plane B -->
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 160px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateY(359deg);">
+                <div class="float_side float_side_d" style="transform: rotateX(-90deg) rotateY(0deg) translateZ(0px) translateZ(140px);">
+                    <p>D</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 160px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateY(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 160px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div class="float_side float_side_r" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(0px) translateZ(140px);">
+                    <p>R</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 80px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 80px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div class="float_side float_side_l" style="transform: rotateX(0deg) rotateY(90deg) translateZ(0px) translateZ(140px);">
+                    <p>L</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 80px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 0px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div class="float_side float_side_u" style="transform: rotateX(90deg) rotateY(0deg) translateZ(0px) translateZ(140px);">
+                    <p>U</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 0px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 0px, 0px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <!-- plane C -->
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 160px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateY(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 160px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateY(359deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 160px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 255, 255);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 80px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div class="float_side float_side_b" style="transform: rotateX(0deg) rotateY(0deg) translateZ(0px) translateZ(-140px);">
+                    <p>B</p>
+                </div>
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 80px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 80px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute; transform: rotateX(0deg);">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(160px, 0px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(204, 34, 68);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(80px, 0px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+            <div style="transform-style: preserve-3d; width: 240px; height: 240px; position: absolute;">
+                <div style="transform-style: preserve-3d; width: 80px; height: 80px; position: absolute; transform: translate3d(0px, 0px, -80px);">
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(90deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(-90deg) translateZ(40px); background-color: rgb(255, 102, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(270deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(180deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 170, 102);"></div>
+                    <div class="basic_side" style="transform: rotateX(90deg) rotateY(0deg) translateZ(40px); background-color: rgb(255, 221, 0);"></div>
+                    <div class="basic_side" style="transform: rotateX(0deg) rotateY(0deg) translateZ(40px); background-color: rgb(0, 0, 0);"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        var startX,
+            startY,
+            disX,
+            disY;
+
+        var frontPlane = document.getElementsByClassName('float_side_f')[0];
+        var backPlane = document.getElementsByClassName('float_side_b')[0];
+        var leftPlane = document.getElementsByClassName('float_side_l')[0];
+        var rightPlane = document.getElementsByClassName('float_side_r')[0];
+        var upPlane = document.getElementsByClassName('float_side_u')[0];
+        var downPlane = document.getElementsByClassName('float_side_d')[0];
+
+        frontPlane.addEventListener('click', function(e) {
+            console.log('click');
+        })
+        frontPlane.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].pageX;
+            startY = e.touches[0].pageY;
+            // console.log('touchstart', e.touches[0]);
+        })
+        frontPlane.addEventListener('touchmove', function(e) {
+            disY = e.touches[0].pageY - this.startY;
+            disX = e.touches[0].pageX - this.startX;
+
+            var angle = (disX / 120) * 90
+
+        })
+        frontPlane.addEventListener('touchend', function(e) {
+            // console.log('touchend', e.touches[0] );
+        })
+    </script>
+</body>
+
+</html>

@@ -11,24 +11,11 @@
             </p>
         </div>
         <joy-cooper v-show="showJoy"></joy-cooper>
-        <div>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-            <cub-unit></cub-unit>
-        </div>
-        
     </div>
 </template>
 <script>
 import rapHead from 'common/raphead.vue'
 import joyCooper from 'joy/cooperation.vue'
-import cubUnit from 'joy/cubeUnit.vue'
 import goLogin from 'common/login/index.js'
 import { user } from 'api/api.js'
 export default {
@@ -50,8 +37,7 @@ export default {
     },
     components: {
         rapHead,
-        joyCooper,
-        cubUnit
+        joyCooper
     },
     mounted() {},
     methods: {
