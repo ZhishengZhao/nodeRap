@@ -1,12 +1,8 @@
 import App from './App.vue';
-
 import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
-// import register from './mainpage/register.vue';
 import joycenter from './joy/index.vue';
-
 import detail from './detail/index.vue';
-
 import NotFound from './404.vue';
 
 let configRoutes = [{

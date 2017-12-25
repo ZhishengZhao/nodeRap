@@ -48,20 +48,21 @@
                     <el-button @click="projectAddCancel">取消</el-button>
                 </div>
             </rap-dialog>
-            <rap-dialog>
+            <!-- <rap-dialog v-show="'false'">
                 <div slot="content">
                     <div class="alert__title">
                         这里是一个测试的title
                     </div>
                     <div class="alert__content">
-                        谁知道这里会是什么
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea pariatur amet quisquam aspernatur adipisci neque qui corporis enim eius error explicabo cum ipsam et quae nemo cumque, distinctio eligendi nostrum.
+                        <input type="text" v-model="form.name" placeholder="项目名称">
+                        <input type="text" class="disblock input__project--edit" v-model="form.desc" placeholder="项目描述">
+                        <input type="text" class="disblock input__project--edit" v-model="form.paties" placeholder="项目成员">
                     </div>
                     <div class="alert__btns">
-                        <p class="rap--btn">呵呵</p>
+                        BTN-TXT
                     </div>
                 </div>
-            </rap-dialog>
+            </rap-dialog> -->
         </div>
     </div>
 </template>
@@ -342,7 +343,7 @@ export default {
 .alert__title {
     font-size: 20px;
     text-align: center;
-    line-height: 28px;
+    line-height: 40px;
 }
 .alert__content {
     // text-align: center;
@@ -350,8 +351,13 @@ export default {
     line-height: 22px;
 }
 .alert__btns {
+    width: 100%;
+    height: 28px;
+    margin-top: 10px;
     font-size: 20px;
     line-height: 28px;
+    text-align: center;
+    border-top: 1px solid #ccc;
 }
 .rap--btn {
     display: inline-block;

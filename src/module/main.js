@@ -3,16 +3,37 @@ import VueRouter from 'vue-router'
 import detail from './detail/index.vue'
 import App from './App.vue'
 import '../libs/jsonformate.js'
+// import ElementUI from 'element-ui'
 Vue.use(VueRouter)
+// Vue.use(ElementUI)
 import {
-  Input,
-  Button,
-  Tree,
-  Alert,
-  Row,
-  MessageBox,
-  Message
+    Select,
+    Option,
+    OptionGroup,
+    Input,
+    Button,
+    Tree,
+    Alert,
+    Row,
+    Col,
+    MessageBox,
+    Message,
+    Dialog,
+    Form,
+    FormItem,
+    Radio,
+    RadioGroup
 } from 'element-ui'
+
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(OptionGroup)
+Vue.use(Col)
+Vue.use(Dialog)
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Radio)
+Vue.use(RadioGroup)
 
 Vue.use(Input)
 Vue.use(Button)

@@ -40,7 +40,7 @@
         </div>
         <div class="other">
             <el-dialog :visible.sync="dialogFormVisible">
-                <el-form ref="form" :model="form" label-width="80px">
+                <!-- <el-form v-if="defaultAdd" ref="form" :model="form" label-width="80px">
                     <el-form-item label="名称">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
@@ -65,10 +65,63 @@
                     <el-form-item>
                         <el-button type="primary" @click="goAddInterface">确定</el-button>
                         <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <el-button @click="ajaxImportShow = true">接口直导</el-button>
                     </el-form-item>
                 </el-form>
+                <el-form v-else ref="form" :model="form" label-width="80px">
+                    <el-form-item label="名称">
+                        <el-input v-model="form.name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="请求类型">
+                        <el-radio-group v-model="form.type">
+                            <el-radio label="get"></el-radio>
+                            <el-radio label="post"></el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="请求链接">
+                        <el-input v-model="form.link"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属页面">
+                        <el-select v-model="curPageId" placeholder="请选择">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="说明">
+                        <el-input type="textarea" v-model="form.desc"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="goAddInterface">确定</el-button>
+                        <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <el-button @click="ajaxImportShow = true">接口直导</el-button>
+                    </el-form-item>
+                </el-form> -->
             </el-dialog>
-            <el-dialog class="bor-radius_50" :visible.sync="updateFlag">
+            <!-- <rap-dialog>
+                <template slot="content" v-show="show">
+                    <h2>Welcome {{showTxt}}</h2>
+                    <section v-show="actionLogin">
+                        <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
+                        <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
+                        <p>
+                            <input type="checkbox">&nbsp;记住密码
+                            <span class="fr" @click="findPwd">忘记密码</span>
+                        </p>
+                        <p class="btn__full" @click="doLogin">登录</p>
+                        <p class="tip--switchlogin" @click="actionLogin = false">要是没账户的话，先注册一个吧</p>
+                    </section>
+                    <section v-show="!actionLogin">
+                        <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
+                        <input type="text" class="input__login" v-model="form.email" placeholder="邮箱">
+                        <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
+                        <input type="password" class="input__login" v-model="form.pwdconfirm" placeholder="确认密码">
+                        <p @click="registerByTel"> 手机号注册 </p>
+                        <p class="btn__full" @click="doLogin">注册</p>
+                        <p class="tip--switchlogin" @click="actionLogin = true">有账号的话直接登录吧</p>
+                    </section>
+                </template>
+            </rap-dialog> -->
+            <el-dialog class="bor-radius_50 wid800" :visible.sync="updateFlag">
                 <el-form ref="form">
                     <el-form-item>
                         <textarea name="" cols="30" rows="10" class="edit_input" ref="editParams" v-model="responseParams">
@@ -94,6 +147,24 @@
                     </el-form-item>
                 </el-form>
             </el-dialog>
+            <!-- 接口直导功能弹窗 -->
+            <el-dialog class="bor-radius_50 wid800" :visible.sync="ajaxImportShow">
+                <el-form ref="form" label-width="80px">
+                    <el-form-item label="接口地址">
+                        <el-input v-model="requestUrl"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属页面">
+                        <el-select v-model="curPageId" placeholder="请选择">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="ajaxImport">确定</el-button>
+                        <el-button @click="ajaxImportShow = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -103,6 +174,7 @@ import rapFooter from 'common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
 import { project, inter, jsonRecords } from 'api/api.js'
 import { JsonFormater } from 'src/libs/jsonformate.js'
+import rapDialog from 'src/components/dialog/index.vue'
 export default {
     filters: {},
     data() {
@@ -140,6 +212,8 @@ export default {
             responseParams: '',
             updateFlag: false,
             addPageShow: false,
+            ajaxImportShow: false,
+            requestUrl: '',
             filterText: '',
             pageOptions: [],
             value: '',
@@ -157,7 +231,8 @@ export default {
     components: {
         rapHead,
         rapFooter,
-        interfaceDetail
+        interfaceDetail,
+        rapDialog
     },
     mounted() {
         this.getInterfaceList()
@@ -396,6 +471,11 @@ export default {
         setClass(node) {
             console.log('node=', node)
             return node.data.pid == 0 ? '' : 'dom_hide'
+        },
+        ajaxImport() {
+            jsonRecords.ajaxImport({requestUrl: this.requestUrl}, (data) => {
+                    
+            })
         }
     }
 }
@@ -413,12 +493,15 @@ export default {
 }
 
 .el-dialog--small {
-    width: auto;
+    // width: auto;
     border-radius: 10px;
 }
 
 .el-form-item__content {
-    text-align: center;
+    // text-align: center;
+}
+.other .el-input__icon {
+    display: none;
 }
 
 #container {
@@ -460,5 +543,8 @@ export default {
         font-size: 29px;
         color: #fff;
     }
+}
+.wid800 .el-dialog {
+    width: 800px;
 }
 </style>

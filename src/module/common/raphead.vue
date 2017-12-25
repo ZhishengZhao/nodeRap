@@ -2,13 +2,20 @@
     created by zhaozhisheng on 07/17/2017
  -->
 <template>
-    <div class="rap_head">
+    <el-row :gutter="20" class="rap_head">
         <div class="wid1080">
             <img class="logo" src="./img/logo1.png" alt="" @click="goMainPage">
             <!-- <a class="logo_title" href="javascript:;">Heioray</a> -->
             <!-- <span @click="goLogin">{{welcomeTxt}}</span> -->
         </div>
-    </div>
+    </el-row>
+    <!-- <div class="rap_head">
+        <div class="wid1080">
+            <img class="logo" src="./img/logo1.png" alt="" @click="goMainPage">
+            <a class="logo_title" href="javascript:;">Heioray</a>
+            <span @click="goLogin">{{welcomeTxt}}</span>
+        </div>
+    </div> -->
 </template>
 <script>
 import { user } from '../api/api.js'
@@ -49,7 +56,7 @@ a {
 }
 
 .rap_head {
-    width: 100%;
+    // width: 100%;
     height: 80px;
     background-color: #3B3E43;
     padding: 15px 0;

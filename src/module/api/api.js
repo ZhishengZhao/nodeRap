@@ -1,5 +1,10 @@
 import { creatAPI } from './base'
 
+/* Common */
+const common = {
+    sendEmail: (params, callback) => creatAPI('rap/sendEmail', 'post', params, callback)
+}
+
 /* User */
 const user = {
     isLogin: (params, callback) => creatAPI('rap/isLogin', 'get', params, callback),
@@ -37,7 +42,8 @@ const jsonRecords = {
     add: (params, callback) => creatAPI('rap/addJsonRecord', 'post', params, callback),
     update: (params, callback) => creatAPI('rap/updateJsonRecord', 'post', params, callback),
     getItem: (params, callback) => creatAPI('rap/getJsonRecordByPid', 'post', params, callback),
-    getFormatedItem: (params, callback) => creatAPI('rap/getFinalJRByPid', 'post', params, callback)
+    getFormatedItem: (params, callback) => creatAPI('rap/getFinalJRByPid', 'post', params, callback),
+    ajaxImport: (params, callback) => creatAPI('rap/ajaxImport', 'post', params, callback) 
 }
 
 /* Mock */
@@ -46,6 +52,7 @@ const mock = {
 }
 
 export {
+    common,
     user,
     project,
     inter,
