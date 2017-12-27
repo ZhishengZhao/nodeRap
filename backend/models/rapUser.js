@@ -9,4 +9,16 @@ module.exports = {
             name: name
         }).exec();
     },
+    getUserPwdByEmail: function getUserPwdByEmail(emailAddress) {
+        return User.find({
+            email: emailAddress
+        }).exec();
+    },
+    resetPwd: function resetPwd(token, pwd) {
+        return User.update({
+            _id: token
+        }, {$set: {
+            password: pwd
+        }}).exec();
+    }
 };

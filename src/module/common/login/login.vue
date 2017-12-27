@@ -107,39 +107,43 @@ export default {
                 goLogin.destroy()
                 if (data.success) {
                     console.log('登陆/注册成功，跳转主页')
-                    if (action === 'register') {
-                        common.sendEmail({
-                            email,
-                            message: 'test'
-                        }, (data) => {
-                            if (data.success) {
-                                this.$alert('激活邮件已发送，请前往注册邮箱进行激活')
-                            }
-                            this.callback && this.callback()
-                        })
-                    }
+                    this.$router.push({
+                        path: 'mainpage'
+                    })
+                    // if (action === 'register') {
+                    //     common.sendEmailActive({
+                    //         to: email
+                    //     }, (data) => {
+                    //         if (data.success) {
+                    //             this.$alert('激活邮件已发送，请前往注册邮箱进行激活')
+                    //         }
+                    //         this.callback && this.callback()
+                    //     })
+                    // }
                 } else {
                     this.$alert(data.desc || '系统异常 稍后再试')
                 }
             })
-        },
-        rememberPwd() {
-
         },
         openPwdFindDialog() {
             this.defaultShow = false
             this.findPwdShow = true
         },
         findPwd() {
-            common.sendEmail({
-                email: this.registEmail,
-                message: 'test'
+            common.sendEmailPwd({
+                to: this.registEmail,
+                resetUrl: window.location.origin // + '/#/user_common?type=reset'
             }, (data) => {
+                goLogin.destroy()
                 if (data.success) {
-                    this.$alert('激活邮件已发送，请前往注册邮箱进行激活')
+                    this.$alert('激活邮件已发送，请前往邮箱查看并进行密码重置')
+                } else {
+                    this.$alert('激活邮件发送失败，请稍后再试')
                 }
-                this.callback && this.callback()
             })
+        },
+        rememberPwd() {
+
         },
         registerByTel() {
 

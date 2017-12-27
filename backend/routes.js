@@ -39,6 +39,7 @@ router.post('/getIterParamsByIterId', recordsController.getRecordsByInterID);
 router.get('/isLogin', userController.isLogin);
 router.post('/login', userController.login);
 router.post('/registe', userController.registe);
+router.post('/resetPwd', userController.resetPwd);
 
 /* Project */
 router.post('/add', checkLogin, projectController.addPorject);
@@ -56,7 +57,8 @@ router.get('/mock/:projectId/*', jsonRecordsController.responseData);
 router.post('/mock/:projectId/*', jsonRecordsController.responseData);
 
 /* Common */
-router.post('/sendEmail', commonController.sendEmail);
+router.post('/sendEmailActive', commonController.sendEmailActive);
+router.post('/sendEmailPwd', commonController.sendEmailPwd);
 
 /* Example */
 // router.post('/mock/projectId/11', function(req, res, next) {

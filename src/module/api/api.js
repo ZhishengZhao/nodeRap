@@ -2,14 +2,16 @@ import { creatAPI } from './base'
 
 /* Common */
 const common = {
-    sendEmail: (params, callback) => creatAPI('rap/sendEmail', 'post', params, callback)
+    sendEmailActive: (params, callback) => creatAPI('rap/sendEmailActive', 'post', params, callback),
+    sendEmailPwd: (params, callback) => creatAPI('rap/sendEmailPwd', 'post', params, callback)
 }
 
 /* User */
 const user = {
     isLogin: (params, callback) => creatAPI('rap/isLogin', 'get', params, callback),
     login: (params, callback) => creatAPI('rap/login', 'post', params, callback),
-    register: (params, callback) => creatAPI('rap/registe', 'post', params, callback)
+    register: (params, callback) => creatAPI('rap/registe', 'post', params, callback),
+    resetPwd: (params, callback) => creatAPI('rap/resetPwd', 'post', params, callback)
 }
 
 /* Project */
