@@ -19,6 +19,7 @@ var commonController = require('./controller/common.js');
 /* Interface */
 router.post('/getInterfaceList', interfaceController.getAll);
 router.post('/getInterfaceListByProjectID', interfaceController.getRecordsByPID);
+router.post('/directImport', interfaceController.directImport);
 
 router.post('/addInterface', interfaceController.addInterface);
 router.post('/updateInterface', interfaceController.updateInterface);

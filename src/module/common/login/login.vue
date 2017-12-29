@@ -107,9 +107,9 @@ export default {
                 goLogin.destroy()
                 if (data.success) {
                     console.log('登陆/注册成功，跳转主页')
-                    this.$router.push({
-                        path: 'mainpage'
-                    })
+                    // this.$router.push({
+                    //     path: 'mainpage'
+                    // })
                     // if (action === 'register') {
                     //     common.sendEmailActive({
                     //         to: email

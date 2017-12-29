@@ -7,5 +7,9 @@ module.exports = {
             return unescape(r[2]);
         }
         return null;
+    },
+    // 正则校验
+    isValidEmail: function(email) {
+        return /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/.test(email);
     }
 };

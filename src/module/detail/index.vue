@@ -40,7 +40,7 @@
         </div>
         <div class="other">
             <el-dialog :visible.sync="dialogFormVisible">
-                <!-- <el-form v-if="defaultAdd" ref="form" :model="form" label-width="80px">
+                <el-form ref="form" :model="form" label-width="80px">
                     <el-form-item label="名称">
                         <el-input v-model="form.name"></el-input>
                     </el-form-item>
@@ -65,62 +65,11 @@
                     <el-form-item>
                         <el-button type="primary" @click="goAddInterface">确定</el-button>
                         <el-button @click="dialogFormVisible = false">取消</el-button>
-                        <el-button @click="ajaxImportShow = true">接口直导</el-button>
+                        <!-- <el-button @click="ajaxImportShow = true">接口直导</el-button> -->
+                        <el-button @click="goAddInterface('import')">接口直导</el-button>
                     </el-form-item>
                 </el-form>
-                <el-form v-else ref="form" :model="form" label-width="80px">
-                    <el-form-item label="名称">
-                        <el-input v-model="form.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="请求类型">
-                        <el-radio-group v-model="form.type">
-                            <el-radio label="get"></el-radio>
-                            <el-radio label="post"></el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                    <el-form-item label="请求链接">
-                        <el-input v-model="form.link"></el-input>
-                    </el-form-item>
-                    <el-form-item label="所属页面">
-                        <el-select v-model="curPageId" placeholder="请选择">
-                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="说明">
-                        <el-input type="textarea" v-model="form.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="goAddInterface">确定</el-button>
-                        <el-button @click="dialogFormVisible = false">取消</el-button>
-                        <el-button @click="ajaxImportShow = true">接口直导</el-button>
-                    </el-form-item>
-                </el-form> -->
             </el-dialog>
-            <!-- <rap-dialog>
-                <template slot="content" v-show="show">
-                    <h2>Welcome {{showTxt}}</h2>
-                    <section v-show="actionLogin">
-                        <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
-                        <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
-                        <p>
-                            <input type="checkbox">&nbsp;记住密码
-                            <span class="fr" @click="findPwd">忘记密码</span>
-                        </p>
-                        <p class="btn__full" @click="doLogin">登录</p>
-                        <p class="tip--switchlogin" @click="actionLogin = false">要是没账户的话，先注册一个吧</p>
-                    </section>
-                    <section v-show="!actionLogin">
-                        <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
-                        <input type="text" class="input__login" v-model="form.email" placeholder="邮箱">
-                        <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
-                        <input type="password" class="input__login" v-model="form.pwdconfirm" placeholder="确认密码">
-                        <p @click="registerByTel"> 手机号注册 </p>
-                        <p class="btn__full" @click="doLogin">注册</p>
-                        <p class="tip--switchlogin" @click="actionLogin = true">有账号的话直接登录吧</p>
-                    </section>
-                </template>
-            </rap-dialog> -->
             <el-dialog class="bor-radius_50 wid800" :visible.sync="updateFlag">
                 <el-form ref="form">
                     <el-form-item>
@@ -217,7 +166,8 @@ export default {
             filterText: '',
             pageOptions: [],
             value: '',
-            leafNodes: []
+            leafNodes: [],
+            emailReg: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/
         }
     },
     watch: {
@@ -325,15 +275,12 @@ export default {
             this.interEditFlag = editflag
         },
         // 新增接口
-        goAddInterface() {
+        goAddInterface(type) {
             if (this.curPageId == '') {
                 alert('请先添加一个页面，在添加接口')
                 return
             }
-            if (this.form.link.indexOf('/') != 0) {
-                this.form.link = '/' + this.form.link
-            }
-
+            
             let params = {
                 name: this.form.name,
                 desc: this.form.desc,
@@ -343,15 +290,52 @@ export default {
                 pid: this.curPageId
             }
 
-            // let editUrl = this.interEditFlag ? 'rap/updateInterface' : 'rap/addInterface'
-            let action = this.interEditFlag ? 'update' : 'add'
+            if (!this.formCheck('addForm', params)) {
+                return
+            }
 
-            inter[action](params, (data) => {
-                if (data && data.success) {
-                    this.dialogFormVisible = false
-                    this.getInterfaceList()
+            if (type == 'import') {
+                if (!this.emailReg.test(params.reqUrl)) {
+                    this.$alert('请输入完整有效的url地址，如https://m.aiyoumi.com:8443/mall/loan/getLoanInit')
+                    return
                 }
-            })
+                
+                inter.directImport(params, (data) => {
+                    if (data && data.success) {
+                        this.dialogFormVisible = false
+                        this.getInterfaceList()
+                    }
+                })
+            } else {
+                if (params.reqUrl.indexOf('/') != 0) {
+                    params.reqUrl = '/' + params.reqUrl
+                }
+                let action = this.interEditFlag ? 'update' : 'add'
+
+                inter[action](params, (data) => {
+                    if (data && data.success) {
+                        this.dialogFormVisible = false
+                        this.getInterfaceList()
+                    }
+                })
+            }
+        },
+        // 参数校验
+        formCheck(type, data) {
+            if (type === 'addForm') {
+                if (!data.name) {
+                    this.$alert('请输入接口名')
+                    return false
+                }
+                if (!data.reqType) {
+                    this.$alert('请选择接口类型')
+                    return false
+                }
+                if (!data.reqUrl) {
+                    this.$alert('请输入接口地址')
+                    return false
+                }
+            }
         },
         // 接口删除
         deleteInterface() {

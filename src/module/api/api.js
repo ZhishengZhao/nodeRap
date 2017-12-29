@@ -36,7 +36,8 @@ const inter = {
     delete: (params, callback) => creatAPI('rap/deleteInterface', 'get', params, callback),
     update: (params, callback) => creatAPI('rap/updateInterface', 'post', params, callback),
     getList: (params, callback) => creatAPI('rap/getInterfaceList', 'post', params, callback),
-    getListByPID: (params, callback) => creatAPI('rap/getInterfaceListByProjectID', 'post', params, callback)
+    getListByPID: (params, callback) => creatAPI('rap/getInterfaceListByProjectID', 'post', params, callback),
+    directImport: (params, callback) => creatAPI('rap/directImport', 'post', params, callback)
 }
 
 /* jsonRecords */
