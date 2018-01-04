@@ -65,7 +65,8 @@ module.exports = {
     responseData: function(req, res, next) {
         var tempIndex = req.url.indexOf('?') == -1 ? req.url.length : req.url.indexOf('?');
         var reqPath = '/' + req.url.substring(0, tempIndex).split('/').splice(3).join('/');
-
+        console.log('req.params.projectId, reqPath');
+        console.log(req.params.projectId, reqPath, req.url);
         rapInterface.getByPidAndPath(req.params.projectId, reqPath).then(function(result) {
             if (result.length) {
                 rapJsonRecord.getByPid(result[0]._id).then(function(result) {

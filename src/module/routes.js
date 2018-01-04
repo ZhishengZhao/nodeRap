@@ -3,8 +3,10 @@ import mainpage from './mainpage/mainpage.vue';
 import welcome from './mainpage/welcome.vue';
 import joycenter from './joy/index.vue';
 import detail from './detail/index.vue';
+import compare from './detail/index_compare.vue';
 import NotFound from './404.vue';
 import user_common from './views/user/common.vue';
+import dCompare from './detail/demo_compare.vue';
 
 let configRoutes = [{
     path: '/',
@@ -32,6 +34,13 @@ let configRoutes = [{
             title: '详情页'
         }
     }, {
+        path: 'compare',
+        component: compare,
+        name: 'rapCompare',
+        meta: {
+            title: '接口校验'
+        }
+    }, {
         path: 'joycenter',
         component: joycenter,
         name: 'joycenter',
@@ -45,8 +54,13 @@ let configRoutes = [{
         meta: {
             title: 'node rap'
         }
-    }
-    ]
+    }, {
+        path: 'demoCompare',
+        component: dCompare,
+        meta: {
+            title: 'Demo Compare'
+        }
+    }]
 }, {
     path: '*',
     component: NotFound,

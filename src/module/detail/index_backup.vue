@@ -65,6 +65,7 @@
                     <el-form-item>
                         <el-button type="primary" @click="goAddInterface">确定</el-button>
                         <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <!-- <el-button @click="ajaxImportShow = true">接口直导</el-button> -->
                         <el-button @click="goAddInterface('import')">接口直导</el-button>
                     </el-form-item>
                 </el-form>
@@ -76,6 +77,9 @@
                         </textarea>
                     </el-form-item>
                     <el-form-item :class="bgColor" v-if="jsonCheckResult" v-html="jsonCheckResult">
+                        <!-- <p v-if="jsonCheckResult">
+                          {{jsonCheckResult}}  
+                        </p> -->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="goUpdateSubmit">确定</el-button>
@@ -94,6 +98,24 @@
                     <el-form-item>
                         <el-button type="primary" @click="goAddPage">确定</el-button>
                         <el-button @click="addPageShow = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
+            <!-- 接口直导功能弹窗 -->
+            <el-dialog class="bor-radius_50 wid800" :visible.sync="ajaxImportShow">
+                <el-form ref="form" label-width="80px">
+                    <el-form-item label="接口地址">
+                        <el-input v-model="requestUrl"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属页面">
+                        <el-select v-model="curPageId" placeholder="请选择">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="ajaxImport">确定</el-button>
+                        <el-button @click="ajaxImportShow = false">取消</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -145,6 +167,7 @@ export default {
             responseParams: '',
             updateFlag: false,
             addPageShow: false,
+            ajaxImportShow: false,
             requestUrl: '',
             filterText: '',
             pageOptions: [],
@@ -463,6 +486,11 @@ export default {
         setClass(node) {
             console.log('node=', node)
             return node.data.pid == 0 ? '' : 'dom_hide'
+        },
+        ajaxImport() {
+            jsonRecords.ajaxImport({requestUrl: this.requestUrl}, (data) => {
+                    
+            })
         }
     }
 }
