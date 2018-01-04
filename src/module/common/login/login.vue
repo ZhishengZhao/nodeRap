@@ -106,10 +106,7 @@ export default {
             user[action](this.form, (data) => {
                 goLogin.destroy()
                 if (data.success) {
-                    console.log('登陆/注册成功，跳转主页')
-                    // this.$router.push({
-                    //     path: 'mainpage'
-                    // })
+                    // console.log('登陆/注册成功')
                     // if (action === 'register') {
                     //     common.sendEmailActive({
                     //         to: email

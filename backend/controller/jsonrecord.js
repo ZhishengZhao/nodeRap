@@ -81,7 +81,11 @@ module.exports = {
                     res.send(data);
                 }).catch(next);
             } else {
-                res.send({});
+                console.log('err');
+                res.send({
+                    desc: '数据查询失败',
+                    success: false
+                });
             }
         }).catch(next);
     },
