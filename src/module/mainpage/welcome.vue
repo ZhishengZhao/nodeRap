@@ -3,43 +3,26 @@
  -->
 <template>
     <div class="page">
-        <rap-head></rap-head>
-        <div class="part_main">
-            <p class="title--main" @click="showJoy = !showJoy">
-            </p>
-            <p class="btn--main" @click="goPage('main')">
-            </p>
-        </div>
-        <joy-cooper v-show="showJoy"></joy-cooper>
+        <h3 class="title" @click="goPage('main')">
+           Hi Rap 
+        </h3>
     </div>
 </template>
 <script>
-import rapHead from 'common/raphead.vue'
-import joyCooper from 'joy/cooperation.vue'
 import goLogin from 'common/login/index.js'
 import { user } from 'api/api.js'
 export default {
     name: 'welcome',
     data() {
         return {
-            loginShow: false,
-            form: {
-                name: '',
-                email: '',
-                pwd: '',
-                pwdconfirm: ''
-            },
-            actionLogin: true,
-            showJoy: false
         }
     },
     computed: {
     },
     components: {
-        rapHead,
-        joyCooper
     },
-    mounted() {},
+    mounted() {
+    },
     methods: {
         goPage(params) {
             let me = this
@@ -61,26 +44,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.part_main {
-    height: 800px;
-    padding: 100px;
-    margin: 0 auto;
-    min-width: 900px;
+.page {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #fafafa;
 }
-
-.title--main {
-    width: 900px;
-    height: 260px;
-    margin: 30px auto;
-    background: url('../../assets/images/logo.png') 0 center no-repeat;
-    background-size: cover;
-}
-
-.btn--main {
-    width: 210px;
-    height: 94px;
-    margin: 30px auto;
-    background: url('../../assets/images/enter.png') 0 center no-repeat;
-    background-size: cover;
+.title {
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    font-size: 140px;
 }
 </style>
