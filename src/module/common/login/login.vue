@@ -10,12 +10,11 @@
                     <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
                     <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
                     <p>
-                        <!-- <input type="checkbox" @click="rememberPwd">&nbsp;记住密码 -->
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" @click="rememberPwd">&nbsp;记住密码
                         <span class="fr" @click="openPwdFindDialog">忘记密码</span>
                     </p>
                     <p class="btn__full" @click="doLogin">登录</p>
-                    <p class="tip--switchlogin" @click="actionLogin = false">要是没账户的话，先注册一个吧</p>
+                    <p class="tip__switchlogin" @click="actionLogin = false">去注册</p>
                 </section>
                 <section v-show="defaultShow && !actionLogin">
                     <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
@@ -24,12 +23,12 @@
                     <input type="password" class="input__login" v-model="form.pwdconfirm" placeholder="确认密码">
                     <!-- <p @click="registerByTel"> 手机号注册 </p> -->
                     <p class="btn__full" @click="doLogin">注册</p>
-                    <p class="tip--switchlogin" @click="actionLogin = true">有账号的话直接登录吧</p>
+                    <p class="tip__switchlogin" @click="actionLogin = true">去登录</p>
                 </section>
                 <section v-show="!defaultShow">
                     <input type="text" class="input__login" v-model="registEmail" placeholder="注册邮箱">
                     <p class="btn__full" @click="findPwd">确定</p>
-                    <p class="tip--switchlogin" @click="openLogin">想起来了就再试试吧~</p>
+                    <p class="tip__switchlogin" @click="openLogin">想起来了就再试试吧~</p>
                 </section>
             </template>
         </rap-dialog>
@@ -190,7 +189,7 @@ export default {
     background: #ccc;
     border-radius: 20px;
 }
-.tip--switchlogin {
+.tip__switchlogin {
     text-align: center;
     color: #7f7f7f;
 }

@@ -64,6 +64,8 @@ router.beforeEach((to, from, next) => {
     next()
 })
 
+Vue.config.devtools = true
+
 new Vue({
     el: '#hiRap',
     router,

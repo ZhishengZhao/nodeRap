@@ -1,11 +1,14 @@
 import App from './App.vue';
-import mainpage from './mainpage/mainpage.vue';
-import welcome from './mainpage/welcome.vue';
-import joycenter from './joy/index.vue';
-import detail from './detail/index.vue';
-import compare from './detail/index_compare.vue';
+import welcome from './views/welcome.vue';
+import mainpage from './views/project_list.vue';
+import detail from './views/project_detail.vue';
+import user_common from './views/common.vue';
+import joycenter from './views_joy/index.vue';
 import NotFound from './404.vue';
-import user_common from './views/user/common.vue';
+
+// -----------test--------
+
+import compare from './detail/index_compare.vue';
 import dCompare from './detail/demo_compare.vue';
 
 let configRoutes = [{

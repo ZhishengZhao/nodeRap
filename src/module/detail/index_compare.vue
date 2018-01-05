@@ -31,7 +31,6 @@
 <script>
 import rapHead from 'common/raphead.vue'
 import rapFooter from 'common/footer.vue'
-import interfaceDetail from './interfacedetail.vue'
 import { project, inter, jsonRecords } from 'api/api.js'
 import { JsonFormater } from 'src/libs/jsonformate.js'
 import rapDialog from 'src/components/dialog/index.vue'
@@ -75,8 +74,7 @@ export default {
     },
     components: {
         rapHead,
-        rapFooter,
-        interfaceDetail
+        rapFooter
     },
     mounted() {
         this.getInterfaceList()

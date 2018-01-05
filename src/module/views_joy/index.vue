@@ -39,7 +39,7 @@
     </div>
 </template>
 <script>
-import cubUnit from 'joy/cubeUnit.vue'
+import cubUnit from './cubeUnit.vue'
 export default {
     name: 'welcome',
     data() {
