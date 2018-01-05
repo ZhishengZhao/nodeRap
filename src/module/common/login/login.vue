@@ -10,7 +10,8 @@
                     <input type="text" class="input__login" v-model="form.name" placeholder="用户名">
                     <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
                     <p>
-                        <input type="checkbox" @click="rememberPwd">&nbsp;记住密码
+                        <!-- <input type="checkbox" @click="rememberPwd">&nbsp;记住密码 -->
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <span class="fr" @click="openPwdFindDialog">忘记密码</span>
                     </p>
                     <p class="btn__full" @click="doLogin">登录</p>
@@ -21,13 +22,14 @@
                     <input type="text" class="input__login" v-model="form.email" placeholder="邮箱">
                     <input type="password" class="input__login" v-model="form.pwd" placeholder="密码">
                     <input type="password" class="input__login" v-model="form.pwdconfirm" placeholder="确认密码">
-                    <p @click="registerByTel"> 手机号注册 </p>
+                    <!-- <p @click="registerByTel"> 手机号注册 </p> -->
                     <p class="btn__full" @click="doLogin">注册</p>
                     <p class="tip--switchlogin" @click="actionLogin = true">有账号的话直接登录吧</p>
                 </section>
                 <section v-show="!defaultShow">
                     <input type="text" class="input__login" v-model="registEmail" placeholder="注册邮箱">
                     <p class="btn__full" @click="findPwd">确定</p>
+                    <p class="tip--switchlogin" @click="openLogin">想起来了就再试试吧~</p>
                 </section>
             </template>
         </rap-dialog>
@@ -37,6 +39,10 @@
 import rapDialog from 'src/components/dialog/index.vue'
 import { user, common } from '../../api/api.js'
 import goLogin from './index.js'
+import { 
+    isValidEmail,
+    isValidPwd
+} from 'src/libs/util_reg.js'
 export default {
     name: 'login_component',
     props: ['callback', 'show'],
@@ -79,23 +85,32 @@ export default {
             } = this.form
 
             if (!name) {
-                this.$alert('用户名不能为空哟~')
+                this.$alert('用户名不能为空，老铁~')
                 return
             }
 
             if (!pwd) {
-               this.$alert('密码不能为空哟~') 
-               return
+                this.$alert('密码不能为空，老铁~') 
+                return
+            } else if (!isValidPwd(pwd)) {
+                this.$alert('密码长度应在6~10位之间，老铁~') 
+                return
             }
 
             if (!this.actionLogin) {
                 if (!email) {
-                    this.$alert('邮箱不能为空哟~')
+                    this.$alert('邮箱还没填呢，老铁~')
+                    return
+                } else if (!isValidEmail(email)) {
+                    this.$alert('邮箱格式不对啊，老铁~')
                     return
                 }
 
                 if (!pwdconfirm) {
-                   this.$alert('确认密码不能为空哟~') 
+                   this.$alert('确认密码还没填呢，老铁~') 
+                   return
+                } else if (pwdconfirm !== pwd) {
+                   this.$alert('两个密码不一致啊，老铁~') 
                    return
                 } 
             }
@@ -106,7 +121,8 @@ export default {
             user[action](this.form, (data) => {
                 goLogin.destroy()
                 if (data.success) {
-                    // console.log('登陆/注册成功')
+                    this.callback && this.callback()
+                    // 后续功能权限添加之后，在开通邮件激活功能
                     // if (action === 'register') {
                     //     common.sendEmailActive({
                     //         to: email
@@ -133,11 +149,15 @@ export default {
             }, (data) => {
                 goLogin.destroy()
                 if (data.success) {
-                    this.$alert('激活邮件已发送，请前往邮箱查看并进行密码重置')
+                    this.$alert('邮件已发送，请前往邮箱查看并进行密码重置')
                 } else {
-                    this.$alert('激活邮件发送失败，请稍后再试')
+                    this.$alert('邮件发送失败，请稍后再试')
                 }
             })
+        },
+        openLogin() {
+            this.defaultShow = true
+            this.actionLogin = true
         },
         rememberPwd() {
 
