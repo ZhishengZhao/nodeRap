@@ -5,14 +5,19 @@
     <div>
         <rap-head></rap-head>
         <div class="page_main wid1080 content">
+            <div class="area_page">
+                <p @click="getList('mine')">我创建的</p>
+                <p @click="getList('myjoin')">我参与的</p>
+                <p @click="getList('all')">所有的</p>
+                <!-- <p class="switch_check">
+                    <el-button @click="getList('all')" type="primary">所有的</el-button>
+                    <el-button @click="getList('mine')" type="primary"></el-button>
+                    <el-button @click="getList('myjoin')" type="success"></el-button>
+                </p> -->
+            </div>
             <el-row :gutter="20">
                 <section class="area_projects">
                     <div class="area_check">
-                        <p class="switch_check">
-                            <el-button @click="getList('mine')" type="primary">我创建的</el-button>
-                            <!-- <el-button @click="getList('all')" type="primary">所有的</el-button> -->
-                            <el-button @click="getList('myjoin')" type="success">我参与的</el-button>
-                        </p>
                         <p class="text_filter_container fr">
                             <el-input placeholder="输入关键字进行过滤" class="text_filter_cotent" v-model="filterText"></el-input>
                             <el-button type="info" class="text_filter_search" @click="search">搜索</el-button>
@@ -104,7 +109,7 @@ export default {
         rapDialog
     },
     mounted() {
-        this.getList('mine')
+        this.getList('all')
     },
     methods: {
         goPage(item) {
@@ -293,6 +298,25 @@ export default {
 
 .clearfix {
     display: block;
+}
+.page_main {
+    position: relative;
+}
+.area_page {
+    position: absolute;
+    left: 0;
+    top: -50px;
+    p {
+        float: left;
+        height: 50px;
+        line-height: 40px;
+        font-size: 15px;
+        text-align: center;
+        padding: 5px 15px;
+        background-color: #f2f2f2;
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+    }
 }
 
 .area_check {

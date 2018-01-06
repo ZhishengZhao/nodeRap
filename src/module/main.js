@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import detail from './detail/index.vue'
 import App from './App.vue'
 import '../libs/jsonformate.js'
 // import ElementUI from 'element-ui'
