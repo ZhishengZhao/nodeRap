@@ -45,9 +45,9 @@ module.exports = {
         var name = req.body.name;
         var password = sha1(req.body.pwd);
         var errInfo = '';
-        console.log('--------name', name);
+        // console.log('--------name', name);
         rapUser.getUserByName(name).then(function(user) {
-            console.log('--------user', user);
+            // console.log('--------user', user);
             var success = true,
                 errInfo = '';
             if (!user.length) {
@@ -59,9 +59,9 @@ module.exports = {
             } else {
                 delete user[0].password;
                 // res.setHeader("Set-Cookie", ['a=000', 't=1111', 'w=2222']);
-                console.log(user);
+                // console.log(user);
                 req.session.user = user[0];
-                console.log('--------req.session', req.session);
+                // console.log('--------req.session', req.session);
             }
 
             res.send({
@@ -171,4 +171,15 @@ module.exports = {
             return res.redirect('/pages/mainpage');
         });
     },
+    resetPwd: function (req, res, next) {
+        var id = req.body.token,
+            pwd = sha1(req.body.pwd);
+
+        rapUser.resetPwd(id, pwd).then(function(result) {
+            res.send({
+                result: '',
+                success: true
+            });
+        }).catch(next);
+    }
 };

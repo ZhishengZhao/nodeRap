@@ -1,10 +1,17 @@
 import { creatAPI } from './base'
 
+/* Common */
+const common = {
+    sendEmailActive: (params, callback) => creatAPI('rap/sendEmailActive', 'post', params, callback),
+    sendEmailPwd: (params, callback) => creatAPI('rap/sendEmailPwd', 'post', params, callback)
+}
+
 /* User */
 const user = {
     isLogin: (params, callback) => creatAPI('rap/isLogin', 'get', params, callback),
     login: (params, callback) => creatAPI('rap/login', 'post', params, callback),
-    register: (params, callback) => creatAPI('rap/registe', 'post', params, callback)
+    register: (params, callback) => creatAPI('rap/registe', 'post', params, callback),
+    resetPwd: (params, callback) => creatAPI('rap/resetPwd', 'post', params, callback)
 }
 
 /* Project */
@@ -29,7 +36,8 @@ const inter = {
     delete: (params, callback) => creatAPI('rap/deleteInterface', 'get', params, callback),
     update: (params, callback) => creatAPI('rap/updateInterface', 'post', params, callback),
     getList: (params, callback) => creatAPI('rap/getInterfaceList', 'post', params, callback),
-    getListByPID: (params, callback) => creatAPI('rap/getInterfaceListByProjectID', 'post', params, callback)
+    getListByPID: (params, callback) => creatAPI('rap/getInterfaceListByProjectID', 'post', params, callback),
+    directImport: (params, callback) => creatAPI('rap/directImport', 'post', params, callback)
 }
 
 /* jsonRecords */
@@ -37,7 +45,8 @@ const jsonRecords = {
     add: (params, callback) => creatAPI('rap/addJsonRecord', 'post', params, callback),
     update: (params, callback) => creatAPI('rap/updateJsonRecord', 'post', params, callback),
     getItem: (params, callback) => creatAPI('rap/getJsonRecordByPid', 'post', params, callback),
-    getFormatedItem: (params, callback) => creatAPI('rap/getFinalJRByPid', 'post', params, callback)
+    getFormatedItem: (params, callback) => creatAPI('rap/getFinalJRByPid', 'post', params, callback),
+    ajaxImport: (params, callback) => creatAPI('rap/ajaxImport', 'post', params, callback) 
 }
 
 /* Mock */
@@ -46,6 +55,7 @@ const mock = {
 }
 
 export {
+    common,
     user,
     project,
     inter,

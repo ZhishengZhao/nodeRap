@@ -65,14 +65,21 @@
                     <el-form-item>
                         <el-button type="primary" @click="goAddInterface">确定</el-button>
                         <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <!-- <el-button @click="ajaxImportShow = true">接口直导</el-button> -->
+                        <el-button @click="goAddInterface('import')">接口直导</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
-            <el-dialog class="bor-radius_50" :visible.sync="updateFlag">
+            <el-dialog class="bor-radius_50 wid800 item_margin0" :visible.sync="updateFlag">
                 <el-form ref="form">
                     <el-form-item>
-                        <textarea name="" cols="30" rows="10" class="edit_input" ref="editParams" v-model="responseParams">
+                        <textarea name="" cols="30" rows="10" class="edit_input " ref="editParams" v-model="responseParams">
                         </textarea>
+                    </el-form-item>
+                    <el-form-item :class="bgColor" v-if="jsonCheckResult" v-html="jsonCheckResult">
+                        <!-- <p v-if="jsonCheckResult">
+                          {{jsonCheckResult}}  
+                        </p> -->
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="goUpdateSubmit">确定</el-button>
@@ -94,6 +101,24 @@
                     </el-form-item>
                 </el-form>
             </el-dialog>
+            <!-- 接口直导功能弹窗 -->
+            <el-dialog class="bor-radius_50 wid800" :visible.sync="ajaxImportShow">
+                <el-form ref="form" label-width="80px">
+                    <el-form-item label="接口地址">
+                        <el-input v-model="requestUrl"></el-input>
+                    </el-form-item>
+                    <el-form-item label="所属页面">
+                        <el-select v-model="curPageId" placeholder="请选择">
+                            <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="ajaxImport">确定</el-button>
+                        <el-button @click="ajaxImportShow = false">取消</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -103,6 +128,8 @@ import rapFooter from 'common/footer.vue'
 import interfaceDetail from './interfacedetail.vue'
 import { project, inter, jsonRecords } from 'api/api.js'
 import { JsonFormater } from 'src/libs/jsonformate.js'
+import rapDialog from 'src/components/dialog/index.vue'
+import { jsonlint } from 'src/libs/jsonlint/jsonlint.js'
 export default {
     filters: {},
     data() {
@@ -140,10 +167,16 @@ export default {
             responseParams: '',
             updateFlag: false,
             addPageShow: false,
+            ajaxImportShow: false,
+            requestUrl: '',
             filterText: '',
             pageOptions: [],
             value: '',
-            leafNodes: []
+            leafNodes: [],
+            emailReg: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/,
+            jsonCheckResult: '',
+            jsonValid: false,
+            test: '<p>123456</p>'
         }
     },
     watch: {
@@ -152,12 +185,15 @@ export default {
         }
     },
     computed: {
-
+        bgColor() {
+            return this.jsonValid ? 'bg_green' : 'bg_red'
+        }
     },
     components: {
         rapHead,
         rapFooter,
-        interfaceDetail
+        interfaceDetail,
+        rapDialog
     },
     mounted() {
         this.getInterfaceList()
@@ -250,15 +286,13 @@ export default {
             this.interEditFlag = editflag
         },
         // 新增接口
-        goAddInterface() {
+        goAddInterface(type) {
+            console.log(type)
             if (this.curPageId == '') {
                 alert('请先添加一个页面，在添加接口')
                 return
             }
-            if (this.form.link.indexOf('/') != 0) {
-                this.form.link = '/' + this.form.link
-            }
-
+            
             let params = {
                 name: this.form.name,
                 desc: this.form.desc,
@@ -268,15 +302,54 @@ export default {
                 pid: this.curPageId
             }
 
-            // let editUrl = this.interEditFlag ? 'rap/updateInterface' : 'rap/addInterface'
-            let action = this.interEditFlag ? 'update' : 'add'
+            if (!this.formCheck('addForm', params)) {
+                return
+            }
 
-            inter[action](params, (data) => {
-                if (data && data.success) {
-                    this.dialogFormVisible = false
-                    this.getInterfaceList()
+            if (type == 'import') {
+                if (!this.emailReg.test(params.reqUrl)) {
+                    this.$alert('请输入完整有效的url地址，如https://m.aiyoumi.com:8443/mall/loan/getLoanInit')
+                    return
                 }
-            })
+                
+                inter.directImport(params, (data) => {
+                    if (data && data.success) {
+                        this.dialogFormVisible = false
+                        this.getInterfaceList()
+                    }
+                })
+            } else {
+                if (params.reqUrl.indexOf('/') != 0) {
+                    params.reqUrl = '/' + params.reqUrl
+                }
+                let action = this.interEditFlag ? 'update' : 'add'
+                console.log('-------------')
+                inter[action](params, (data) => {
+                    if (data && data.success) {
+                        this.dialogFormVisible = false
+                        this.getInterfaceList()
+                    }
+                })
+            }
+        },
+        // 参数校验
+        formCheck(type, data) {
+            if (type === 'addForm') {
+                if (!data.name) {
+                    this.$alert('请输入接口名')
+                    return false
+                }
+                if (!data.reqType) {
+                    this.$alert('请选择接口类型')
+                    return false
+                }
+                if (!data.reqUrl) {
+                    this.$alert('请输入接口地址')
+                    return false
+                }
+
+                return true
+            }
         },
         // 接口删除
         deleteInterface() {
@@ -305,7 +378,23 @@ export default {
         // 接口内容更新提交
         goUpdateSubmit() {
             let txt = this.responseParams
-            // this.responseParams = JSON.stringify(this.json2mock(txt))
+
+            try {
+                jsonlint.parse(txt)
+                this.jsonValid = true
+                this.jsonCheckResult = '<p>JSON数据格式正常</p>'
+            } catch (err) {
+                this.jsonValid = false
+                this.jsonCheckResult = err.message
+                console.log(err.message.split('\n'))
+                let erArr = err.message.split('\n')
+                let descDom = erArr.map((item) => {
+                    return '<p>' + item + '</p>'
+                })
+                this.jsonCheckResult = descDom.join(' ')
+                return
+            }
+
             this.responseParams = txt // JSON.stringify(this.json2mock(txt))
             jsonRecords.update({
                 _id: this.curIterfaceId,
@@ -316,6 +405,7 @@ export default {
                     this.updateFlag = false
                     this.getInterfaceList()
                 }
+                this.jsonValid = false
             })
         },
         // 获取接口参数
@@ -396,6 +486,11 @@ export default {
         setClass(node) {
             console.log('node=', node)
             return node.data.pid == 0 ? '' : 'dom_hide'
+        },
+        ajaxImport() {
+            jsonRecords.ajaxImport({requestUrl: this.requestUrl}, (data) => {
+                    
+            })
         }
     }
 }
@@ -404,8 +499,9 @@ export default {
 @import '../../assets/styles/jsonformate.css';
 
 .edit_input {
-    width: 750px;
-    height: 560px;
+    width: 100%;
+    height: 500px;
+    max-height: 500px;
 }
 
 .border {
@@ -413,12 +509,15 @@ export default {
 }
 
 .el-dialog--small {
-    width: auto;
+    // width: auto;
     border-radius: 10px;
 }
 
 .el-form-item__content {
-    text-align: center;
+    // text-align: center;
+}
+.other .el-input__icon {
+    display: none;
 }
 
 #container {
@@ -460,5 +559,25 @@ export default {
         font-size: 29px;
         color: #fff;
     }
+}
+.wid800 .el-dialog {
+    width: 800px;
+}
+.item_margin0 {
+    .el-form-item {
+        margin-bottom: 0;
+    }
+}
+.bg_green {
+    background-color: #efe;
+    color: #393;
+    border: 2px solid #393;
+    margin-bottom: 15px !important;
+}
+.bg_red {
+    background-color: #fee;
+    color: #933;
+    border: 2px solid #933;
+    margin-bottom: 15px !important;
 }
 </style>

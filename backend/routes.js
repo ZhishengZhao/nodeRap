@@ -9,6 +9,7 @@ var jsonRecordsController = require('./controller/jsonrecord.js');
 var userController = require('./controller/user.js');
 var projectController = require('./controller/project.js');
 var userProjectController = require('./controller/userproject.js');
+var commonController = require('./controller/common.js');
 
 // router.post('/getInterfaceListByProjectID', function(req, res, next) {
 //     console.log('params', req);
@@ -18,6 +19,7 @@ var userProjectController = require('./controller/userproject.js');
 /* Interface */
 router.post('/getInterfaceList', interfaceController.getAll);
 router.post('/getInterfaceListByProjectID', interfaceController.getRecordsByPID);
+router.post('/directImport', interfaceController.directImport);
 
 router.post('/addInterface', interfaceController.addInterface);
 router.post('/updateInterface', interfaceController.updateInterface);
@@ -28,6 +30,7 @@ router.post('/addJsonRecord', jsonRecordsController.addRecord);
 router.post('/updateJsonRecord', jsonRecordsController.updateRecord);
 router.post('/getJsonRecordByPid', jsonRecordsController.getByPid);
 router.post('/getFinalJRByPid', jsonRecordsController.getFinalByPid);
+router.post('/ajaxImport', jsonRecordsController.ajaxImport);
 
 /* old records */
 router.post('/paramsSave', recordsController.addRecords);
@@ -37,6 +40,7 @@ router.post('/getIterParamsByIterId', recordsController.getRecordsByInterID);
 router.get('/isLogin', userController.isLogin);
 router.post('/login', userController.login);
 router.post('/registe', userController.registe);
+router.post('/resetPwd', userController.resetPwd);
 
 /* Project */
 router.post('/add', checkLogin, projectController.addPorject);
@@ -46,12 +50,16 @@ router.get('/deleteProjectById', projectController.deleteById);
 router.get('/getAllMine', checkLogin, projectController.getMine);
 
 /* User Project Relation */
-// router.get('/getAllOthers', userProjectController.getMyJoin);
+// router.get('/getAllOthers', commonController.getMyJoin);
 router.get('/getMyJoins', checkLogin, userProjectController.getMyJoin);
 
 /* Mock */
 router.get('/mock/:projectId/*', jsonRecordsController.responseData);
 router.post('/mock/:projectId/*', jsonRecordsController.responseData);
+
+/* Common */
+router.post('/sendEmailActive', commonController.sendEmailActive);
+router.post('/sendEmailPwd', commonController.sendEmailPwd);
 
 /* Example */
 // router.post('/mock/projectId/11', function(req, res, next) {
