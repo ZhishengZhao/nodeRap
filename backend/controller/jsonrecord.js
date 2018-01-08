@@ -44,11 +44,11 @@ module.exports = {
         }).catch(next);
     },
     updateRecord: function(req, res, next) {
-        var params = {
-            content: req.body.content,
-            _id: new ObjectID(req.body._id),
-            pid: req.body.pid
-        };
+        // var params = {
+        //     content: req.body.content,
+        //     _id: new ObjectID(req.body._id),
+        //     pid: req.body.pid
+        // };
         JsonRecord.remove({ pid: req.body.pid }).then(function(result) {
             var params = {
                 content: req.body.content,

@@ -18,7 +18,9 @@ module.exports = {
             
             partyArr.forEach(function(item, index) {
                 rapUser.getUserByName(item).then(function(result) {
-                    rapUserProject.addRelation((result[0]._id + ''), projectID);
+                    if (result.length) {
+                        rapUserProject.addRelation((result[0]._id + ''), projectID);
+                    }
                 });
             });
             

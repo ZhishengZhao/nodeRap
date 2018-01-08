@@ -84,32 +84,32 @@ export default {
             } = this.form
 
             if (!name) {
-                this.$alert('用户名不能为空，老铁~')
+                this.$alert('用户名不能为空~')
                 return
             }
 
             if (!pwd) {
-                this.$alert('密码不能为空，老铁~') 
+                this.$alert('密码不能为空~') 
                 return
             } else if (!isValidPwd(pwd)) {
-                this.$alert('密码长度应在6~10位之间，老铁~') 
+                this.$alert('密码长度应在6~10位之间~') 
                 return
             }
 
             if (!this.actionLogin) {
                 if (!email) {
-                    this.$alert('邮箱还没填呢，老铁~')
+                    this.$alert('邮箱还没填呢~')
                     return
                 } else if (!isValidEmail(email)) {
-                    this.$alert('邮箱格式不对啊，老铁~')
+                    this.$alert('邮箱格式不对啊~')
                     return
                 }
 
                 if (!pwdconfirm) {
-                   this.$alert('确认密码还没填呢，老铁~') 
+                   this.$alert('确认密码还没填呢~') 
                    return
                 } else if (pwdconfirm !== pwd) {
-                   this.$alert('两个密码不一致啊，老铁~') 
+                   this.$alert('两个密码不一致啊~') 
                    return
                 } 
             }
