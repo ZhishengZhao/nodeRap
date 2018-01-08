@@ -3,8 +3,9 @@
  -->
 <template>
     <el-row :gutter="20" class="rap_head">
-        <div class="wid1080">
-            <img class="logo" src="./img/logo1.png" alt="" @click="goMainPage">
+        <div class="wid1080" @click="goMainPage">
+            <h3 class="bg__blue">Hi</h3><h3>Rap</h3>
+            <!-- <img class="logo" src="./img/logo1.png" alt="" @click="goMainPage"> -->
             <!-- <a class="logo_title" href="javascript:;">Heioray</a> -->
             <!-- <span @click="goLogin">{{welcomeTxt}}</span> -->
         </div>
@@ -65,6 +66,16 @@ a {
 .wid1080 {
     width: 1080px;
     margin: 0 auto;
+    h3 {
+        font-size: 40px;
+        display: inline-block;
+        color: #e5d5d5;
+    }
+    .bg__blue {
+        background-color: #e5d5d5;
+        margin-right: 15px;
+        color: #3b3e43;
+    }
 }
 
 .logo_title {

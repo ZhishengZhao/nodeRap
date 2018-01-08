@@ -128,6 +128,8 @@ module.exports = {
                                 desc: '项目状态正常'
                             });
                         }
+
+                        return;
                     }
 
                     if (type == 'doEdit') {
@@ -145,7 +147,7 @@ module.exports = {
                             success: false,
                             desc: '项目状态正常'
                         });
-                    } else {
+                    } else if (type == 'doEdit') {
                         rapProject.lockById(pid, 'lock', uid).then(function(result) {
                             res.send({
                                 success: true,

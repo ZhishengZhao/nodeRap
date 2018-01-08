@@ -370,6 +370,7 @@ export default {
         },
         // 接口内容更新
         goUpdate() {
+            this.jsonCheckResult = ''
             this.updateFlag = true
             let pid = this.curIterfaceId
             jsonRecords.getItem({ pid }, (data) => {
@@ -636,7 +637,7 @@ export default {
 .area_btns_inter {
     position: absolute;
     right: 15px;
-    top: 33px;
+    top: 48px; // 33px
     width: 140px;
     height: 120px;
     z-index: 1999;

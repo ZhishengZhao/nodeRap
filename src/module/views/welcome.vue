@@ -3,9 +3,9 @@
  -->
 <template>
     <div class="page">
-        <h3 class="title" @click="goPage('main')">
-           Hi Rap 
-        </h3>
+        <div class="title" @click="goPage('main')">
+            <h3 class="bg__blue">Hi</h3><h3>Rap</h3>
+        </div>
     </div>
 </template>
 <script>
@@ -58,6 +58,15 @@ export default {
     top: 38%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
-    font-size: 140px;
+    h3 {
+        font-size: 140px;
+        display: inline-block;
+        color: #323030;
+    }
+    .bg__blue {
+        background-color: #323030;
+        margin-right: 45px;
+        color: #fff;
+    }
 }
 </style>
