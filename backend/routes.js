@@ -48,6 +48,7 @@ router.get('/getAll', projectController.getAllProjects);
 router.post('/updateProjectById', projectController.updateProjectById);
 router.get('/deleteProjectById', projectController.deleteById); 
 router.get('/getAllMine', checkLogin, projectController.getMine);
+router.post('/goEdit', checkLogin, projectController.goEdit);
 
 /* User Project Relation */
 // router.get('/getAllOthers', commonController.getMyJoin);

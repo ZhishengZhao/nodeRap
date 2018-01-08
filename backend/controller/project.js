@@ -97,5 +97,71 @@ module.exports = {
                 success: true
             });
         }).catch(next);
+    },
+    goEdit: function(req, res, next) {
+        var pid = req.body.pid,
+            uid = req.session.user._id,
+            type = req.body.type;
+
+        rapProject.getById(pid).then(function(result) {
+            if (result.length) {
+                if (result[0].locked) {
+                    if (type == 'doComplete' && uid == result[0].lockby) {
+                        rapProject.lockById(pid, 'unlock').then(function(result) {
+                            res.send({
+                                success: true,
+                                desc: '项目已解锁',
+                                result: result
+                            });
+                        }).catch(next);
+                    }
+
+                    if (type == 'isSelfLocked') {
+                        if (uid == result[0].lockby) {
+                            res.send({
+                                success: true,
+                                desc: '该项目目前正被您锁定中，是否进入编辑状态？'
+                            });
+                        } else {
+                            res.send({
+                                success: false,
+                                desc: '项目状态正常'
+                            });
+                        }
+                    }
+
+                    if (type == 'doEdit') {
+                        rapUser.getUserById(result[0].lockby).then(function(result) {
+                            var name = result[0].name || 'XXX';
+                            res.send({
+                                success: false,
+                                desc: '项目目前正被' + name + '锁定'
+                            });
+                        });
+                    }
+                } else {
+                    if (type == 'isSelfLocked') {
+                        res.send({
+                            success: false,
+                            desc: '项目状态正常'
+                        });
+                    } else {
+                        rapProject.lockById(pid, 'lock', uid).then(function(result) {
+                            res.send({
+                                success: true,
+                                desc: '项目已进入锁定状态',
+                                result: result
+                            });
+                        }).catch(next);
+                    }
+                }
+            } else {
+                res.send({
+                    result: {},
+                    desc: '数据异常，请退出重试',
+                    success: false
+                });
+            }
+        }).catch(next);
     }
 };

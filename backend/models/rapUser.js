@@ -9,6 +9,11 @@ module.exports = {
             name: name
         }).exec();
     },
+    getUserById: function getUserById(uid) {
+        return User.find({
+            _id: uid
+        }).exec();
+    },
     getUserPwdByEmail: function getUserPwdByEmail(emailAddress) {
         return User.find({
             email: emailAddress

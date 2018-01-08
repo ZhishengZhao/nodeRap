@@ -1,7 +1,7 @@
 <template>
     <div class="area_interinfo">
         <h3>接口详情</h3>
-        <hr class="mb20">
+        <!-- <hr class="mb20"> -->
         <p>
             <span class="wd100 fs16 mr20">
                 接口名称：
@@ -27,7 +27,7 @@
             </span>
         </p>
         <div class="block_preview">
-            <a :href="url">
+            <a :href="url" target="blank">
                 预览
             </a>
         </div>
@@ -73,6 +73,8 @@ export default {
     height: 150px;
     h3 {
         font-size: 20px;
+        border-bottom: 1px solid #a8a3a3;
+        margin-bottom: 10px;
     }
     p {
         line-height: 30px;

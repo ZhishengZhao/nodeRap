@@ -27,9 +27,20 @@ module.exports = {
             author: {$ne:uid}
         }).exec();
     },
-    getById: function getById(proid) {
+    getById: function getById(pid) {
         return Project.find({
-            _id: proid
+            _id: pid
         }).exec();
+    },
+    lockById: function lockById(pid, type, uid) { // type -> lock unlock
+        if (type == 'lock') {
+            return Project.update({
+                _id: pid
+            }, { $set: { locked: true, lockby: uid } }).exec();
+        } else {
+            return Project.update({
+                _id: pid
+            }, { $set: { locked: false, lockby: '' } }).exec();
+        }
     }
 };

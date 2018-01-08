@@ -15,13 +15,14 @@ const user = {
 }
 
 /* Project */
-const project = {
+const project = { 
     add: (params, callback) => creatAPI('rap/add', 'post', params, callback),
     delete: (params, callback) => creatAPI('rap/deleteProjectById', 'get', params, callback),
     update: (params, callback) => creatAPI('rap/updateProjectById', 'post', params, callback),
     getList: (params, callback) => creatAPI('rap/getAll', 'get', params, callback),
     getMine: (params, callback) => creatAPI('rap/getAllMine', 'get', params, callback),
-    getOthers: (params, callback) => creatAPI('rap/getAllOthers', 'get', params, callback)
+    getOthers: (params, callback) => creatAPI('rap/getAllOthers', 'get', params, callback),
+    goEdit: (params, callback) => creatAPI('rap/goEdit', 'post', params, callback)
 }
 
 /* UserProject Relation */

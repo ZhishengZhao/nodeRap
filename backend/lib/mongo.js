@@ -31,7 +31,9 @@ exports.Project = mongolass.model('Project', {
     name: { type: 'string' },
     desc: { type: 'string' },
     author: { type: 'string' },
-    parties: { type: 'string' }
+    parties: { type: 'string' },
+    locked: { type: 'boolean'},
+    lockby: { type: 'string' }
 });
 
 exports.JsonRecord = mongolass.model('JsonRecord', {

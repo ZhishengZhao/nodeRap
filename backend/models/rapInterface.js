@@ -23,5 +23,16 @@ module.exports = {
             projectId: projectId,
             reqUrl: reqPath
         }).exec();
+    },
+    update: function update(interface) {
+        return Interface.update({
+            _id: interface._id
+        }, { $set: {
+            name: interface.name,
+            desc: interface.desc,
+            reqType: interface.reqType,
+            reqUrl: interface.reqUrl,
+            pid: interface.pid
+        } });
     }
 };

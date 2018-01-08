@@ -7,9 +7,9 @@
         <div class="content wid1080">
             <el-row :gutter="20" class="border">
                 <div class="block fr">
-                    <el-button type="info" v-if="!editFlag" @click="editFlag = true">编辑</el-button>
-                    <el-button type="info" v-if="editFlag" @click="addPageShow = true">添加页面</el-button>
-                    <el-button type="info" v-if="editFlag" @click="editFlag = false">取消</el-button>
+                    <el-button type="info" v-if="!editFlag" @click="goEdit">编辑</el-button>
+                    <!-- <el-button type="info" v-if="editFlag" @click="addPageShow = true">添加页面</el-button> -->
+                    <el-button type="info" v-if="editFlag" @click="editComplete">完成</el-button>
                 </div>
             </el-row>
             <el-row :gutter="20" class="border">
@@ -18,21 +18,30 @@
                         <h3>{{projectName}}</h3>
                         <el-input placeholder="输入关键字进行过滤" v-model="filterText">
                         </el-input>
+                        <div class="area_operate clearfix" v-if="editFlag">
+                            <p @click="addPageShow = true">新增页面</p>
+                            <p @click="editInterface(false)">新增接口</p>
+                        </div>
                         <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode">
                             <!-- :render-content="renderContent" -->
                         </el-tree>
-                        <el-button v-if="editFlag" @click="editInterface(false)" type="info">add</el-button>
-                        <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button>
+                        <!-- <el-button v-if="editFlag" @click="editInterface(false)" type="info">add</el-button>
+                        <el-button v-if="editFlag" @click="deleteInterface" type="info">delete</el-button> -->
                         <!-- <el-button v-if="editFlag" @click="editInterface(true)" type="info">update</el-button> -->
                     </div>
                 </el-col>
                 <el-col :span="18" class="pad20 grid-content bg-purple-dark bor20 border">
+                    <div class="area_btns_inter" v-if="editFlag">
+                        <!-- <p @click="editInterface(true)">更新接口</p> -->
+                        <p @click="goUpdate">更新内容</p>
+                        <p @click="deleteInterface">删除接口</p>
+                    </div>
                     <interface-detail :detail="interfaceInfo" class="border"></interface-detail>
                     <div class="grid-content bg-purple-light border content_inter">
                         <h3>接口参数</h3>
-                        <div class="fr trigle_topright" v-if="editFlag">
+                        <!-- <div class="fr trigle_topright" v-if="editFlag">
                             <p @click="goUpdate">更新</p>
-                        </div>
+                        </div> -->
                         <div id='container'></div>
                     </div>
                 </el-col>
@@ -64,8 +73,8 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="goAddInterface">确定</el-button>
+                        <el-button type="primary" @click="goAddInterface('import')">直导</el-button>
                         <el-button @click="dialogFormVisible = false">取消</el-button>
-                        <el-button @click="goAddInterface('import')">接口直导</el-button>
                     </el-form-item>
                 </el-form>
             </el-dialog>
@@ -84,7 +93,7 @@
                 </el-form>
             </el-dialog>
             <el-dialog class="bor-radius_50" :visible.sync="addPageShow">
-                <el-form ref="form" :model="formPage">
+                <el-form ref="form" :model="formPage" label-width="80px">
                     <el-form-item label="名称">
                         <el-input v-model="formPage.name"></el-input>
                     </el-form-item>
@@ -145,15 +154,12 @@ export default {
             responseParams: '',
             updateFlag: false,
             addPageShow: false,
-            requestUrl: '',
             filterText: '',
             pageOptions: [],
-            value: '',
             leafNodes: [],
             emailReg: /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/,
             jsonCheckResult: '',
-            jsonValid: false,
-            test: '<p>123456</p>'
+            jsonValid: false
         }
     },
     watch: {
@@ -172,10 +178,30 @@ export default {
         interfaceDetail,
         rapDialog
     },
+    beforeRouteLeave(to, from, next) {
+        this.editComplete()
+        next()
+    },
     mounted() {
         this.getInterfaceList()
+        this.initEditState()
     },
     methods: {
+        initEditState() {
+            let pid = this.projectId,
+                type = 'isSelfLocked';
+
+            project.goEdit({ pid, type }, (result) => {
+                if (result.success) {
+                    this.$confirm('项目正在被您锁定，是否进入编辑状态？')
+                        .then((data) => {
+                            this.editFlag = true
+                        }).catch(data => {
+                            this.editComplete()
+                        });
+                }
+            })
+        },
         /* 初始化事件 */
         // 获取接口列表
         getInterfaceList() {
@@ -276,7 +302,8 @@ export default {
                 reqType: this.form.type,
                 reqUrl: this.form.link,
                 projectId: this.projectId,
-                pid: this.curPageId
+                pid: this.curPageId,
+                id: this.curIterfaceId
             }
 
             if (!this.formCheck('addForm', params)) {
@@ -300,7 +327,7 @@ export default {
                     params.reqUrl = '/' + params.reqUrl
                 }
                 let action = this.interEditFlag ? 'update' : 'add'
-                console.log('-------------')
+                // console.log('-------------')
                 inter[action](params, (data) => {
                     if (data && data.success) {
                         this.dialogFormVisible = false
@@ -330,15 +357,16 @@ export default {
         },
         // 接口删除
         deleteInterface() {
-            let context = '确定删除' + this.curIterfaceName + '？'
-            // if (window.comfirm(context)) {
-            var iterId = this.curIterfaceId
-            inter.delete({ iterId }, (data) => {
-                if (data && data.success) {
-                    this.getInterfaceList()
-                }
-            })
-            // }
+            let context = '确定删除接口' + this.curIterfaceName + '？'
+            this.$confirm(context)
+                .then((data) => {
+                    var iterId = this.curIterfaceId
+                    inter.delete({ iterId }, (data) => {
+                        if (data && data.success) {
+                            this.getInterfaceList()
+                        }
+                    })
+                }).catch(data => {});
         },
         // 接口内容更新
         goUpdate() {
@@ -463,6 +491,30 @@ export default {
         setClass(node) {
             console.log('node=', node)
             return node.data.pid == 0 ? '' : 'dom_hide'
+        },
+        goEdit() {
+            let pid = this.projectId,
+                type = 'doEdit';
+
+            project.goEdit({ pid, type }, (result) => {
+                if (result.success) {
+                    this.editFlag = true
+                } else {
+                    this.$alert(result.desc)
+                }
+            })
+        },
+        editComplete() {
+            let pid = this.projectId,
+                type = 'doComplete';
+
+            project.goEdit({ pid, type }, (result) => {
+                if (result.success) {
+                    this.editFlag = false
+                } else {
+                    this.$alert(result.desc)
+                }
+            })
         }
     }
 }
@@ -551,5 +603,52 @@ export default {
     color: #933;
     border: 2px solid #933;
     margin-bottom: 15px !important;
+}
+.area_operate {
+    position: relative;
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #a8a3a3;
+    p {
+        float: left;
+        width: 44%;
+        margin: 10px 2.5%;
+        height: 36px;
+        line-height: 36px;
+        text-align: center;
+        background-color: #909399;
+        border-radius: 5px;
+        color: #fff;
+    }
+}
+.clearfix:after {
+    content: '.';
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    font-size: 0;
+}
+
+.clearfix {
+    display: block;
+}
+.area_btns_inter {
+    position: absolute;
+    right: 15px;
+    top: 33px;
+    width: 140px;
+    height: 120px;
+    z-index: 1999;
+    p {
+        width: 80%;
+        height: 32px;
+        margin: 2px;
+        line-height: 28px;
+        text-align: center;
+        background-color: #909399;
+        border-radius: 5px;
+        color: #fff;
+    }
 }
 </style>
