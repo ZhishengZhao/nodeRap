@@ -48,21 +48,6 @@
                     <el-button @click="projectAddCancel">取消</el-button>
                 </div>
             </rap-dialog>
-            <!-- <rap-dialog v-show="'false'">
-                <div slot="content">
-                    <div class="alert__title">
-                        这里是一个测试的title
-                    </div>
-                    <div class="alert__content">
-                        <input type="text" v-model="form.name" placeholder="项目名称">
-                        <input type="text" class="disblock input__project--edit" v-model="form.desc" placeholder="项目描述">
-                        <input type="text" class="disblock input__project--edit" v-model="form.paties" placeholder="项目成员">
-                    </div>
-                    <div class="alert__btns">
-                        BTN-TXT
-                    </div>
-                </div>
-            </rap-dialog> -->
         </div>
     </div>
 </template>
@@ -120,15 +105,20 @@ export default {
             this.dialogFormVisible = true
         },
         projectAddConfirm() {
-            this.form.partyArr = JSON.stringify(this.form.paties.split(','));
             let action = this.isEdit ? 'update' : 'add'
+
+            if (this.form.paties) {
+                this.form.partyArr = JSON.stringify(this.form.paties.split(','))
+                this.form.isPartyChanged = true
+            }
 
             project[action](this.form, (data) => {
                 if (data.success) {
                     this.dialogFormVisible = false
-                    this.getList('all')
+                    this.getList('mine')
                     this.clearForm()
                 }
+                this.isEdit = false
             })
         },
         projectAddCancel() {
@@ -137,7 +127,7 @@ export default {
         },
         getList(type) {
             if (type === 'all') {
-                this.belongs = 'all'
+                // this.belongs = 'all'
                 project.getList(null, (data) => {
                     if (data.success) {
                         this.projectList = data.result
@@ -145,7 +135,7 @@ export default {
                     }
                 })
             } else if (type === 'mine') {
-                this.belongs = 'mine'
+                // this.belongs = 'mine'
                 project.getMine(null, (data) => {
                     if (data.success) {
                         this.projectList = data.result
@@ -153,9 +143,8 @@ export default {
                     }
                 })
             } else {
-                this.belongs = 'myjoin'
+                // this.belongs = 'myjoin'
                 userProject.getMyJoins(null, (data) => {
-                // project.getMyJoins(null, (data) => {
                     if (data.success) {
                         this.projectList = data.result
                         this.originProjectList = data.result
@@ -164,9 +153,9 @@ export default {
             }
         },
         showEditPanel(_id) {
-            if (this.belongs === 'mine') {
+            // if (this.belongs === 'mine') {
                 this.curFocusId = _id
-            }
+            // }
         },
         goEdit(item) {
             this.isEdit = true

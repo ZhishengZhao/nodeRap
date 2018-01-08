@@ -27,5 +27,11 @@ module.exports = {
         { $match : { userID : toObjectId(uid) } },
         { $project : { 'result': 1, '_id': 0  } }
         ]);
+    },
+    findRecord: function findRecord(uid, proid) {
+        return UserProject.find({
+            userID: uid,
+            projectID: proid
+        }).exec();
     }
 };

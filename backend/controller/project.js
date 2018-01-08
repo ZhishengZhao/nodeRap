@@ -42,12 +42,22 @@ module.exports = {
             name: req.body.name,
             desc: req.body.desc,
             _id: req.body._id
-        };
+        },
+        isPartyChanged = req.body.isPartyChanged || false,
+        partyArr = (req.body.partyArr && JSON.parse(req.body.partyArr)) || [];
+        // console.log('partyArr', partyArr);
+
         rapProject.update(params).then(function(result) {
-            if (req.body.isPartyChanged) {
+            if (isPartyChanged && partyArr.length) {
                 partyArr.forEach(function(item, index) {
                     rapUser.getUserByName(item).then(function(result) {
-                        rapUserProject.addRelation((result[0]._id + ''), params._id);
+                        if (result && result.length) {
+                            rapUserProject.findRecord(result[0]._id, params._id).then(function(data) {
+                                if (!data.length) {
+                                    rapUserProject.addRelation((result[0]._id + ''), params._id);
+                                }
+                            });
+                        }
                     });
                 });
             }
