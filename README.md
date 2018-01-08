@@ -6,11 +6,13 @@
 
 ## 安装使用
 
-npm install -D
+npm install
 
 开发环境启动：
 
-npm run dev
+前端热重载：npm run dev
+服务端热重载：npm run dev:server
+生产环境：npm run build
 
 由于目前前后端统一启动，但只做了前端文件的动态编译，如果改了后台文件，请重新启动脚本
 
