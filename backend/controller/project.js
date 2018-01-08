@@ -11,7 +11,7 @@ module.exports = {
             desc: req.body.desc,
             author: req.session.user._id
             },
-            partyArr = JSON.parse(req.body.partyArr);
+            partyArr = JSON.parse(req.body.partyArr || '[]');
 
         rapProject.create(params).then(function(result) {
             var projectID = result.ops[0]._id + '';
