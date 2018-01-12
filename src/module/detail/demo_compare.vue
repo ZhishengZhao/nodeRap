@@ -26,8 +26,8 @@
             </el-form>
         </el-row>
         <el-row :gutter="20">
-            <div class="area_result" > <!-- v-html="compareResult" -->
-                {{compareResult}}
+            <div class="area_result" v-html="compareResult"> <!-- v-html="compareResult" -->
+                <!-- {{compareResult}} -->
             </div>
         </el-row>
     </div>
@@ -35,6 +35,7 @@
 <script>
 import rapHead from 'common/raphead.vue'
 import rapFooter from 'common/footer.vue'
+// import jc from 'src/libs/jsoncompare'
 
 export default {
     data() {
@@ -45,7 +46,7 @@ export default {
             },
             rapData: null,
             realData: null,
-            compareResult: '<p>11111</p>',
+            compareResult: '<p></p>',
             resultArr: []
         }
     },
@@ -53,7 +54,7 @@ export default {
         // compareResult() {
         //     return this.resultArr.map((item) => {
         //         return '<p>' + item + '</p>'
-        //     }).join('') + '<p>11111</p>'
+        //     }).join('') + '<p></p>'
         // }
     },
     watch: {
@@ -61,7 +62,7 @@ export default {
             console.log('fuck you', val)
             this.compareResult = val.map((item) => {
                 return '<p>' + item + '</p>'
-            }).join('') + '<p>11111</p>'
+            }).join('') + '<p></p>'
             console.log(this.compareResult)
         }
     },
@@ -70,11 +71,22 @@ export default {
         rapFooter
     },
     mounted() {
+        var demo_1_ori = {
+                "name": "json",
+                "age": 13,
+                "gender": "male"
+            },
+            demo_1_tar = {
+                "name": "json",
+                "age": 13
+            }
+        // console.log(typeof jc.init)
+        // jc.init(demo_1_ori, demo_1_tar)
     },
     methods: {
         compareData() {
             let {rapData, realData} = this.$data
-            // console.log('输入数据：', rapData, realData)
+            console.log('输入数据：', rapData, realData)
             if (typeof rapData == 'string') {
                 rapData = JSON.parse(rapData)
             }

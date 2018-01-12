@@ -3,7 +3,8 @@ import { creatAPI } from './base'
 /* Common */
 const common = {
     sendEmailActive: (params, callback) => creatAPI('rap/sendEmailActive', 'post', params, callback),
-    sendEmailPwd: (params, callback) => creatAPI('rap/sendEmailPwd', 'post', params, callback)
+    sendEmailPwd: (params, callback) => creatAPI('rap/sendEmailPwd', 'post', params, callback),
+    getAjaxData: (params, callback) => creatAPI('rap/getAjaxData', 'post', params, callback)
 }
 
 /* User */

@@ -61,6 +61,7 @@ router.post('/mock/:projectId/*', jsonRecordsController.responseData);
 /* Common */
 router.post('/sendEmailActive', commonController.sendEmailActive);
 router.post('/sendEmailPwd', commonController.sendEmailPwd);
+router.post('/getAjaxData', commonController.getAjaxData);
 
 /* Example */
 // router.post('/mock/projectId/11', function(req, res, next) {

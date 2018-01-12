@@ -2,6 +2,7 @@ var rapCommon = require('../models/rapCommon');
 var rapUser = require('../models/rapUser');
 var nodemailer = require('nodemailer');
 var emailConfig = require('../../config/emailconfig.js');
+var request = require('request');
 
 module.exports = {
     sendEmailActive: function (req, res, next) {
@@ -73,5 +74,31 @@ module.exports = {
                 });
             }
         }).catch(next);
+    },
+    getAjaxData: function (req, res, next) {
+        var requestUrl = req.body.url,
+            params = {
+                url: '',
+                method: "POST",
+                json: true,
+                headers: {
+                    "content-type": "application/json"
+                }
+            };
+
+        try {
+            params.url = requestUrl;
+            request(params,function(error, response, body) {
+                res.send({
+                    result: body,
+                    success: true
+                });
+            });
+        } catch (e) {
+            res.send({
+                result: {},
+                success: false
+            });
+        }
     }
 };

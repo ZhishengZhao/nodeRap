@@ -2,6 +2,7 @@ import App from './App.vue';
 import welcome from './views/welcome.vue';
 import mainpage from './views/project_list.vue';
 import detail from './views/project_detail.vue';
+import detail_compare from './views/project_detail_compare.vue';
 import user_common from './views/common.vue';
 import joycenter from './views_joy/index.vue';
 import NotFound from './404.vue';
@@ -33,6 +34,13 @@ let configRoutes = [{
         path: 'detail',
         component: detail,
         name: 'rapDetail',
+        meta: {
+            title: '详情页'
+        }
+    },  {
+        path: 'detail_compare',
+        component: detail_compare,
+        name: 'detail_compare',
         meta: {
             title: '详情页'
         }

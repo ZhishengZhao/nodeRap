@@ -1,0 +1,90 @@
+{
+  "success": true,
+  "result": {
+    "userStatus": 41,
+    "availableCredit": 30000000,
+    "overDue": false,
+    "userBankList": [
+      {
+        "status": "1",
+        "bankIcon": "http://aixuedaiimgtest.oss-cn-hangzhou.aliyuncs.com/aicai/2015721/03070000.png",
+        "mobile": "18120914967",
+        "userId": 10352,
+        "modifyTime": "2015-10-22 20:27:46",
+        "bankCode": "03070000",
+        "cardNo": "6216260000000000548",
+        "bankId": 12,
+        "payType": "2",
+        "createTime": "2015-10-22 14:23:40",
+        "bankName": "\u5e73\u5b89\u94f6\u884c",
+        "cardId": 13,
+        "isAuth": "1",
+        "payChnlCode": "lianlian",
+        "source": "3",
+        "idNo": "6216260000000000548",
+        "agreeNo": "2015110210498530",
+        "custType": "0",
+        "id": 2016113000309,
+        "idType": "0"
+      },
+      {
+        "status": "1",
+        "bankIcon": "https://aixuedaiimgtest.oss-cn-hangzhou.aliyuncs.com/aicai/2015721/01000000.png",
+        "mobile": "15268175233",
+        "userId": 10352,
+        "modifyTime": "2015-10-22 20:27:46",
+        "bankCode": "01000000",
+        "cardNo": "6217993300061389711",
+        "bankId": 12,
+        "payType": "2",
+        "createTime": "2015-10-22 14:23:40",
+        "bankName": "\u4e2d\u56fd\u90ae\u653f\u50a8\u84c4\u94f6\u884c",
+        "cardId": 13,
+        "isAuth": "1",
+        "payChnlCode": "lianlian",
+        "source": "3",
+        "idNo": "6216260000000000548",
+        "agreeNo": "2015110210498530",
+        "custType": "0",
+        "id": 1086880,
+        "idType": "0"
+      }
+    ],
+    "usergrade": "55",
+    "escr": "pass",
+    "userId": 3,
+    "miniStatus": "1000",
+    "needCardNo": "0",
+    "loanPurposes": [
+      {
+        "id": 8,
+        "purposeName": "\u65c5\u6e38111",
+        "purposePic": "https://img.aiyoumi.com/null/2016129/181818421/20160129181818.png"
+      },
+      {
+        "id": 7,
+        "purposeName": "yundong",
+        "purposePic": "https://img.aiyoumi.com/null/2016129/181648583/20160129181648.png"
+      },
+      {
+        "id": 6,
+        "purposeName": "\u54c8\u54c8\u54c85",
+        "purposePic": "https://img.aiyoumi.com/null/2016129/181229398/20160129181229.png"
+      },
+      {
+        "id": 5,
+        "purposeName": "\u54c8\u54c8\u54c8",
+        "purposePic": "https://img.aiyoumi.com/null/2016129/180634439/20160129180634.png"
+      },
+      {
+        "id": 4,
+        "purposeName": "\u5403\u996d",
+        "purposePic": "https://img.aiyoumi.com/null/2016129/180257490/20160129180257.png"
+      }
+    ],
+    "totalCredit": 3000000,
+    "accountStatus": "0",
+    "externalLoanStatus": 1,
+    "loanProvider": "xiaodai"
+  }
+}

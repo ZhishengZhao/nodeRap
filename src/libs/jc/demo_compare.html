@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo_compare</title>
+    <style>
+        p {
+            font-size: 35px;
+        }
+        .btn {
+            /*width: 400px;*/
+            height: 100px;
+            background-color: #ccc;
+            font-size: 60px;
+            line-height: 100px;
+            border-radius: 20px;
+            margin: 20px auto;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <p class="btn" onclick="goCompare()">Compare Complex</p>
+    <p class="btn" onclick="compareLevel1()">Compare Level1</p>
+    <p>level1: 简单对象，内部均为非对象属性</p> 
+    <p class="btn" onclick="compareLevel2()">Compare Level2</p>
+    <p>level1: 简单对象up，内部为对象属性</p> 
+    <p class="btn" onclick="compareLevel3()">Compare Level3</p>
+    <p>level1: 简单对象up，内部为对象对象属性</p> 
+    <!-- <p class="btn" onclick="compareLevel2()">Compare Level2</p>
+    <p class="btn" onclick="compareLevel2()">Compare Level2</p>
+    <p class="btn" onclick="compareLevel2()">Compare Level2</p> -->
+    <script src="./jsoncompare_bl(1).js"></script>
+    <script>
+        var demo_1_ori = {
+            "result": {
+                "userId": "0",
+                "userStatus": "0",
+                "loanPurposes": [{
+                    "id": "318",
+                    "purposePic": "https://img.aiyoumi.com/null/201701218/104004431/20171218104004_194x194.png?height=194&width=194",
+                    "purposeName": "运动健身"
+                }, {
+                    "id": "317",
+                    "purposePic": "https://img.aiyoumi.com/null/201701218/103937683/20171218103937_194x194.png?height=194&width=194",
+                    "purposeName": "生活开销"
+                }, {
+                    "id": "316",
+                    "purposePic": "https://img.aiyoumi.com/null/201701218/103905480/20171218103905_194x194.png?height=194&width=194",
+                    "purposeName": "医疗服务"
+                }, {
+                    "id": "315",
+                    "purposePic": "https://img.aiyoumi.com/null/201701218/103842695/20171218103842_194x194.png?height=194&width=194",
+                    "purposeName": "购物消费"
+                }, {
+                    "id": "314",
+                    "purposePic": "https://img.aiyoumi.com/null/201701218/103753842/20171218103753_194x194.png?height=194&width=194",
+                    "purposeName": "学习进修"
+                }, {
+                    "id": "313",
+                    "purposePic": "https://img.aiyoumi.com/null/201701215/171731255/20171215171731_194x194.png?height=194&width=194",
+                    "purposeName": "旅游消费"
+                }],
+                "overDue": false,
+                "loanProvider": "aicai"
+            },
+            "success": true
+        },
+        demo_1_tar = {
+          "success": true,
+          "result": {
+            "userStatus": 41,
+            "availableCredit": 30000000,
+            "overDue": false,
+            "userBankList": [
+              {
+                "status": "1",
+                "bankIcon": "http://aixuedaiimgtest.oss-cn-hangzhou.aliyuncs.com/aicai/2015721/03070000.png",
+                "mobile": "18120914967",
+                "userId": 10352,
+                "modifyTime": "2015-10-22 20:27:46",
+                "bankCode": "03070000",
+                "cardNo": "6216260000000000548",
+                "bankId": 12,
+                "payType": "2",
+                "createTime": "2015-10-22 14:23:40",
+                "bankName": "\u5e73\u5b89\u94f6\u884c",
+                "cardId": 13,
+                "isAuth": "1",
+                "payChnlCode": "lianlian",
+                "source": "3",
+                "idNo": "6216260000000000548",
+                "agreeNo": "2015110210498530",
+                "custType": "0",
+                "id": 2016113000309,
+                "idType": "0"
+              },
+              {
+                "status": "1",
+                "bankIcon": "https://aixuedaiimgtest.oss-cn-hangzhou.aliyuncs.com/aicai/2015721/01000000.png",
+                "mobile": "15268175233",
+                "userId": 10352,
+                "modifyTime": "2015-10-22 20:27:46",
+                "bankCode": "01000000",
+                "cardNo": "6217993300061389711",
+                "bankId": 12,
+                "payType": "2",
+                "createTime": "2015-10-22 14:23:40",
+                "bankName": "\u4e2d\u56fd\u90ae\u653f\u50a8\u84c4\u94f6\u884c",
+                "cardId": 13,
+                "isAuth": "1",
+                "payChnlCode": "lianlian",
+                "source": "3",
+                "idNo": "6216260000000000548",
+                "agreeNo": "2015110210498530",
+                "custType": "0",
+                "id": 1086880,
+                "idType": "0"
+              }
+            ],
+            "usergrade": "55",
+            "escr": "pass",
+            "userId": 3,
+            "miniStatus": "1000",
+            "needCardNo": "0",
+            "loanPurposes": [
+              {
+                "id": 8,
+                "purposeName": "\u65c5\u6e38111",
+                "purposePic": "https://img.aiyoumi.com/null/2016129/181818421/20160129181818.png"
+              },
+              {
+                "id": 7,
+                "purposeName": "yundong",
+                "purposePic": "https://img.aiyoumi.com/null/2016129/181648583/20160129181648.png"
+              },
+              {
+                "id": 6,
+                "purposeName": "\u54c8\u54c8\u54c85",
+                "purposePic": "https://img.aiyoumi.com/null/2016129/181229398/20160129181229.png"
+              },
+              {
+                "id": 5,
+                "purposeName": "\u54c8\u54c8\u54c8",
+                "purposePic": "https://img.aiyoumi.com/null/2016129/180634439/20160129180634.png"
+              },
+              {
+                "id": 4,
+                "purposeName": "\u5403\u996d",
+                "purposePic": "https://img.aiyoumi.com/null/2016129/180257490/20160129180257.png"
+              }
+            ],
+            "totalCredit": 3000000,
+            "accountStatus": "0",
+            "externalLoanStatus": 1,
+            "loanProvider": "xiaodai"
+          }
+        },
+        demo_level_1_1 = {
+            name: 'json',
+            age: 23,
+            gender: 'femal'
+        },
+        demo_level_1_2 = {
+            name: 'tom',
+            age: '23',
+            height: 178
+        },
+        demo_level_2_1 = {
+            result: {
+                name: 'json',
+                age: 23,
+                gender: 'femal'
+            }
+        },
+        demo_level_2_2 = {
+            result: {
+                name: 'tom',
+                age: '23',
+                height: 178
+            }
+        },
+        demo_level_3_1 = {
+            result: {
+                result2: {
+                    name: 'json',
+                    age: 23,
+                    gender: 'femal'
+                }
+            }
+        },
+        demo_level_3_2 = {
+            result: {
+                result2: {
+                    name: 'tom',
+                    age: '23',
+                    height: 178
+                }
+            }
+        };
+
+        function goCompare() {
+            var result = jc.init(demo_1_ori, demo_1_tar);
+            console.log('demo_1', result);  
+        }
+
+        function compareLevel1() {
+            var result = jc.init(demo_level_1_1, demo_level_1_2);
+            console.log('result1', result);  
+        }
+
+        function compareLevel2() {
+            var result = jc.init(demo_level_2_1, demo_level_2_2);
+            console.log('result2', result);  
+        }
+
+        function compareLevel3() {
+            var result = jc.init(demo_level_3_1, demo_level_3_2);
+            console.log('result3', result);  
+        }
+    </script>
+</body>
+</html>
