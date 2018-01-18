@@ -3,60 +3,41 @@
  -->
 <template>
     <div class="rap_page__compare">
-        <div class="area_left">
-            <div class="part_top">
-                <h3>{{projectName}}</h3>
-                <el-input placeholder="输入关键字进行过滤" v-model="filterText">
-                </el-input>
-                <el-tree ref="interTree" :data="interList" :props="defaultProps" @node-click="iterfaceNodeClick" :filter-node-method="filterNode">
-                </el-tree>
-            </div>
-            <div class="area_interinfo">
-                <h3>接口信息</h3>
-                <p>
-                    <span class="wd100">
-                        rap地址：
-                    </span>
-                    <span class="bg_url">
-                        {{interfaceInfo.url}}
-                    </span>
-                </p>
-                <p>
-                    <span class="wd100">
-                        对比接口地址：
-                    </span>
-                    <span>
-                        <!-- <input type="text" class="" v-model="realAddress"> -->
-                        <textarea class="input_address" v-model="realAddress"></textarea>
-                    </span>
-                </p>
-                <div class="block_preview">
-                    <a href="javascript:;" target="blank" @click="doCompare">
-                        对比
-                    </a>
-                </div>
-            </div>
+        <div class="container area_left" >
+            <p class="inter_info">
+                rap接口: {{interfaceInfo.url}}
+                <!-- <el-select v-model="curPageId" placeholder="请选择">
+                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select> -->
+            </p>
+            <p class="json_container json_left" id='container'></p>
         </div>
-        <div class="area_right">
-            <h3>接口参数</h3>
-            <div class="json_container json_left" id='container'></div>
-            <div class="json_container json_right" id='container2'></div>
+        <div class="container area_middle">
+            <p class="btn_compare" @click="doCompare">Compare</p>
         </div>
-        <div class="other">
-            <el-dialog class="bor-radius_50" :visible.sync="addPageShow">
-                <el-form ref="form" :model="formPage" label-width="80px">
-                    <el-form-item label="名称">
-                        <el-input v-model="formPage.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="说明">
-                        <el-input type="textarea" v-model="formPage.desc"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="">确定</el-button>
-                        <el-button @click="addPageShow = false">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
+        <div class="container area_right">
+            <p class="inter_info inter_info__right">
+                对比接口: {{interfaceInfo.url}}
+                <!-- <el-select v-model="curPageId" placeholder="请选择">
+                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select> -->
+            </p>
+            <p class="json_container json_right" id='container2'></p>
+        </div>
+        <div class="area_float">
+            <rap-dialog id="login_component">
+            <template slot="content" v-show="show">
+                <h2>对比接口地址</h2>
+                <el-select v-model="rapUrl" placeholder="rap地址">
+                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                </el-select>
+                <el-input v-model="realUrl" placeholder="对比地址"></el-input>
+                <p class="btn__full" @click="doLogin">Compare</p>
+            </template>
+        </rap-dialog>
         </div>
     </div>
 </template>
@@ -66,6 +47,7 @@ import rapFooter from 'common/footer.vue'
 import { project, inter, jsonRecords, common } from 'api/api.js'
 import { JsonFormater } from 'src/libs/jsonformate.js'
 import rapDialog from 'src/components/dialog/index.vue'
+import 'src/libs/jc/jsoncompare_v3.js'
 export default {
     filters: {},
     data() {
@@ -106,7 +88,10 @@ export default {
             addPageShow: false,
             filterText: '',
             pageOptions: [],
-            leafNodes: []
+            leafNodes: [],
+            /*---------------*/
+            rapUrl: '',
+            realUrl: ''
         }
     },
     watch: {
@@ -170,12 +155,16 @@ export default {
                 if (arr[i].pid == 0) {
                     arr[i].children = []
                     pidArr.push(arr[i])
+                    // this.pageOptions.push({
+                    //     value: arr[i].id,
+                    //     label: arr[i].name
+                    // })
+                } else {
                     this.pageOptions.push({
                         value: arr[i].id,
                         label: arr[i].name
                     })
-                } else {
-                    childArr.push(arr[i])
+                    // childArr.push(arr[i])
                 }
             }
             this.leafNodes = childArr
@@ -216,6 +205,13 @@ export default {
                 };
                 var jf = new JsonFormater(options); //创建对象
                 jf.doFormat(contentInter); //格式化json
+
+                // let contentInter = data
+                var options = {
+                    dom: '#container2' //对应容器的css选择器
+                };
+                var jf = new JsonFormater(options); //创建对象
+                jf.doFormat(contentInter); //格式化json
             })
         },
         /* 非初始化--辅助处理 */
@@ -231,147 +227,65 @@ export default {
 * {
     box-sizing: border-box;
 }
+// div {
+//     border: 1px solid #000;
+// }
+
 .rap_page__compare {
-    padding: 15px;
-    background-color: #f2f2f2;
+    display: flex;
+    display: -webkit-flex;
     position: absolute;
-    left: 0;
-    top: 0;
     width: 100%;
     height: 100%;
-}
-.area_left {
-    padding: 15px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 300px;
-    overflow: auto;
-    .part_top {
-        height: 50%;
-        min-height: 400px;
-        overflow: auto;
-    }
-    .area_interinfo {
+    .container {
         position: relative;
-        height: 50%;
-        h3 {
-            font-size: 20px;
-            border-bottom: 1px solid #a8a3a3;
-            margin-bottom: 10px;
-        }
-        .input_address {
-            width: 270px;
-            height: 80px;
-            text-indent: 5px;
-            font-size: 16px;
-        }
-        .bg_url {
-            background-color: #fff;
-            border: 1px solid #ccc;
-            text-indent: 5px;
-            font-size: 16px;
-            font-weight: normal;
-        }
-        p {
-            font-size: 16px;
-            span {
-                display: block;
-                font-weight: bold;
-                line-height: 44px;
-            }
-            input {
-                display: inline-block;
-                // min-width: 500px;
-                height: 32px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                text-indent: 6px;
-                line-height: 32px;
-                font-size: 15px;
-            }
-        }
-
-        .block_preview {
-            width: 100%;
-            height: 80px;
-            border: 4px solid #000;
-            border-radius: 10px;
-            text-align: center;
-            padding-left: 0;
-            a {
-                font-size: 30px;
-                line-height: 72px;
-                text-decoration: none;
-                color: #000;
-            }
-        }
+        flex: 4;
+        overflow: auto;
+        padding-top: 50px;
     }
-}
-
-.area_right {
-    width: 100%;
-    padding-left: 320px;
+    .area_middle {
+        flex: 0;
+        flex-basis: 100px;
+    }
     .json_container {
-        display: inline-block;
-        width: 48% !important;
-        min-width: 0 !important;
-        margin-right: 2%;
-        float: left;
+        width: 100%;
+        height: 100%;
+        background-color: #272822;
+    }
+    .inter_info {
+        position: absolute;
+        left: 10px;
+        top: 0;
+        line-height: 50px;
     }
 }
-
-.border {
-    border: 1px solid transparent;
-}
-
-.el-dialog--small {
-    // width: auto;
-    border-radius: 10px;
-}
-
-.el-form-item__content {
-    // text-align: center;
-}
-.other .el-input__icon {
+.el-input__icon {
     display: none;
 }
-
-#container {
-    background-color: #272822;
-    min-height: 350px;
+.area_float div {
     width: 100%;
-    overflow: scroll;
+    margin-bottom: 6px;
 }
-
-#container2 {
-    background-color: #272822;
-    min-height: 350px;
+// .input__login {
+//     display: block;
+//     width: 400px;
+//     height: 50px;
+//     line-height: 50px;
+//     text-indent: 10px;
+//     margin: 10px auto;
+//     border: 1px solid rgba(50,58,69,.2);
+//     border-radius: 5px;
+//     font-size: 18px;
+// }
+.btn__full {
     width: 100%;
-    overflow: scroll;
-}
-
-.content_inter {
-    position: relative;
-    padding-top: 20px;
-    .json_container {
-        display: inline-block;
-        width: 48% !important;
-        min-width: 0 !important;
-        margin-right: 2%;
-        float: left;
-    }
-}
-
-.content_inter_2 {
-    padding-top: 20px;
-}
-
-
-.item_margin0 {
-    .el-form-item {
-        margin-bottom: 0;
-    }
+    height: 50px;
+    line-height: 50px;
+    font-size: 25px;
+    text-align: center;
+    margin: 10px auto;
+    background: #ccc;
+    border-radius: 20px;
 }
 
 .clearfix:after {

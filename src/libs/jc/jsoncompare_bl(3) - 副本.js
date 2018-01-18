@@ -5,6 +5,7 @@ var jc = {
     resultReal: {
 
     },
+    resultArr: [],
     init(rapData, realData) {
         this.resultRap = {}
         this.resultReal = {}
@@ -21,58 +22,77 @@ var jc = {
     },
 
     compare(rapData, realData, key) {
-        if (!rapData && !realData) {
-            return {
-                resultRap: this.resultRap,
-                resultReal: this.resultReal
-            }
-        } else if (rapData && !realData) {
-            let rapDataType = this.getType(rapData)
+        // if (!rapData && !realData) {
+        //     return {
+        //         resultRap: this.resultRap,
+        //         resultReal: this.resultReal
+        //     }
+        // } else if (rapData && !realData) {
+        //     let rapDataType = this.getType(rapData)
 
-            if (rapDataType == 'object') {
-                this.simpleKeyHandler(rapData, realData, key);
-                this.complexKeyHandler(rapData, realData, key);
-            } else if (rapDataType == 'array') {
-                let maxLength = Math.max(rapData.length, realData.length)
-                let i = 0
-                let count = key.length
+        //     if (rapDataType == 'object') {
+        //         this.simpleKeyHandler(rapData, realData, key);
+        //         this.complexKeyHandler(rapData, realData, key);
+        //     } else if (rapDataType == 'array') {
+        //         // let minLength = Math.min(rapData.length, realData.length)
+        //         // let i = 0
+        //         // let count = key.length
 
-                for (; i < maxLength; i++) {
-                    key[count - 1].num = i
-                    this.compare(rapData[i], realData[i], key)
-                }
-            } else {
-                console.log('其他字符类型，不用对比')
-            }
+        //         // for (; i < minLength; i++) {
+        //         //     key[count - 1].num = i
+        //         //     this.compare(rapData[i], realData[i], key)
+        //         // }
+        //         let maxLength = Math.max(rapData.length, realData.length)
+        //         let i = 0
+        //         let count = key.length
 
-            return {
-                resultRap: this.resultRap,
-                resultReal: this.resultReal
-            }
-        } else if (!rapData && realData) {
-            let realDataType = this.getType(realData)
+        //         for (; i < maxLength; i++) {
+        //             key[count - 1].num = i
+        //             this.compare(rapData[i], realData[i], key)
+        //         }
 
-            if (realDataType == 'object') {
-                this.simpleKeyHandler(rapData, realData, key);
-                this.complexKeyHandler(rapData, realData, key);
-            } else if (realDataType == 'array') {
-                let maxLength = Math.max(rapData.length, realData.length)
-                let i = 0
-                let count = key.length
 
-                for (; i < maxLength; i++) {
-                    key[count - 1].num = i
-                    this.compare(rapData[i], realData[i], key)
-                }
-            } else {
-                console.log('其他字符类型，不用对比')
-            }
 
-            return {
-                resultRap: this.resultRap,
-                resultReal: this.resultReal
-            }
-        } else {
+        //         // if (rapData.length > minLength) {
+        //         //     this.setKeyValue('resultRap', key, parentkey, flag, rapData)
+        //         //     this.resultRap.concat(rapData.filter((item, index) => index > i))
+        //         // }
+
+        //         // if (realData.length > minLength) {
+        //         //     this.resultReal.concat(realData.filter((item, index) => index > i))
+        //         // }
+        //     } else {
+        //         console.log('其他字符类型，不用对比')
+        //     }
+
+        //     return {
+        //         resultRap: this.resultRap,
+        //         resultReal: this.resultReal
+        //     }
+        // } else if (!rapData && realData) {
+        //     let realDataType = this.getType(realData)
+
+        //     if (realDataType == 'object') {
+        //         this.simpleKeyHandler(rapData, realData, key);
+        //         this.complexKeyHandler(rapData, realData, key);
+        //     } else if (realDataType == 'array') {
+        //         let maxLength = Math.max(rapData.length, realData.length)
+        //         let i = 0
+        //         let count = key.length
+
+        //         for (; i < maxLength; i++) {
+        //             key[count - 1].num = i
+        //             this.compare(rapData[i], realData[i], key)
+        //         }
+        //     } else {
+        //         console.log('其他字符类型，不用对比')
+        //     }
+
+        //     return {
+        //         resultRap: this.resultRap,
+        //         resultReal: this.resultReal
+        //     }
+        // } else {
             let rapDataType = this.getType(rapData),
                 realDataType = this.getType(realData)
 
@@ -81,6 +101,14 @@ var jc = {
                     this.simpleKeyHandler(rapData, realData, key);
                     this.complexKeyHandler(rapData, realData, key);
                 } else if (rapDataType == 'array') {
+                    // let minLength = Math.min(rapData.length, realData.length)
+                    // let i = 0
+                    // let count = key.length
+
+                    // for (; i < minLength; i++) {
+                    //     key[count - 1].num = i
+                    //     this.compare(rapData[i], realData[i], key)
+                    // }
                     let maxLength = Math.max(rapData.length, realData.length)
                     let i = 0
                     let count = key.length
@@ -89,18 +117,27 @@ var jc = {
                         key[count - 1].num = i
                         this.compare(rapData[i], realData[i], key)
                     }
+
+                    // if (rapData.length > minLength) {
+                    //     this.setKeyValue('resultRap', key, parentkey, flag, rapData)
+                    //     this.resultRap.concat(rapData.filter((item, index) => index > i))
+                    // }
+
+                    // if (realData.length > minLength) {
+                    //     this.resultReal.concat(realData.filter((item, index) => index > i))
+                    // }
                 } else {
                     console.log('其他字符类型，不用对比')
                 }
             } else {
-                console.log('数据类型不一致，请仔细检查')
+                this.resultArr.push('key ' + key + '\'s Type diff between rap and real:')
             }
 
             return {
                 resultRap: this.resultRap,
                 resultReal: this.resultReal
             }
-        }
+        // }
     },
     simpleKeyHandler(rapData, realData, parentkey) {
         let rapKeys = this.getSimpleKey(rapData) || [],
@@ -115,6 +152,15 @@ var jc = {
                 this.setKeyValue('resultRap', key, parentkey, flag, rapData)
                 this.setKeyValue('resultReal', key, parentkey, flag, realData)
                 realKeys.splice(index, 1)
+                
+                // if (typeof rapData[key] === typeof realData[key]) {
+                //     this.setKeyValue('resultRap', key, parentkey, true, rapData)
+                //     this.setKeyValue('resultReal', key, parentkey, true, realData)
+                // } else {
+                //     this.setKeyValue('resultRap', key, parentkey, false, rapData)
+                //     this.setKeyValue('resultReal', key, parentkey, false, realData)
+                // }
+                // realKeys.splice(index, 1);
             }
         });
 
@@ -122,11 +168,16 @@ var jc = {
             this.setKeyValue('resultReal', key, parentkey, false, realData)
         })
     },
+    // setKeyValue(taregt, key, keyArr, equal, value) {
     setKeyValue(target, key, parentkey, equal, data) {
         let flag = equal ? '_0' : '_1'
         let length = parentkey.length
+        
+        // console.log('parentkey', parentkey)
 
         // 从下向上递归，逐步组成对象 赋值属性
+        // console.log('parentkey', parentkey)
+        // if (length > 1) {
         let temp = {}
 
         for (var i = length - 1; i >= 0; i--) {
@@ -166,8 +217,7 @@ var jc = {
     },
     complexKeyHandler(rapData, realData, parentkey) {
         let cRapKeys = this.getSimpleKey(rapData, 'hard'),
-            cRealKeys = this.getSimpleKey(realData, 'hard'),
-            tempKeys = parentkey.slice()
+            cRealKeys = this.getSimpleKey(realData, 'hard');
 
         cRapKeys.forEach(key => {
             let index = cRealKeys.indexOf(key);
@@ -175,15 +225,15 @@ var jc = {
                 this.setKeyValue('resultRap', key, parentkey, false, rapData)
             } else {
                 if (this.getType(rapData[key]) !== 'array') {
-                    tempKeys.push(key)
+                    parentkey.push(key)
                 } else {
-                    tempKeys.push({
+                    parentkey.push({
                         key,
                         num: 0
                     })
                 }
                 
-                this.compare(rapData[key], realData[key], tempKeys)
+                this.compare(rapData[key], realData[key], parentkey)
 
                 cRealKeys.splice(index, 1);
             }
@@ -216,6 +266,17 @@ var jc = {
     },
     toJson(data) {
         return JSON.parse(data)
+    },
+    getArrSame(arrOri, arrTar, type) {
+        if (type == 'same') {
+            return arrOri.fiter((item) => {
+                return arrTar.indexOf(item) !== -1;
+            });
+        } else {
+            return arrOri.fiter((item) => {
+                return arrTar.indexOf(item) == -1;
+            });
+        }
     }
 }
 
@@ -236,6 +297,8 @@ function deepConcat(t, o) {
     } else if ((!typeO && typeT) || (!typeO && !typeT)) {
 
     } else if (typeO !== typeT) {
+        console.log(typeT, typeO)
+        console.log(t, o)
         throw new Error('深合并需保证两个参数数据类型一致')
     } else {
         if (typeO == 'object') {
@@ -262,6 +325,9 @@ function deepConcat(t, o) {
             if (!t || !t.length) {
                 t = o.slice()
             } else {
+                // for (let i = 0; i < o.length; i++) {
+                //     deepConcat(t[i], o[i])
+                // }
                 o.forEach((item, index) => {
                     t[index] = deepConcat(t[index], item)
                 })

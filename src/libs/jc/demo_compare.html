@@ -27,10 +27,9 @@
     <p>level1: 简单对象up，内部为对象属性</p> 
     <p class="btn" onclick="compareLevel3()">Compare Level3</p>
     <p>level1: 简单对象up，内部为对象对象属性</p> 
-    <!-- <p class="btn" onclick="compareLevel2()">Compare Level2</p>
-    <p class="btn" onclick="compareLevel2()">Compare Level2</p>
-    <p class="btn" onclick="compareLevel2()">Compare Level2</p> -->
-    <script src="./jsoncompare_bl(1).js"></script>
+    <p class="btn" onclick="compareLevel4()">Compare Level4</p>
+    <p>level4: 数组对象</p> 
+    <script src="./jsoncompare_v3.js"></script>
     <script>
         var demo_1_ori = {
             "result": {
@@ -216,6 +215,11 @@
 
         function compareLevel3() {
             var result = jc.init(demo_level_3_1, demo_level_3_2);
+            console.log('result3', result);  
+        }
+
+        function compareLevel4() {
+            var result = jc.init(demo_level_4_1, demo_level_4_2);
             console.log('result3', result);  
         }
     </script>

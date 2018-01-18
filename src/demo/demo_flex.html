@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>demo_flexLayout</title>
+    <style>
+        .container {
+            display: flex;
+            display: -webkit-flex;
+            align-items: baseline;
+            justify-content: space-around;
+        }
+        .container div, .container span {
+            border: 1px solid #000;
+        }
+        .left {
+            /*flex: 1;*/
+            font-size: 100px;
+            height: 200px;
+            line-height: 200px;
+        }
+        .middle {
+            /*flex: 2;*/
+            font-size: 80px;
+            height: 150px;
+            line-height: 150px;
+        }
+        .right {
+            /*flex: 3;*/
+            font-size: 50px;
+            height: 100px;
+            line-height: 100px;
+        }
+        .over {
+            width: 100%;
+            height: 20px;
+            line-height: 20px;
+            font-size: 15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <span class="left">
+            1
+        </span>
+        <span class="middle">
+            2
+        </span>
+        <span class="right">
+            3
+        </span>
+    </div>
+    <div class="txt">
+        <p class="over">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem recusandae ex, quis sunt est cum. Quidem dolor eaque accusantium eveniet obcaecati non error praesentium recusandae ipsa dolore! Ex, repellendus! Expedita!
+        </p>
+    </div>
+</body>
+</html>

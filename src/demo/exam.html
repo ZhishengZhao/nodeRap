@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            width: 750px;
+            padding: 0 20px;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            border: 1px solid red;
+        }
+        .block_product {
+            display: inline-block;
+            width: 230px;
+            /*height: 370px;*/
+            border: 1px solid black;
+        }
+        .part_img {
+            width: 100%;
+            height: 230px;
+            background: #ccc;
+        }
+        .part_txt {
+            padding: 0 20px;
+        }
+        .part_name {
+            height: 50px;
+            font-size: 20px;
+            line-height: 25px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            margin-bottom: 10px;
+        }
+        .part_price {
+            font-size: 15px;
+            line-height: 21px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a class="block_product" href="">
+            <p class="part_img">
+                <img src="" alt="">
+            </p>
+            <p class="part_txt part_name">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque, magni minus excepturi consequuntur! Eos sapiente qui error dolorum, optio? Culpa cupiditate quis nobis iste laudantium praesentium, obcaecati sequi consequuntur ratione!</p>
+            <p class="part_txt part_price">1520</p>
+            <p class="part_txt part_price">月供：￥1520</p>
+        </a>
+        <a class="block_product" href="">
+            <p class="part_img">
+                <img src="" alt="">
+            </p>
+            <p class="part_txt part_name">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa inventore, magni iusto corporis nesciunt, dolorem dolore veniam vitae nisi possimus voluptate expedita? Alias nemo officiis repellat, libero dolorum atque porro.</p>
+            <p class="part_txt part_price">1520</p>
+        </a>
+        <a class="block_product" href="">
+            <p class="part_img">
+                <img src="" alt="">
+            </p>
+            <p class="part_txt part_name">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius officia ex, sequi dicta voluptatibus dolorum suscipit commodi? Sunt nobis ea, rerum, debitis fugit fugiat mollitia! Quibusdam iure magni optio sed.</p>
+            <p class="part_txt part_price">1520</p>
+        </a>
+    </div>
+</body>
+</html>

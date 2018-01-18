@@ -1,4 +1,4 @@
-var jc = {
+const jc = {
     resultRap: {
 
     },
@@ -19,7 +19,6 @@ var jc = {
 
         return this.compare(rapData, realData, [])
     },
-
     compare(rapData, realData, key) {
         if (!rapData && !realData) {
             return {
@@ -27,7 +26,7 @@ var jc = {
                 resultReal: this.resultReal
             }
         } else if (rapData && !realData) {
-            let rapDataType = this.getType(rapData)
+            let rapDataType = getType(rapData)
 
             if (rapDataType == 'object') {
                 this.simpleKeyHandler(rapData, realData, key);
@@ -50,7 +49,7 @@ var jc = {
                 resultReal: this.resultReal
             }
         } else if (!rapData && realData) {
-            let realDataType = this.getType(realData)
+            let realDataType = getType(realData)
 
             if (realDataType == 'object') {
                 this.simpleKeyHandler(rapData, realData, key);
@@ -73,8 +72,8 @@ var jc = {
                 resultReal: this.resultReal
             }
         } else {
-            let rapDataType = this.getType(rapData),
-                realDataType = this.getType(realData)
+            let rapDataType = getType(rapData),
+                realDataType = getType(realData)
 
             if (rapDataType == realDataType) {
                 if (rapDataType == 'object') {
@@ -131,7 +130,7 @@ var jc = {
 
         for (var i = length - 1; i >= 0; i--) {
             if (i == length - 1) {
-                if (this.getType(parentkey[i]) == 'object') {
+                if (getType(parentkey[i]) == 'object') {
                     let arr = new Array(parentkey[i]['num'] + 1)
                     arr[parentkey[i]['num']] = {
                         [key + flag]: data[key]
@@ -148,7 +147,7 @@ var jc = {
                     }
                 }
             } else {
-                if (this.getType(parentkey[i]) == 'object') {
+                if (getType(parentkey[i]) == 'object') {
                     temp = {
                         [parentkey[i]]: [{
                             [key + flag]: data[key]
@@ -174,7 +173,7 @@ var jc = {
             if (index == -1) {
                 this.setKeyValue('resultRap', key, parentkey, false, rapData)
             } else {
-                if (this.getType(rapData[key]) !== 'array') {
+                if (getType(rapData[key]) !== 'array') {
                     tempKeys.push(key)
                 } else {
                     tempKeys.push({
@@ -197,22 +196,6 @@ var jc = {
         return Object.keys(obj).filter(key => {
             return type == 'simple' ? (typeof obj[key] !== 'object') : (typeof obj[key] == 'object');
         })
-    },
-    getType(data) {
-        if (data) {
-            let type = typeof data
-            if (type == 'object') {
-                if (data.toString() == '[object Object]') {
-                    return 'object'
-                } else {
-                    return 'array'
-                }
-            } else {
-                return type
-            }
-        } else {
-            return null
-        }
     },
     toJson(data) {
         return JSON.parse(data)
@@ -297,82 +280,3 @@ function getType(data) {
         return null
     }
 }
-
-
-var a = {
-        info: {
-            home: {
-                location: {
-                    name: 'hangzhou',
-                    years: 3
-                },
-                settle: true
-            },
-            gender: 'male'
-        }
-    },
-    b = {
-        location: {
-            name: 'new',
-            years: 5
-        }
-    }
-
-
-function test_obj(key, parentkey, data) {
-    let length = parentkey.length
-    let temp = {}
-
-    for (var i = length - 1; i >= 0; i--) {
-        if (i == length - 1) {
-            temp = {
-                [parentkey[i]]: {
-                    [key]: data[key]
-                }
-            }
-        } else {
-            temp = {
-                [parentkey[i]]: temp
-            }
-        }
-    }
-
-    return temp
-}
-
-var b = {
-    location: {
-        name: 'new',
-        years: 5
-    }
-}
-
-test_obj('years', ['info', 'home', 'location'], b)
-
-
-var a = {
-        info: {
-            home: {
-                location: {
-                    name: 'hangzhou',
-                    years: 3
-                },
-                settle: true
-            },
-            gender: 'male'
-        }
-    },
-    b = {
-        info: {
-            home: {
-                location: {
-                    name: '1111',
-                    years: 232323
-                },
-                settle: false
-            },
-            gender: 'female'
-        }
-    }
-
-// deepConcat(a, b)
