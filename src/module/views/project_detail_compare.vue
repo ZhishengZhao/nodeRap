@@ -14,30 +14,26 @@
             <p class="json_container json_left" id='container'></p>
         </div>
         <div class="container area_middle">
-            <p class="btn_compare" @click="doCompare">Compare</p>
+            <p class="btn_compare" @click="doCompare"></p>
         </div>
         <div class="container area_right">
             <p class="inter_info inter_info__right">
                 对比接口: {{interfaceInfo.url}}
-                <!-- <el-select v-model="curPageId" placeholder="请选择">
-                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select> -->
             </p>
             <p class="json_container json_right" id='container2'></p>
         </div>
         <div class="area_float">
-            <rap-dialog id="login_component">
-            <template slot="content" v-show="show">
-                <h2>对比接口地址</h2>
-                <el-select v-model="rapUrl" placeholder="rap地址">
-                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select>
-                <el-input v-model="realUrl" placeholder="对比地址"></el-input>
-                <p class="btn__full" @click="doLogin">Compare</p>
-            </template>
-        </rap-dialog>
+            <rap-dialog id="login_component" v-show="show">
+                <template slot="content">
+                    <h2>对比接口地址</h2>
+                    <el-select v-model="rapUrl" placeholder="rap地址">
+                        <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-input v-model="realUrl" placeholder="对比地址"></el-input>
+                    <p class="btn__full" @click="doCompare">Compare</p>
+                </template>
+            </rap-dialog>
         </div>
     </div>
 </template>
@@ -91,7 +87,8 @@ export default {
             leafNodes: [],
             /*---------------*/
             rapUrl: '',
-            realUrl: ''
+            realUrl: '',
+            show: false
         }
     },
     watch: {
@@ -235,6 +232,7 @@ export default {
     display: flex;
     display: -webkit-flex;
     position: absolute;
+    // align-items: center;
     width: 100%;
     height: 100%;
     .container {
@@ -246,6 +244,9 @@ export default {
     .area_middle {
         flex: 0;
         flex-basis: 100px;
+        // height: 100px;
+        padding-top: 30%;
+        // margin-top: 200px;
     }
     .json_container {
         width: 100%;
@@ -257,6 +258,12 @@ export default {
         left: 10px;
         top: 0;
         line-height: 50px;
+    }
+    .btn_compare {
+        width: 100px;
+        height: 100px;
+        background: url('../../assets/images/vs.jpg') 0 center no-repeat;
+        background-size: cover;
     }
 }
 .el-input__icon {
