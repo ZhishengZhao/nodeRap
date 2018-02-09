@@ -89,6 +89,7 @@ module.exports = {
         try {
             params.url = requestUrl;
             request(params,function(error, response, body) {
+                console.log(requestUrl, body)
                 res.send({
                     result: body,
                     success: true

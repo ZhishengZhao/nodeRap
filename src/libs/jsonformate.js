@@ -6,7 +6,8 @@ function JsonFormater(opt) {
         quoteKeys: true,
         imgCollapsed: './image/Collapsed.gif',
         imgExpanded: './image/Expanded.gif',
-        isCollapsible: true
+        isCollapsible: true,
+        colorSet: ''
     }, opt || {});
     this.isFormated = false;
     this.obj = {
@@ -181,7 +182,17 @@ JsonFormater.prototype = {
                     var j = 0;
                     for (prop in obj) {
                         var quote = this.options.quoteKeys ? "\"" : "";
-                        html += this.getRow(indent + 1, "<span class='jf-PropertyName'>" + quote + prop + quote + "</span>: " + this.ProcessObject(obj[prop], indent + 1, ++j < numProps, false, true));
+                        var color = this.options.colorSet
+                        if (color) {
+                            if (pro.indexOf('_1') !== -1) {
+                                prop = prop.split('_1')[0]
+                                html += this.getRow(indent + 1, "<span class='jf-PropertyName' style=>" + quote + prop + quote + "</span>: " + this.ProcessObject(obj[prop], indent + 1, ++j < numProps, false, true));
+                            } else {
+                                html += this.getRow(indent + 1, "<span class='jf-PropertyName'>" + quote + prop + quote + "</span>: " + this.ProcessObject(obj[prop], indent + 1, ++j < numProps, false, true));
+                            }
+                        } else {
+                            html += this.getRow(indent + 1, "<span class='jf-PropertyName'>" + quote + prop + quote + "</span>: " + this.ProcessObject(obj[prop], indent + 1, ++j < numProps, false, true));
+                        }
                     }
                     clpsHtml = this.options.isCollapsible ? "</span>" : "";
                     html += this.getRow(indent, clpsHtml + "<span class='jf-ObjectBrace'>}</span>" + comma);

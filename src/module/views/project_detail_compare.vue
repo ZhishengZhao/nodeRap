@@ -2,38 +2,30 @@
     created by zhaozhisheng on 07/17/2017
  -->
 <template>
-    <div class="rap_page__compare">
-        <div class="container area_left" >
-            <p class="inter_info">
-                rap接口: {{interfaceInfo.url}}
-                <!-- <el-select v-model="curPageId" placeholder="请选择">
-                    <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                </el-select> -->
-            </p>
-            <p class="json_container json_left" id='container'></p>
-        </div>
-        <div class="container area_middle">
-            <p class="btn_compare" @click="doCompare"></p>
-        </div>
-        <div class="container area_right">
-            <p class="inter_info inter_info__right">
-                对比接口: {{interfaceInfo.url}}
-            </p>
-            <p class="json_container json_right" id='container2'></p>
-        </div>
-        <div class="area_float">
-            <rap-dialog id="login_component" v-show="show">
-                <template slot="content">
-                    <h2>对比接口地址</h2>
-                    <el-select v-model="rapUrl" placeholder="rap地址">
-                        <el-option v-for="item in pageOptions" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                    </el-select>
-                    <el-input v-model="realUrl" placeholder="对比地址"></el-input>
-                    <p class="btn__full" @click="doCompare">Compare</p>
-                </template>
-            </rap-dialog>
+    <div class="page_root clearfix">
+        <div class="rap_page__compare">
+            <div class="container area_left" >
+                <p class="json_container json_left" id='container'></p>
+            </div>
+            <div class="container area_middle">
+                <p class="btn_compare" @click="dialogShow = true"></p>
+            </div>
+            <div class="container area_right">
+                <p class="json_container json_right" id='containerReal'></p>
+            </div>
+            <div class="area_float">
+                <rap-dialog id="login_component" v-show="dialogShow">
+                    <template slot="content">
+                        <h2>对比接口地址</h2>
+                        <el-select v-model="rapUrl" placeholder="rap地址">
+                            <el-option v-for="item in interList" :key="item.value" :label="item.label" :value="item.value">
+                            </el-option>
+                        </el-select>
+                        <el-input v-model="realUrl" placeholder="对比地址"></el-input>
+                        <p class="btn__full" @click="doCompare">Compare</p>
+                    </template>
+                </rap-dialog>
+            </div>
         </div>
     </div>
 </template>
@@ -44,92 +36,65 @@ import { project, inter, jsonRecords, common } from 'api/api.js'
 import { JsonFormater } from 'src/libs/jsonformate.js'
 import rapDialog from 'src/components/dialog/index.vue'
 import 'src/libs/jc/jsoncompare_v3.js'
+import { 
+    isValidUrl
+} from 'src/libs/util_reg.js'
 export default {
     filters: {},
     data() {
         return {
-            realAddress: '',
-            interList: [],
-            defaultProps: {
-                children: 'children',
-                label: 'name'
-            },
-            dialogFormVisible: false,
-            form: {
-                name: '',
-                type: '',
-                link: '',
-                desc: ''
-            },
-            formPage: {
-                name: '',
-                desc: ''
-            },
-            curIterfaceId: '',
-            curIterfaceName: '',
-            curPageId: '',
-            editFlag: false,
-            interEditFlag: false,
-            interfaceInfo: {
-                name: '',
-                type: '',
-                url: '',
-                projectId: this.$route.query.id
-            },
+            nodeList: [],
             projectId: this.$route.query.id,
             projectName: this.$route.query.name,
-            /* 接口内容 */
-            responseParams: '',
-            updateFlag: false,
-            addPageShow: false,
-            filterText: '',
-            pageOptions: [],
-            leafNodes: [],
             /*---------------*/
             rapUrl: '',
             realUrl: '',
-            show: false
-        }
-    },
-    watch: {
-        filterText(val) {
-            this.$refs.interTree.filter(val);
+            dialogShow: false,
+            interList: [],
+            pageList: [],
+            rapDataReady: false,
+            realDataReady: false,
+            rapData: {},
+            realData: {}
         }
     },
     computed: {
-
+        dataReady() {
+            return this.rapDataReady && this.realDataReady
+        }
+    },
+    watch: {
+        dataReady(val) {
+            if (val) {
+                this.setCompare()
+            }
+        }
     },
     components: {
         rapHead,
         rapFooter,
         rapDialog
     },
-    mounted() {
+    created() {
         this.getInterfaceList()
     },
+    mounted() {
+        this.openDialog()
+    },
     methods: {
-        doCompare() {
-            common.getAjaxData({ 
-                url: this.realAddress
-            }, (data) => {
-                data = data.result
-
-                var options = {
-                    dom: '#container2' //对应容器的css选择器
-                };
-                var jf = new JsonFormater(options); //创建对象
-                jf.doFormat(data); //格式化json
-            })
-        },
         /* 初始化事件 */
-        // 获取接口列表
+        /**
+         * @DateTime 2018-01-19
+         * @Author   Zhao       Zhisheng
+         * @return   {[type]}   [获取接口列表]
+         */
         getInterfaceList() {
             let pid = this.projectId
             inter.getListByPID({ pid }, (data) => {
                 if (data && data.result && data.success) {
-                    let temparr = []
+                    let tempArr = []
                     for (let i = 0; i < data.result.length; i++) {
-                        temparr.push({
+                        tempArr.push({
                             name: data.result[i].name,
                             id: data.result[i]._id,
                             type: data.result[i].reqType,
@@ -137,57 +102,60 @@ export default {
                             pid: data.result[i].pid
                         })
                     }
-                    this.interList = this.arrHandle(temparr)
-                    // console.log('interList', this.interList)
-                    if (this.leafNodes.length) {
-                        this.iterfaceNodeClick(this.leafNodes[0])
-                    }
+                    this.nodeList = tempArr
+                    this.arrHandle(tempArr)
                 }
             })
         },
         arrHandle(arr) {
-            let pidArr = []
-            let childArr = []
-            for (let i = 0; i < arr.length; i++) {
-                if (arr[i].pid == 0) {
-                    arr[i].children = []
-                    pidArr.push(arr[i])
-                    // this.pageOptions.push({
-                    //     value: arr[i].id,
-                    //     label: arr[i].name
-                    // })
-                } else {
-                    this.pageOptions.push({
-                        value: arr[i].id,
-                        label: arr[i].name
+            arr.forEach((item) => {
+                if (item.pid == 0) {
+                    this.pageList.push({
+                        value: item.id,
+                        label: item.name
                     })
-                    // childArr.push(arr[i])
+                } else {
+                    this.interList.push({
+                        value: item.id,
+                        label: item.name
+                    })
                 }
-            }
-            this.leafNodes = childArr
-            for (let m = 0; m < childArr.length; m++) {
-                for (let n = 0; n < pidArr.length; n++) {
-                    if (childArr[m].pid == pidArr[n].id) {
-                        pidArr[n].children.push(childArr[m])
-                    }
-                }
-            }
-
-            return pidArr
+            })
         },
-        // 左侧列表点击
-        iterfaceNodeClick(data) {
-            if (data.id == '0' && this.editFlag) {
-                this.dialogFormVisible = true
-                this.curPageId = data.pid
-            } else if (data.pid != '0' && data.id != '0') {
-                Object.assign(this.interfaceInfo, data)
-                this.curIterfaceId = data.id
-                this.curIterfaceName = data.name
-                this.getInterfaceParams(data.id)
-            } else {
-                this.curPageId = data.id
+        /**
+         * @DateTime 2018-01-19
+         * @Author   Zhao       Zhisheng
+         * @return   {[type]}   [description]
+         */
+        openDialog() {
+            this.dialogShow = true
+        },
+        doCompare() {
+            if (!this.rapUrl) {
+                this.$alert('请选择一个rap接口')
+                return
+            } 
+            if (!isValidUrl(this.realUrl)) {
+                this.$alert('请输入一个有效的对比接口地址')
+                return
             }
+            // 获取对比源数据
+            this.getInterfaceParams(this.rapUrl)
+            this.getData(this.realUrl)
+            // 接入loading -- 获取数据 -- 初始填充数据 -- jc对比 -- 重新格式化数据展示 -- 解除loading
+            // 填充json 归整为一个通用函数
+        },
+        getData(realUrl) {
+            common.getAjaxData({ 
+                url: realUrl
+            }, (data) => {
+
+                data = data.result
+                this.realData = data
+                this.realDataReady = true
+
+                this.renderJsonDom('#containerReal', data)
+            })
         },
         // 获取接口参数
         getInterfaceParams(pid) {
@@ -195,26 +163,33 @@ export default {
                 if (typeof data == 'string') {
                     data = JSON.parse(data)
                 }
-
-                let contentInter = data
-                var options = {
-                    dom: '#container' //对应容器的css选择器
-                };
-                var jf = new JsonFormater(options); //创建对象
-                jf.doFormat(contentInter); //格式化json
-
-                // let contentInter = data
-                var options = {
-                    dom: '#container2' //对应容器的css选择器
-                };
-                var jf = new JsonFormater(options); //创建对象
-                jf.doFormat(contentInter); //格式化json
+                this.rapData = data
+                this.rapDataReady = true
+                this.renderJsonDom('#container', data)
             })
         },
-        /* 非初始化--辅助处理 */
-        filterNode(value, data) {
-            if (!value) return true;
-            return data.name.indexOf(value) !== -1;
+        setCompare() {
+            let {
+                rapData,
+                realData
+            } = this.$data
+            console.log(rapData, realData)
+            let {
+                resultRap,
+                resultReal
+            }  = jc.init(rapData, realData)
+            console.log(resultRap, resultReal)
+
+            this.renderJsonDom('#container', resultRap)
+            this.renderJsonDom('#containerReal', resultReal)
+            this.dialogShow = false
+        },
+        renderJsonDom(dom, data, color) {
+            var options = {
+                dom: dom //对应容器的css选择器
+            };
+            var jf = new JsonFormater(options); //创建对象
+            jf.doFormat(data); //格式化json
         }
     }
 }
@@ -227,19 +202,25 @@ export default {
 // div {
 //     border: 1px solid #000;
 // }
-
+.page_root {
+    padding: 3%;
+}
 .rap_page__compare {
     display: flex;
     display: -webkit-flex;
     position: absolute;
     // align-items: center;
-    width: 100%;
-    height: 100%;
+    width: 94%;
+    height: 90%;
+    background-color: #ccc;
+    box-shadow: 0 0 50px #909399;
+    border-radius: 20px;
+    overflow: hidden;
     .container {
         position: relative;
         flex: 4;
         overflow: auto;
-        padding-top: 50px;
+        // padding-top: 50px;
     }
     .area_middle {
         flex: 0;
@@ -262,7 +243,7 @@ export default {
     .btn_compare {
         width: 100px;
         height: 100px;
-        background: url('../../assets/images/vs.jpg') 0 center no-repeat;
+        background: url('../../assets/images/vs.png') 0 center no-repeat;
         background-size: cover;
     }
 }

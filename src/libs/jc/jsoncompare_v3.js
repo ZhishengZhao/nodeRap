@@ -122,7 +122,7 @@ const jc = {
         })
     },
     setKeyValue(target, key, parentkey, equal, data) {
-        let flag = equal ? '_0' : '_1'
+        let flag = equal ? '' : '_1'
         let length = parentkey.length
 
         // 从下向上递归，逐步组成对象 赋值属性
