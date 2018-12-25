@@ -308,7 +308,7 @@ export default {
 
             if (type == 'import') {
                 if (!this.emailReg.test(params.reqUrl)) {
-                    this.$alert('请输入完整有效的url地址，如https://m.aiyoumi.com:8443/mall/loan/getLoanInit')
+                    this.$alert('请输入完整有效的url地址，如https://m.test.com:8443/mall/loan/getLoanInit')
                     return
                 }
                 

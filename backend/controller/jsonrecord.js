@@ -94,7 +94,7 @@ module.exports = {
         var ajaxUrl = req.body.ajaxUrl;
 
         var params = {
-            url: 'https://m.aiyoumi.com:443/mall/loan/getLoanInit',
+            url: 'https://m.test.com:443/mall/loan/getLoanInit',
             method: "POST",
             json: true,
             headers: {
